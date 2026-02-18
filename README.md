@@ -72,16 +72,11 @@ The output image is at `Build/O6/RELEASE_GCC5/cix_flash_all.bin`.
 
 ## Flashing
 
-1. Copy the image to the Orion O6:
-   ```
-   scp Build/O6/RELEASE_GCC5/cix_flash_all.bin user@orion-o6:
-   ```
+1. Build the bios or download the release .zip from the Releases tab:
 
-2. On the Orion O6, copy the image to the EFI partition:
+2. Copy the release files or build files to a FAT32 partition or your EFI partition:
    ```
-   sudo mount /dev/nvme0n1p1 /mnt/
-   sudo cp ~user/cix_flash_all.bin /mnt/orion-o6/
-   sudo umount /mnt/
+   unzip edk2-cix-unlocked.zip && cp -r orion-o6 /to/FAT32/part/
    ```
 
 3. Reboot into the BIOS and select "Boot to UEFI Shell" in the Boot menu. Alternatively, from GRUB press `c` for command line:
@@ -94,12 +89,10 @@ The output image is at `Build/O6/RELEASE_GCC5/cix_flash_all.bin`.
    ```
    Shell> fs0:
    FS0:\> cd orion-o6
-   FS0:\orion-o6\> setup.nsh
+   FS0:\orion-o6\> startup.nsh
    ```
    Press ENTER to start flashing. Once done, press `q` to quit, then cold reboot:
-   ```
-   FS0:\orion-o6\> reset -c
-   ```
+
 
 5. After reboot, press ESC to enter the BIOS when prompted and configure your settings.
 
@@ -111,14 +104,14 @@ The Power Management menu in BIOS settings lets you tune frequency and voltage f
 
 | Domain | Stock entries | Freq range (MHz) | Voltage | Notes |
 |--------|--------------|-------------------|---------|-------|
-| GPU Core | 7 | 100–1100 | 800 mV (configurable) | |
-| GPU Top | 6 | 100–1000 | 800 mV (configurable) | |
-| CPU Little | 2 | 800–1800 | 790 mV (configurable) | |
-| CPU Big G0 | 7 | 800–2600 | 750–920 mV (configurable) | |
-| CPU Big G1 | 7 | 800–2600 | 750–920 mV (configurable) | |
-| CPU Mid G0 | 7 | 800–2400 | 750–920 mV (configurable) | |
-| CPU Mid G1 | 7 | 800–2400 | 750–920 mV (configurable) | |
-| DSU | 2 | 500–1300 | 790 mV (configurable) | |
+| GPU Core | 7 | 100–1100 | 800 mV | Configurable |
+| GPU Top | 6 | 100–1000 | 800 mV | Configurable |
+| CPU Little | 2 | 800–1800 | 790 mV | Configurable |
+| CPU Big G0 | 7 | 800–2600 | 750–920 mV | Configurable |
+| CPU Big G1 | 7 | 800–2600 | 750–920 mV | Configurable |
+| CPU Mid G0 | 7 | 800–2400 | 750–920 mV | Configurable |
+| CPU Mid G1 | 7 | 800–2400 | 750–920 mV | Configurable |
+| DSU | 2 | 500–1300 | 790 mV | Configurable |
 | NPU | 4 | 400–1200 | Fixed (SOC rail) | Frequency only |
 | VPU | 6 | 150–1200 | Fixed (SOC rail) | Frequency only |
 | CI700 | 1 | 1500 | Fixed (SOC rail) | Interconnect bus |
@@ -128,16 +121,16 @@ The Power Management menu in BIOS settings lets you tune frequency and voltage f
 
 Per-rail TDP limits in milliwatts. Stock defaults:
 
-| Rail | Stock TDP (mW) |
+| Rail | Stock TDP (mW) | Notes |
 |------|---------------|
-| CPU Little | 2400 (configurable) |
-| CPU Big G0 | 6700 (configurable) |
-| CPU Big G1 | 6500 (configurable) |
-| CPU Mid G0 | 8000 (configurable) |
-| CPU Mid G1 | 8200 (configurable) |
-| DSU | 5500 (configurable) |
-| GPU | 12000 (configurable) |
-| SOC | 9000 (configurable) |
+| CPU Little | 2400 | Configurable |
+| CPU Big G0 | 6700 | Configurable |
+| CPU Big G1 | 6500 | Configurable |
+| CPU Mid G0 | 8000 | Configurable |
+| CPU Mid G1 | 8200 | Configurable |
+| DSU | 5500 | Configurable |
+| GPU | 12000 | Configurable |
+| SOC | 9000 | Configurable |
 
 ## ⚠️ Overclocking warning — READ THIS BEFORE CHANGING VALUES
 
@@ -273,9 +266,9 @@ The **only** way to recover from a bricked board is to use an **external SPI fla
 
 **The SPI flash chip operates at 1.8V. Using a 3.3V programmer will destroy the chip.**
 
-A compatible programmer such as [this CH341A 1.8V model](https://www.aliexpress.com/item/1005004452694448.html) is required, along with an SOP8 clip adapter (if not already included with the programmer) such as [this one](https://www.aliexpress.com/item/32707843336.html) or [this one](https://www.aliexpress.com/item/1005003407813371.html).
+A compatible programmer such as [CH341A 3.3V with a 1.8V adapter] is required, along with an SOP8 clip adapter (if not already included with the programmer).
 
-The flash chip is a [W25Q64JWSSIQ](https://www.winbond.com/hq/product/code-storage-flash-memory/serial-nor-flash/?__locale=en&partNo=W25Q64JW) (1.8V, 64Mbit or 8MiB). Be aware that many counterfeit chips exist that do not support the required 133 MHz operation. Genuine chips can be found [here](https://www.aliexpress.com/item/1005008734283748.html) (confirmed working). [These](https://www.aliexpress.com/item/1005007825295302.html) have been reported as fake.
+The flash chip is a [W25Q64JWSSIQ](https://www.winbond.com/hq/product/code-storage-flash-memory/serial-nor-flash/?__locale=en&partNo=W25Q64JW) (1.8V, 64Mbit or 8MiB). Be aware that many counterfeit chips exist that do not support the required 133 MHz operation.
 
 To flash with an external programmer:
 
@@ -311,7 +304,7 @@ The following changes have been made on top of the stock release:
 - **I2C bus frequency initialization** — restored I2C `_INI` methods with zero-check fallbacks and added 8 I2C frequency writes to the AcpiSocDxe GNVA area so Linux sees correct bus speeds.
 - **PCIe root port initialization** — restored `_INI` methods for all 5 root ports (PRC0–PRC4) with zero-check fallbacks, added 25 PCIe config writes to GNVA (bandwidth, speed, payload, ASPM), and updated all `_DSD` properties to use dynamic values.
 - **PCIe _OSC capabilities** — changed `_OSC` control mask from `0x10` to `0x1C` to grant Linux native **PME** (Power Management Events) and **AER** (Advanced Error Reporting) control. The hardware defines AER interrupt lines (correctable, fatal, non-fatal) for all 5 root ports. Hotplug/SHPC/LTR remain disabled (no hardware support).
-- **PCIe boot reliability** — all 8 PCIe `_STA` methods (PRC0–PRC4, PCP0–PCP2) now unconditionally return 0xF. The original code checked a `PcieLinkUpStatus` snapshot which caused ~70% boot failure when PCIe links hadn't trained by GNVA write time, permanently hiding NVMe and other devices.
+- **PCIe boot reliability** — all 8 PCIe `_STA` methods (PRC0–PRC4, PCP0–PCP2) now unconditionally return 0xF. The original code checked a `PcieLinkUpStatus` snapshot which caused failure when PCIe links hadn't trained by GNVA write time, permanently hiding NVMe and other devices.
 - **PCIe power regulators** — moved `CdnsPciePwr.asl` (PVC0–PVC4 devices) from SSDT to DSDT include to fix `AE_NOT_FOUND` errors on PVC4 cross-table Package references.
 - **Missing iomux pin groups** — added 9 missing pin groups to MUX1 (5 PCIe PERST + 4 power regulator groups) that were causing `reg-fixed-voltage` probe failures (`-ENOMEM`).
 - **Ramoops** — changed `RAMOOPS_RES_SIZE` from 0xA0000 (not power of 2) to 0x80000 and reduced record/console sizes to fit, fixing ramoops probe failure (`-EINVAL`).
