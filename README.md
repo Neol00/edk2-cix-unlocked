@@ -122,7 +122,7 @@ The Power Management menu in BIOS settings lets you tune frequency and voltage f
 Per-rail TDP limits in milliwatts. Stock defaults:
 
 | Rail | Stock TDP (mW) | Notes |
-|------|---------------|
+|------|---------------|-------|
 | CPU Little | 2400 | Configurable |
 | CPU Big G0 | 6700 | Configurable |
 | CPU Big G1 | 6500 | Configurable |
