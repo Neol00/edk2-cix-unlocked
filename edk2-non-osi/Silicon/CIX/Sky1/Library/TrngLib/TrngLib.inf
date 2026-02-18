@@ -1,0 +1,33 @@
+## @file
+#  Instance of TRNG (Ture Random Number Generator) Library.
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001B
+  BASE_NAME                      = TrngLib
+  FILE_GUID                      = 84C05D1B-2F97-4CE2-8D35-FC40E7FC5D7F
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = TrngLib
+
+[Binaries.AARCH64]
+  LIB|TrngLib.lib|*
+
+[Packages]
+  MdePkg/MdePkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  BaseLib
+  BaseMemoryLib
+  MemoryAllocationLib
+  DebugLib
+  UefiBootServicesTableLib
+  MailBoxLib
+
+[Protocols]

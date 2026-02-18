@@ -1,0 +1,83 @@
+/** @file
+
+  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+
+  SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+#include <Library/AcpiLib.h>
+#include <Library/PcdLib.h>
+#include <IndustryStandard/Acpi.h>
+#include <Include/AcpiPlatform.h>
+#include "CommonDefines.h"
+
+#define SYSTEM_TIMER_BASE_ADDRESS     0xFFFFFFFFFFFFFFFF
+#define GTDT_GLOBAL_FLAGS             0
+#define GTDT_GTIMER_FLAGS             EFI_ACPI_6_4_GTDT_TIMER_FLAG_TIMER_INTERRUPT_POLARITY
+#if GTDT_WATCHDOG_ENABLE == 1
+#define GTDT_PLATFORM_WATCHDOG_COUNT  FixedPcdGet64 (PcdWatchdogCount)
+#else
+#define GTDT_PLATFORM_WATCHDOG_COUNT  0
+#endif
+#define EFI_ACPI_6_4_ARM_GENERIC_WATCHDOG_STRUCTURE_INIT(         \
+  RefreshFramePhysicalAddress, ControlFramePhysicalAddress,       \
+  WatchdogTimerGSIV, WatchdogTimerFlags)                          \
+  {                                                               \
+    EFI_ACPI_6_4_GTDT_ARM_GENERIC_WATCHDOG,                       \
+    sizeof (EFI_ACPI_6_4_GTDT_ARM_GENERIC_WATCHDOG_STRUCTURE),    \
+    EFI_ACPI_RESERVED_WORD,                                       \
+    RefreshFramePhysicalAddress,                                  \
+    ControlFramePhysicalAddress,                                  \
+    WatchdogTimerGSIV,                                            \
+    WatchdogTimerFlags                                            \
+  }
+
+#pragma pack (1)
+typedef struct {
+  EFI_ACPI_6_4_GENERIC_TIMER_DESCRIPTION_TABLE        Gtdt;
+#if GTDT_WATCHDOG_ENABLE
+  EFI_ACPI_6_4_GTDT_ARM_GENERIC_WATCHDOG_STRUCTURE    Watchdogs[GTDT_PLATFORM_WATCHDOG_COUNT];
+#endif
+} EFI_ACPI_6_4_GENERIC_TIMER_DESCRIPTION_TABLES;
+#pragma pack ()
+
+STATIC EFI_ACPI_6_4_GENERIC_TIMER_DESCRIPTION_TABLES  Gtdt = {
+  {
+    ARM_ACPI_HEADER (
+                     EFI_ACPI_6_4_GENERIC_TIMER_DESCRIPTION_TABLE_SIGNATURE,
+                     EFI_ACPI_6_4_GENERIC_TIMER_DESCRIPTION_TABLES,
+                     EFI_ACPI_6_4_GENERIC_TIMER_DESCRIPTION_TABLE_REVISION
+                     ),
+    SYSTEM_TIMER_BASE_ADDRESS,                             // UINT64  PhysicalAddress
+    0,                                                     // UINT32  Reserved
+    FixedPcdGet32 (PcdArmArchTimerSecIntrNum),             // UINT32  SecurePL1TimerGSIV
+    GTDT_GTIMER_FLAGS,                                     // UINT32  SecurePL1TimerFlags
+    FixedPcdGet32 (PcdArmArchTimerIntrNum),                // UINT32  NonSecurePL1TimerGSIV
+    GTDT_GTIMER_FLAGS,                                     // UINT32  NonSecurePL1TimerFlags
+    FixedPcdGet32 (PcdArmArchTimerVirtIntrNum),            // UINT32  VirtualTimerGSIV
+    GTDT_GTIMER_FLAGS,                                     // UINT32  VirtualTimerFlags
+    FixedPcdGet32 (PcdArmArchTimerHypIntrNum),             // UINT32  NonSecurePL2TimerGSIV
+    GTDT_GTIMER_FLAGS,                                     // UINT32  NonSecurePL2TimerFlags
+    0xFFFFFFFFFFFFFFFF,                                    // UINT64  CntReadBasePhysicalAddress
+    GTDT_PLATFORM_WATCHDOG_COUNT,                          // UINT32  PlatformTimerCount
+    sizeof (EFI_ACPI_6_4_GENERIC_TIMER_DESCRIPTION_TABLE), // UINT32  PlatfromTimerOffset
+    FixedPcdGet32 (PcdArmArchTimerHypVirtIntrNum),         // UINT32  VirtualPL2TimerGSIV
+    GTDT_GTIMER_FLAGS                                      // UINT32  VirtualPL2TimerFlags
+  },
+#if GTDT_WATCHDOG_ENABLE
+  {
+    EFI_ACPI_6_4_ARM_GENERIC_WATCHDOG_STRUCTURE_INIT (
+      FixedPcdGet64 (PcdGenericWatchdogRefreshBase), // UINT64  RefreshFramePhysicalAddress
+      FixedPcdGet64 (PcdGenericWatchdogControlBase), // UINT64  WatchdogControlFramePhysicalAddress
+      FixedPcdGet32 (PcdGenericWatchdogEl2IntrNum),  // UINT32  WatchdogTimerGSIV
+      0
+    )
+  },
+#endif
+};
+
+//
+// Reference the table being generated to prevent the optimizer from removing the
+// data structure from the executable
+//
+VOID * CONST  ReferenceAcpiTable = &Gtdt;

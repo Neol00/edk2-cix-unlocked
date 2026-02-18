@@ -1,0 +1,37 @@
+#/**
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = PlatformBootHookLib
+  FILE_GUID                      = 4E37C346-B7D7-4F6C-8FFA-1528A6C457FA
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = PlatformBootHookLib|DXE_DRIVER DXE_RUNTIME_DRIVER UEFI_APPLICATION UEFI_DRIVER
+  CONSTRUCTOR                    = PlatformBootHookLibConstructor
+
+[Sources.common]
+  PlatformBootHookLib.c
+
+[Packages]
+  EmbeddedPkg/EmbeddedPkg.dec
+  MdePkg/MdePkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  GpioLib
+  ConfigParamsDataBlockLib
+  PlatformConfigParamsDataBlockLib
+
+[Guids]
+
+[Protocols]
+
+[FixedPcd]

@@ -1,0 +1,42 @@
+#/** @file
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = SpiLib
+  FILE_GUID                      = AF0E11A0-A700-4E8A-AAD7-78B454D12DC0
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = SpiLib
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  ArmPlatformPkg/ArmPlatformPkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  IoLib
+  BaseLib
+  DebugLib
+  TimerLib
+  HobLib
+  UefiLib
+  DxeServicesTableLib
+  PostCodeLib
+
+[Guids]
+
+[Protocols]
+  gCixClockProtocolGuid
+
+[Binaries.AARCH64]
+  LIB|SpiLib.lib|*
+
+[Pcd]
+

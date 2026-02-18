@@ -1,0 +1,53 @@
+## @file
+#
+# Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001B
+  BASE_NAME                      = SmbiosPlatformDxe
+  FILE_GUID                      = F0CC7D0B-CD83-4DDA-A5D4-613AB02D4E52
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = SmbiosPlatformDxeEntry
+
+[Sources]
+  SmbiosPlatformDxe.c
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/Ampere/AmpereAltraPkg/AmpereAltraPkg.dec
+  Silicon/Ampere/AmpereSiliconPkg/AmpereSiliconPkg.dec
+
+[LibraryClasses]
+  BaseLib
+  BaseMemoryLib
+  DebugLib
+  HobLib
+  MemoryAllocationLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiLib
+
+[Protocols]
+  gEfiSmbiosProtocolGuid                     ## CONSUMED
+
+[Pcd]
+  # Type 0
+  gAmpereTokenSpaceGuid.PcdSmbiosTables0BiosReleaseDate
+  gAmpereTokenSpaceGuid.PcdSmbiosTables1MajorVersion
+  gAmpereTokenSpaceGuid.PcdSmbiosTables1MinorVersion
+  gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString
+
+  gArmTokenSpaceGuid.PcdFdSize
+
+[Guids]
+  gPlatformInfoHobGuid
+
+[Depex]
+  gEfiSmbiosProtocolGuid

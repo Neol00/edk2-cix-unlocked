@@ -1,0 +1,40 @@
+## @file
+#
+# Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001B
+  BASE_NAME                      = DebugInfo
+  FILE_GUID                      = C0571D26-6176-11E9-8647-D663BD873D93
+  MODULE_TYPE                    = PEIM
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = DebugInfoPeiEntryPoint
+
+[Sources]
+  DebugInfoPei.c
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  ArmPlatformPkg/ArmPlatformPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/Ampere/AmpereAltraPkg/AmpereAltraPkg.dec
+  Silicon/Ampere/AmpereSiliconPkg/AmpereSiliconPkg.dec
+
+[LibraryClasses]
+  AmpereCpuLib
+  ArmLib
+  DebugLib
+  HobLib
+  NVParamLib
+  PeimEntryPoint
+
+[Guids]
+  gPlatformInfoHobGuid
+
+[Depex]
+  TRUE

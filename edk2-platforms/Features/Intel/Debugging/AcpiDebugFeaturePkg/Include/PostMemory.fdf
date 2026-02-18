@@ -1,0 +1,14 @@
+## @file
+#  FDF file for post-memory ACPI Debug advanced feature modules.
+#
+# Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+!if gAcpiDebugFeaturePkgTokenSpaceGuid.PcdUseSmmVersion == FALSE
+  INF RuleOverride = DRIVER_ACPITABLE AcpiDebugFeaturePkg/AcpiDebugDxeSmm/AcpiDebugDxe.inf
+!else
+  INF RuleOverride = DRIVER_ACPITABLE AcpiDebugFeaturePkg/AcpiDebugDxeSmm/AcpiDebugSmm.inf
+!endif

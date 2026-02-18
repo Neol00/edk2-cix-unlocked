@@ -1,0 +1,53 @@
+#/** @file
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#  Copyright (c) 2017, Linaro, Ltd. All rights reserved.<BR>
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = Ra8900ceRealTimeClockLib
+  FILE_GUID                      = 9A7681A9-E4F7-4040-9E82-386337910C64
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = RealTimeClockLib
+
+[Sources.common]
+  Ra8900ceRealTimeClockLib.c
+
+[Packages]
+  EmbeddedPkg/EmbeddedPkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+
+[LibraryClasses]
+  BaseMemoryLib
+  TimeBaseLib
+  DebugLib
+  IoLib
+  I2cLib
+  UefiBootServicesTableLib
+  UefiLib
+  UefiRuntimeLib
+  DxeServicesTableLib
+
+[Guids]
+  gEfiEventVirtualAddressChangeGuid
+
+[Protocols]
+  gEfiI2cMasterProtocolGuid                        ## CONSUMES
+  gRa8900ceRealTimeClockLibI2cMasterProtocolGuid   ## CONSUMES
+  gCixConfigParamsManageProtocolGuid               ## CONSUMES
+  gEfiDevicePathProtocolGuid                       ## CONSUMES
+  gEfiCpuArchProtocolGuid
+
+[FixedPcd]
+  gCixPlatformTokenSpaceGuid.PcdRa8900ceI2cSlaveAddress
+
+[Depex]
+  gRa8900ceRealTimeClockLibI2cMasterProtocolGuid

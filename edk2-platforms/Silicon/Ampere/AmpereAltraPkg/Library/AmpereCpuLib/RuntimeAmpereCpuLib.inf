@@ -1,0 +1,50 @@
+## @file
+#
+# Copyright (c) 2021, Ampere Computing LLC. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001B
+  BASE_NAME                      = RuntimeAmpereCpuLib
+  FILE_GUID                      = 5BE8FCAD-5D7E-4696-948A-E90970CA442E
+  MODULE_TYPE                    = DXE_RUNTIME_DRIVER
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = AmpereCpuLib
+  CONSTRUCTOR                    = RuntimeAmpereCpuLibConstructor
+  DESTRUCTOR                     = RuntimeAmpereCpuLibDestructor
+
+[Sources]
+  AmpereCpuLibCommon.c
+  RuntimeAmpereCpuLib.c
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  ArmPlatformPkg/ArmPlatformPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/Ampere/AmpereAltraPkg/AmpereAltraPkg.dec
+  Silicon/Ampere/AmpereSiliconPkg/AmpereSiliconPkg.dec
+
+[LibraryClasses]
+  ArmLib
+  BaseLib
+  HobLib
+  IoLib
+  MemoryAllocationLib
+  NVParamLib
+  UefiRuntimeLib
+
+[FixedPcd]
+  gArmPlatformTokenSpaceGuid.PcdCoreCount
+  gArmPlatformTokenSpaceGuid.PcdClusterCount
+
+  gAmpereTokenSpaceGuid.PcdSmproEfuseShadow0
+
+  gArmTokenSpaceGuid.PcdSystemMemoryBase
+
+[Guids]
+  gEfiEventVirtualAddressChangeGuid
+  gPlatformInfoHobGuid

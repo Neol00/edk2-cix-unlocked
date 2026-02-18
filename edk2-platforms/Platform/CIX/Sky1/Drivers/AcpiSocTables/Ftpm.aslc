@@ -1,0 +1,51 @@
+/** @file
+
+  Copyright 2023 Cix Technology (Shanghai) Co., Ltd. All Rights Reserved.
+
+  SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+
+#include <Library/AcpiLib.h>
+#include <Library/ArmLib.h>
+#include <Library/PcdLib.h>
+
+#include <IndustryStandard/Acpi.h>
+#include <IndustryStandard/Tpm2Acpi.h>
+#include <Include/AcpiPlatform.h>
+
+// Definition is missing from MdePkg/Include/IndustryStandard/Tpm2Acpi.h
+
+#ifdef EFI_TPM2_ACPI_TABLE_START_METHOD_COMMAND_RESPONSE_BUFFER_INTERFACE_WITH_TREE
+#error "EFI_TPM2_ACPI_TABLE_START_METHOD_COMMAND_RESPONSE_BUFFER_INTERFACE_WITH_TREE is defined elsewhere."
+#else
+#define EFI_TPM2_ACPI_TABLE_START_METHOD_COMMAND_RESPONSE_BUFFER_INTERFACE_WITH_TREE  9
+#endif
+
+//#define EFI_TPM2_ACPI_TABLE_START_METHOD_COMMAND_RESPONSE_BUFFER_INTERFACE  7
+
+EFI_TPM2_ACPI_TABLE Tpm2Table = {
+  {
+    EFI_ACPI_5_0_TRUSTED_COMPUTING_PLATFORM_2_TABLE_SIGNATURE,
+    sizeof (EFI_TPM2_ACPI_TABLE),
+    EFI_TPM2_ACPI_TABLE_REVISION,
+    0,                          // Checksum will be updated at runtime
+    EFI_ACPI_OEM_ID_PCI,        // OEMID is a 6 bytes long field
+    EFI_ACPI_OEM_TABLE_ID,      // OEM table identification(8 bytes long)
+    EFI_ACPI_OEM_REVISION,      // OEM revision number
+    EFI_ACPI_CREATOR_ID,        // Creator vendor ID
+    EFI_ACPI_CREATOR_REVISION,  // Creator revision number
+  },
+  // Flags
+  0,
+  // Control Area
+  FixedPcdGet64(PcdTpm2AcpiBufferBase),
+  // StartMethod
+  EFI_TPM2_ACPI_TABLE_START_METHOD_COMMAND_RESPONSE_BUFFER_INTERFACE_WITH_TREE,
+  //EFI_TPM2_ACPI_TABLE_START_METHOD_COMMAND_RESPONSE_BUFFER_INTERFACE,
+};
+
+// Reference the table being generated to prevent the optimizer from removing the
+// data structure from the executable
+VOID* CONST ReferenceAcpiTable = &Tpm2Table;
+

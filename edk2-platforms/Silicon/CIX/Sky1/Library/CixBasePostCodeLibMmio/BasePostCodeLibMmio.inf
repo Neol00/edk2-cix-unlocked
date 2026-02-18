@@ -1,0 +1,48 @@
+## @file
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved
+#  Copyright (c) 2007 - 2018, Intel Corporation. All rights reserved.<BR>
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = BasePostCodeLibMmio
+  MODULE_UNI_FILE                = BasePostCodeLibMmio.uni
+  FILE_GUID                      = 13B51C62-F787-6A2F-5557-652192AA3CDE
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = PostCodeLib
+
+
+#
+#  VALID_ARCHITECTURES           = IA32 X64 EBC
+#
+
+[Sources]
+  PostCode.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+
+[LibraryClasses]
+  IoLib
+  PcdLib
+  DebugLib
+  SerialPortLib
+  PrintLib
+  BaseLib
+  TimerLib
+  CixFwBootPerfLib
+
+[Pcd]
+  gEfiMdePkgTokenSpaceGuid.PcdPostCodePropertyMask  ## CONSUMES
+  gCixTokenSpaceGuid.PcdPostCodeApAddr
+  gCixTokenSpaceGuid.PcdPostCodeSeAddr
+  gCixPlatformTokenSpaceGuid.PcdRamLogBaseAddress
+  gCixPlatformTokenSpaceGuid.PcdRamLogSize

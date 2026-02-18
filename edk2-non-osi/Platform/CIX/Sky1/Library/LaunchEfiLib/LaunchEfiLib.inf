@@ -1,0 +1,53 @@
+#/** @file
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#**/
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = LaunchEfiLib
+  FILE_GUID                      = 71AD205B-5169-CF70-898C-470085AE6A65
+  MODULE_TYPE                    = UEFI_DRIVER
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = LaunchEfiLib | UEFI_APPLICATION
+
+
+[Binaries.AARCH64]
+  LIB|LaunchEfiLib.lib|*
+
+[BuildOptions]
+	#GCC:*_*_*_CC_FLAGS = -Wno-error=unused-variable
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  BaseLib
+  DebugLib
+  PcdLib
+  UefiLib
+  FdtLib
+  IoLib
+  MemoryAllocationLib
+  UefiBootManagerLib
+  PrintLib
+  UefiBootServicesTableLib
+  DtbUpdateLib
+  SocInitLib
+
+[Pcd]
+  gCixPlatformTokenSpaceGuid.PcdKernelBootImgBase
+  gCixPlatformTokenSpaceGuid.PcdKernelBootImgSize
+
+[Guids]
+  gEfiFileInfoGuid
+  gEfiEventReadyToBootGuid
+
+[Protocols]
+  gEfiSimpleFileSystemProtocolGuid
+  gEfiRamDiskProtocolGuid
+  gEfiBlockIoProtocolGuid

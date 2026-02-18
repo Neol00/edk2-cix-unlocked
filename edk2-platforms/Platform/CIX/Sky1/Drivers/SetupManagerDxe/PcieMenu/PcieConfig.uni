@@ -1,0 +1,105 @@
+/**
+Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+
+SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+
+#langdef en-US  "English"
+
+/*
+* PCIE settings.
+*/
+#string STR_PCIE_FORM_SET_TITLE                 #language en-US "PCIE Configuration"
+#string STR_PCIE_FORM_SET_TITLE_HELP            #language en-US "PCIE Configuration."
+
+#string STR_PCIERP0_OPTIONS_FORM_TITLE          #language en-US "PCI Express Root Port 1"
+#string STR_PCIERP1_OPTIONS_FORM_TITLE          #language en-US "PCI Express Root Port 2"
+#string STR_PCIERP2_OPTIONS_FORM_TITLE          #language en-US "PCI Express Root Port 3"
+#string STR_PCIERP3_OPTIONS_FORM_TITLE          #language en-US "PCI Express Root Port 4"
+#string STR_PCIERP4_OPTIONS_FORM_TITLE          #language en-US "PCI Express Root Port 5"
+#string STR_PCIERP_HELP                         #language en-US "Control the PCI Express Root Port."
+
+#string STR_ENABLED                             #language en-US "Enabled"
+#string STR_DISABLED                            #language en-US "Disabled"
+
+#string STR_PCIE_PROMPT0                        #language en-US "PCI Express Root Port 1"
+#string STR_PCIE_PROMPT1                        #language en-US "PCI Express Root Port 2"
+#string STR_PCIE_PROMPT2                        #language en-US "PCI Express Root Port 3"
+#string STR_PCIE_PROMPT3                        #language en-US "PCI Express Root Port 4"
+#string STR_PCIE_PROMPT4                        #language en-US "PCI Express Root Port 5"
+
+#string STR_PCIE_WIDTH_PROMPT0                  #language en-US "PCIe Bandwidth"
+#string STR_PCIE_WIDTH_PROMPT1                  #language en-US "PCIe Bandwidth"
+#string STR_PCIE_WIDTH_PROMPT2                  #language en-US "PCIe Bandwidth"
+#string STR_PCIE_WIDTH_PROMPT3                  #language en-US "PCIe Bandwidth"
+#string STR_PCIE_WIDTH_PROMPT4                  #language en-US "PCIe Bandwidth"
+#string STR_PCIE_WIDTH_HELP                     #language en-US "PCIe Bandwidth Bifurcation Configuration"
+#string STR_X8                                  #language en-US "X8"
+#string STR_X4                                  #language en-US "X4"
+#string STR_X2                                  #language en-US "X2"
+#string STR_X1                                  #language en-US "X1"
+
+
+#string STR_PCIE_SPEED_PROMPT0                  #language en-US "PCIe Max Speed"
+#string STR_PCIE_SPEED_PROMPT1                  #language en-US "PCIe Max Speed"
+#string STR_PCIE_SPEED_PROMPT2                  #language en-US "PCIe Max Speed"
+#string STR_PCIE_SPEED_PROMPT3                  #language en-US "PCIe Max Speed"
+#string STR_PCIE_SPEED_PROMPT4                  #language en-US "PCIe Max Speed"
+#string STR_PCIE_SPEED_HELP                     #language en-US "Configure PCIe Max Speed Support"
+#string STR_AUTO                                #language en-US "Auto"
+#string STR_GEN1                                #language en-US "Gen1"
+#string STR_GEN2                                #language en-US "Gen2"
+#string STR_GEN3                                #language en-US "Gen3"
+#string STR_GEN4                                #language en-US "Gen4"
+
+#string STR_PCIE_ASPM_MAX_PROMPT0               #language en-US "ASPM Max Support"
+#string STR_PCIE_ASPM_MAX_PROMPT1               #language en-US "ASPM Max Support"
+#string STR_PCIE_ASPM_MAX_PROMPT2               #language en-US "ASPM Max Support"
+#string STR_PCIE_ASPM_MAX_PROMPT3               #language en-US "ASPM Max Support"
+#string STR_PCIE_ASPM_MAX_PROMPT4               #language en-US "ASPM Max Support"
+#string STR_PCIE_ASPM_MAX_HELP                  #language en-US "PCI Express Active State Power Management Max settings."
+
+
+#string STR_PCIE_ASPM_PROMPT0                   #language en-US "ASPM"
+#string STR_PCIE_ASPM_PROMPT1                   #language en-US "ASPM"
+#string STR_PCIE_ASPM_PROMPT2                   #language en-US "ASPM"
+#string STR_PCIE_ASPM_PROMPT3                   #language en-US "ASPM"
+#string STR_PCIE_ASPM_PROMPT4                   #language en-US "ASPM"
+#string STR_PCIE_ASPM_HELP                      #language en-US "PCI Express Active State Power Management settings."
+#string STR_PCIE_ASPM_DISABLE                   #language en-US "Disable"
+#string STR_PCIE_ASPM_L0S_STRING                #language en-US "L0s"
+#string STR_PCIE_ASPM_L1_STRING                 #language en-US "L1"
+#string STR_PCIE_ASPM_L0SL1_STRING              #language en-US "L0sL1"
+
+#string STR_PCIE_MAX_PAYLOAD_PROMPT             #language en-US "Max Payload Support"
+#string STR_PCIE_MAX_PAYLOAD_HELP               #language en-US "Set Max Payload Supported of PCI Express Device"
+
+#string STR_PCIE_MAX_READ_REQUEST_PROMPT        #language en-US "Maximum Read Request"
+#string STR_PCIE_MAX_READ_REQUEST_HELP          #language en-US "Set Maximum Read Request Size of PCI Express Device"
+
+#string STR_MAX_128                             #language en-US "128 Bytes"
+#string STR_MAX_256                             #language en-US "256 Bytes"
+#string STR_MAX_512                             #language en-US "512 Bytes"
+#string STR_MAX_1024                            #language en-US "1024 Bytes"
+#string STR_MAX_2048                            #language en-US "2048 Bytes"
+#string STR_MAX_4096                            #language en-US "4096 Bytes"
+
+#string STR_LINK_SPEED_PROMPT                   #language en-US "Target Link Speed"
+#string STR_LINK_SPEED_HELP                     #language en-US "If supported by hardware and set to 'Force to X.X GT/s' for Downstream Ports, this sets an upper limit on Link operational speed by restricting the values advertised by the Upstream component in its training sequences. When 'Auto' is selected HW initialized data will be used."
+#string STR_LINK_SPEED_AUTO                     #language en-US "Auto"
+#string STR_2_5G                                #language en-US "2.5 GT/s"
+#string STR_5_0G                                #language en-US "5.0 GT/s"
+#string STR_8_0G                                #language en-US "8.0 GT/s"
+#string STR_16_0G                               #language en-US "16.0 GT/s"
+
+#string STR_LINK_WIDTH_PROMPT                   #language en-US "Target Link Width"
+#string STR_LINK_WIDTH_HELP                     #language en-US "If supported by hardware and set to 'Force to X', this sets an upper limit on Link operational width by restricting the values advertised by the Upstream component in its training sequences. When 'Auto' is selected HW initialized data will be used."
+#string STR_LINK_WIDTH_AUTO                     #language en-US "Auto"
+#string STR_LINK_WIDTH_X_1                      #language en-US "X1"
+#string STR_LINK_WIDTH_X_2                      #language en-US "X2"
+#string STR_LINK_WIDTH_X_4                      #language en-US "X4"
+#string STR_LINK_WIDTH_X_8                      #language en-US "X8"
+
+#string STR_PCIE_DTI_PROMPT                     #language en-US "DTI Support"
+#string STR_PCIE_DTI_HELP                       #language en-US "DTI Enable/Disable"

@@ -1,0 +1,58 @@
+/** @file
+
+  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+
+  SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+#include <Library/AcpiLib.h>
+#include <Library/ArmLib.h>
+#include <Library/PcdLib.h>
+
+#include <IndustryStandard/Acpi.h>
+#include <Include/AcpiPlatform.h>
+
+#pragma pack(1)
+typedef struct
+{
+  EFI_ACPI_6_4_PLATFORM_COMMUNICATION_CHANNEL_TABLE_HEADER Header;
+  EFI_ACPI_6_4_PCCT_SUBSPACE_2_HW_REDUCED_COMMUNICATIONS SubSpace;
+} EFI_ACPI_PLATFORM_COMMUNICATION_CHANNEL_TABLE;
+#pragma pack()
+
+EFI_ACPI_PLATFORM_COMMUNICATION_CHANNEL_TABLE Pcct=
+{
+  {
+    ARM_ACPI_HEADER (
+      EFI_ACPI_6_4_PLATFORM_COMMUNICATIONS_CHANNEL_TABLE_SIGNATURE,
+      EFI_ACPI_PLATFORM_COMMUNICATION_CHANNEL_TABLE,
+      EFI_ACPI_6_4_PLATFORM_COMMUNICATION_CHANNEL_TABLE_REVISION
+    ),
+    0,                                                               // Flags; EFI_ACPI_6_4_PCCT_FLAGS_SCI_DOORBELL
+    EFI_ACPI_RESERVED_QWORD,                                         // Reserved;
+  },
+  {
+    EFI_ACPI_6_4_PCCT_SUBSPACE_TYPE_2_HW_REDUCED_COMMUNICATIONS,     // Type;
+    sizeof(EFI_ACPI_6_4_PCCT_SUBSPACE_2_HW_REDUCED_COMMUNICATIONS),  // Length;
+    0,                                                               // DoorbellInterrupt;
+    0,                                                               // DoorbellInterruptFlags;
+    0,                                                               // Reserved;
+    PCC_CPPC_BASE,                                                   // BaseAddress;
+    PCC_CPPC_BASE_LENGTH,                                            // AddressLength;
+    { 0, 0x20, 0, 0x3, PCC_CPPC_DOORBELL_REG},                       // DoorbellRegister;
+    0xFFFFFFFE,                                                      // DoorbellPreserve;
+    0x01,                                                            // DoorbellWrite;
+    500,                                                             // NominalLatency;
+    2400,                                                            // MaximumPeriodicAccessRate;
+    50,                                                              // MinimumRequestTurnaroundTime;
+    { 0, 0x20, 0, 0x3, PCC_CPPC_DOORBELL_ACK_REG},                   // DoorbellAckRegister;
+    0xFFFFFFFE,                                                      // DoorbellAckPreserve;
+    0x01,                                                            // DoorbellAckWrite;
+  },
+};
+
+//
+// Reference the table being generated to prevent the optimizer from removing the
+// data structure from the executable
+//
+VOID* CONST ReferenceAcpiTable = &Pcct;

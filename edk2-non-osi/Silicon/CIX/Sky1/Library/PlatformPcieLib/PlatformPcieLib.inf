@@ -1,0 +1,36 @@
+#/** @file
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = PlatformPcieLib
+  FILE_GUID                      = 50DBC108-E70B-4cc6-85A8-A9A1DA949ADB
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = PlatformPcieLib
+
+[Binaries.AARCH64]
+  LIB|PlatformPcieLib.lib|*
+
+[Packages]
+  MdePkg/MdePkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  PcdLib
+  IoLib
+
+[Pcd]
+  gCixTokenSpaceGuid.PcdPcieRootPort0BusBase
+  gCixTokenSpaceGuid.PcdPcieRootPort1BusBase
+  gCixTokenSpaceGuid.PcdPcieRootPort2BusBase
+  gCixTokenSpaceGuid.PcdPcieRootPort3BusBase
+  gCixTokenSpaceGuid.PcdPcieRootPort4BusBase
+  gCixTokenSpaceGuid.PcdPcieRootPort0BusLimit
+  gCixTokenSpaceGuid.PcdPcieRootPort1BusLimit
+  gCixTokenSpaceGuid.PcdPcieRootPort2BusLimit
+  gCixTokenSpaceGuid.PcdPcieRootPort3BusLimit
+  gCixTokenSpaceGuid.PcdPcieRootPort4BusLimit

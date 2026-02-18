@@ -1,0 +1,38 @@
+//
+// Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+//
+// SPDX-License-Identifier: BSD-2-Clause-Patent
+//
+
+#langdef en-US  "English"
+
+#string STR_RAS_FORM                                #language en-US "RAS Configuration"
+#string STR_RAS_FORM_HELP                           #language en-US "RAS Configuration"
+
+#string STR_RAS_FORM_SEPERATE_LINE                  #language en-US ""
+#string STR_RAS_COMMON_ENABLE                       #language en-US "Enabled"
+#string STR_RAS_COMMON_DISABLE                      #language en-US "Disabled"
+
+#string STR_RAS_HARDWARE_EINJ_PROMPT                #language en-US "Hardware EINJ"
+#string STR_RAS_HARDWARE_EINJ_HELP                  #language en-US "Enable hardware EINJ support, if disabled EINJ is software simulated"
+
+#string STR_RAS_PCIE_AER_FW_FIRST_PROMPT            #language en-US "PCIe AER Firmware First"
+#string STR_RAS_PCIE_AER_FW_FIRST_HELP              #language en-US "Enable firmware to detect PCIe AER, if disabled OS detects AER"
+
+#string STR_RAS_BERT_ENABLED_PROMPT                 #language en-US "Enable BERT"
+#string STR_RAS_BERT_ENABLED_HELP                   #language en-US "Enable Boot Error Record Table, if disabled BERT will not be populated"
+
+#string STR_RAS_SDEI_ENABLED_PROMPT                 #language en-US "Enable SDEI"
+#string STR_RAS_SDEI_ENABLED_HELP                   #language en-US "Enable Software Delegated Exception Interface for NMI support"
+
+#string STR_RAS_DDR_CE_THRESHOLD_PROMPT             #language en-US "DDR CE Threshold"
+#string STR_RAS_DDR_CE_THRESHOLD_HELP               #language en-US "Number of DDR CEs to occur before using SCI notification to OS rather than polled notification"
+
+#string STR_RAS_2P_CE_THRESHOLD_PROMPT              #language en-US "2P CE Threshold"
+#string STR_RAS_2P_CE_THRESHOLD_HELP                #language en-US "Number of 2P CEs to occur before using SCI notification to OS rather than polled notification"
+
+#string STR_RAS_CPM_CE_THRESHOLD_PROMPT             #language en-US "Processor CE Threshold"
+#string STR_RAS_CPM_CE_THRESHOLD_HELP               #language en-US "Number of processor CEs to occur before using SCI notification to OS rather than polled notification"
+
+#string STR_RAS_LINK_ERR_THRESHOLD_PROMPT           #language en-US "DDR Link Error Threshold"
+#string STR_RAS_LINK_ERR_THRESHOLD_HELP             #language en-US "Number of DDR link errors before considering it fatal severity"

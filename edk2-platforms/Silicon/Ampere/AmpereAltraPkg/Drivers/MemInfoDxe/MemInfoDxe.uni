@@ -1,0 +1,9 @@
+//
+// Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+//
+// SPDX-License-Identifier: BSD-2-Clause-Patent
+//
+
+#string STR_MODULE_ABSTRACT             #language en-US "An Altra DDR screen setup driver"
+
+#string STR_MODULE_DESCRIPTION          #language en-US "This driver exposes a screen setup for DDR information and configuration."

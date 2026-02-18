@@ -1,0 +1,41 @@
+## @file
+#
+# Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                   = 0x0001001B
+  BASE_NAME                     = ATFHobPeim
+  FILE_GUID                     = B1975734-77C2-4827-9617-914883F3B578
+  MODULE_TYPE                   = PEIM
+  VERSION_STRING                = 1.0
+  ENTRY_POINT                   = InitializeATFHobPeim
+
+[Sources]
+  ATFHobPeim.c
+
+[FixedPcd]
+  gArmTokenSpaceGuid.PcdSystemMemoryBase
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/Ampere/AmpereAltraPkg/AmpereAltraPkg.dec
+
+[LibraryClasses]
+  BaseLib
+  DebugLib
+  HobLib
+  PcdLib
+  PeiServicesLib
+  PeimEntryPoint
+
+[Guids]
+  gPlatformInfoHobGuid
+
+[Depex]
+  TRUE

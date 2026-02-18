@@ -1,0 +1,54 @@
+## @file
+#
+# Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001B
+  BASE_NAME                      = FlashFvbDxe
+  FILE_GUID                      = 9E6EA240-DF80-11EA-8B6E-0800200C9A66
+  MODULE_TYPE                    = DXE_RUNTIME_DRIVER
+  VERSION_STRING                 = 0.1
+  ENTRY_POINT                    = FlashFvbDxeInitialize
+
+[Sources]
+  FlashFvbDxe.c
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/Ampere/AmpereAltraPkg/AmpereAltraPkg.dec
+  Silicon/Ampere/AmpereSiliconPkg/AmpereSiliconPkg.dec
+
+[LibraryClasses]
+  DebugLib
+  FlashLib
+  PcdLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiRuntimeLib
+
+[FixedPcd]
+  gAmpereTokenSpaceGuid.PcdFvBlockSize
+
+  gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableSize
+  gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwWorkingSize
+  gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareSize
+
+[Pcd]
+  gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableBase64
+
+[Guids]
+  gEfiEventVirtualAddressChangeGuid
+  gSpiNorMmGuid
+
+[Protocols]
+  gEfiFirmwareVolumeBlockProtocolGuid             ## PRODUCES
+  gEfiMmCommunication2ProtocolGuid                ## CONSUMES
+
+[Depex]
+  gEfiMmCommunication2ProtocolGuid

@@ -1,0 +1,130 @@
+/** @file
+
+  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+
+  SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+
+#include <Library/AcpiLib.h>
+#include <Library/ArmLib.h>
+#include <Library/PcdLib.h>
+#include <IndustryStandard/Acpi.h>
+#include <Include/AcpiPlatform.h>
+#include <Include/MemoryMap.h>
+
+#define CORE_CNT   (FixedPcdGet32 (PcdClusterCount) * \
+                      FixedPcdGet32 (PcdCoreCount))
+
+#ifdef ACPI_WINDOWS_BOOT
+#ifdef MULTICORE_ENABLE
+#undef CORE_CNT
+#define CORE_CNT   8
+#endif
+#endif
+
+// Multiple APIC Description Table
+#pragma pack (1)
+
+typedef struct {
+  EFI_ACPI_6_4_MULTIPLE_APIC_DESCRIPTION_TABLE_HEADER   Header;
+  EFI_ACPI_6_4_GIC_STRUCTURE                            GicInterfaces[CORE_CNT];
+  EFI_ACPI_6_4_GIC_DISTRIBUTOR_STRUCTURE                GicDistributor;
+  EFI_ACPI_6_4_GICR_STRUCTURE                           GicRedistributor;
+  EFI_ACPI_6_4_GIC_ITS_STRUCTURE                        GicIts;
+} EFI_ACPI_6_4_MULTIPLE_APIC_DESCRIPTION_TABLE;
+
+#pragma pack ()
+
+STATIC EFI_ACPI_6_4_MULTIPLE_APIC_DESCRIPTION_TABLE Madt = {
+  {
+    ARM_ACPI_HEADER (
+      EFI_ACPI_6_4_MULTIPLE_APIC_DESCRIPTION_TABLE_SIGNATURE,
+      EFI_ACPI_6_4_MULTIPLE_APIC_DESCRIPTION_TABLE,
+      EFI_ACPI_6_4_MULTIPLE_APIC_DESCRIPTION_TABLE_REVISION
+    ),
+    // MADT specific fields
+    0, // LocalApicAddress
+    0  // Flags
+  },
+  {
+    // Format: EFI_ACPI_6_4_GICC_STRUCTURE_INIT(GicId, AcpiCpuUid, Mpidr, Flags,
+    //                                          PmuIrq, GicBase, GicVBase,
+    //                                          GicHBase, GsivId, GicRBase,
+    //                                          Efficiency,
+    //                                          SpeOverflowInterrupt)
+    // Note: The GIC Structure of the primary CPU must be the first entry
+    // (see note in 5.2.12.14 GICC Structure of ACPI v6.4).
+#ifndef MULTICORE_ENABLE
+    EFI_ACPI_6_4_GICC_STRUCTURE_INIT( //  core0
+      0, 0, FixedPcdGet64 (PcdArmPrimaryCore), EFI_ACPI_6_4_GIC_ENABLED, 23,
+      FixedPcdGet32 (PcdGicDistributorBase),
+      0, 0, 25, 0, 0, 0),
+#else
+    EFI_ACPI_6_4_GICC_STRUCTURE_INIT( //  core4
+    0, 4, GET_MPID(0x4, 0x0), EFI_ACPI_6_4_GIC_ENABLED, 23,
+    FixedPcdGet32 (PcdGicDistributorBase),
+    0,  0, 25, 0, 0, 0),
+  #ifndef ACPI_WINDOWS_BOOT
+    EFI_ACPI_6_4_GICC_STRUCTURE_INIT( //  core0
+      0, 0, GET_MPID(0x0, 0x0), EFI_ACPI_6_4_GIC_ENABLED, 23,
+      FixedPcdGet32 (PcdGicDistributorBase),
+      0, 0, 25, 0, 0, 0),
+    EFI_ACPI_6_4_GICC_STRUCTURE_INIT( //  core1
+      0, 1, GET_MPID(0x1, 0x0), EFI_ACPI_6_4_GIC_ENABLED, 23,
+      FixedPcdGet32 (PcdGicDistributorBase),
+       0,  0, 25, 0, 0, 0),
+    EFI_ACPI_6_4_GICC_STRUCTURE_INIT( //  core2
+      0, 2, GET_MPID(0x2, 0x0), EFI_ACPI_6_4_GIC_ENABLED, 23,
+      FixedPcdGet32 (PcdGicDistributorBase),
+       0,  0, 25, 0, 0, 0),
+    EFI_ACPI_6_4_GICC_STRUCTURE_INIT( //  core3
+      0, 3, GET_MPID(0x3, 0x0), EFI_ACPI_6_4_GIC_ENABLED, 23,
+      FixedPcdGet32 (PcdGicDistributorBase),
+       0,  0, 25, 0, 0, 0),
+  #endif
+    EFI_ACPI_6_4_GICC_STRUCTURE_INIT( //  core5
+      0, 5, GET_MPID(0x5, 0x0), EFI_ACPI_6_4_GIC_ENABLED, 23,
+      FixedPcdGet32 (PcdGicDistributorBase),
+       0,  0, 25, 0, 0, 0),
+    EFI_ACPI_6_4_GICC_STRUCTURE_INIT( //  core6
+      0, 6, GET_MPID(0x6, 0x0), EFI_ACPI_6_4_GIC_ENABLED, 23,
+      FixedPcdGet32 (PcdGicDistributorBase),
+       0,  0, 25, 0, 0, 0),
+    EFI_ACPI_6_4_GICC_STRUCTURE_INIT( //  core7
+      0, 7, GET_MPID(0x7, 0x0), EFI_ACPI_6_4_GIC_ENABLED, 23,
+      FixedPcdGet32 (PcdGicDistributorBase),
+       0,  0, 25, 0, 0, 0),
+    EFI_ACPI_6_4_GICC_STRUCTURE_INIT( //  core8
+      0, 8, GET_MPID(0x8, 0x0), EFI_ACPI_6_4_GIC_ENABLED, 23,
+      FixedPcdGet32 (PcdGicDistributorBase),
+       0,  0, 25, 0, 0, 0),
+    EFI_ACPI_6_4_GICC_STRUCTURE_INIT( //  core9
+      0, 9, GET_MPID(0x9, 0x0), EFI_ACPI_6_4_GIC_ENABLED, 23,
+      FixedPcdGet32 (PcdGicDistributorBase),
+       0,  0, 25, 0, 0, 0),
+    EFI_ACPI_6_4_GICC_STRUCTURE_INIT( //  core10
+      0, 10, GET_MPID(0xa, 0x0), EFI_ACPI_6_4_GIC_ENABLED, 23,
+      FixedPcdGet32 (PcdGicDistributorBase),
+       0,  0, 25, 0, 0, 0),
+    EFI_ACPI_6_4_GICC_STRUCTURE_INIT( //  core11
+      0, 11, GET_MPID(0xb, 0x0), EFI_ACPI_6_4_GIC_ENABLED, 23,
+      FixedPcdGet32 (PcdGicDistributorBase),
+       0,  0, 25, 0, 0, 0),
+#endif
+  },
+  // GIC Distributor Entry
+  EFI_ACPI_6_4_GIC_DISTRIBUTOR_INIT(0, FixedPcdGet32 (PcdGicDistributorBase),
+                                    0, EFI_ACPI_6_0_GIC_V4),
+  // GIC Redistributor
+  EFI_ACPI_6_4_GIC_REDISTRIBUTOR_INIT(FixedPcdGet32 (PcdGicRedistributorsBase),
+                                      SIZE_256KB*12),
+  // GIC ITS
+  EFI_ACPI_6_4_GIC_ITS_INIT(0, ITS_BASE),
+};
+
+//
+// Reference the table being generated to prevent the optimizer from removing
+// the data structure from the executable
+//
+VOID* CONST ReferenceAcpiTable = &Madt;

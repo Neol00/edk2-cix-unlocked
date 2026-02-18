@@ -1,0 +1,46 @@
+#/** @file
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#  Copyright (c) 2017-2021, Arm Limited. All rights reserved.<BR>
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#  System Control and Management Interface V1.0
+#    http://infocenter.arm.com/help/topic/com.arm.doc.den0056a/
+#    DEN0056A_System_Control_and_Management_Interface.pdf
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x00010019
+  BASE_NAME                      = PowerDxe
+  FILE_GUID                      = 7A98E3A1-8EF2-19BB-EE53-4A5F56D0D964
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = PowerDxeEntryPoint
+
+[Binaries.AARCH64]
+  PE32|PowerDxe.efi|*
+  DXE_DEPEX|PowerDxe.depex|*
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  ArmPlatformPkg/ArmPlatformPkg.dec
+  MdePkg/MdePkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  ArmLib
+  ArmMtlLib
+  DebugLib
+  IoLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  ArmSmcLib
+
+[Protocols]
+  gCixPowerProtocolGuid
+
+[Depex]
+  TRUE
+

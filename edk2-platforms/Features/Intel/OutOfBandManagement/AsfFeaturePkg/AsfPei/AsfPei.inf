@@ -1,0 +1,51 @@
+## @file
+#  Asf PEIM
+#
+#  Follow Asf spec to send progress or error message to Smbus device
+#
+#  Copyright (c) 1985 - 2022, AMI. All rights reserved.<BR>
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = AsfPei
+  MODULE_UNI_FILE                = AsfPei.uni
+  FILE_GUID                      = D2603B09-B8A2-4837-AA1E-EAE8E4DF78E7
+  MODULE_TYPE                    = PEIM
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = AsfPeiEntry
+
+#
+# The following information is for reference only and not required by the build tools.
+#
+#  VALID_ARCHITECTURES           = IA32 X64
+#
+
+[Sources]
+  AsfPei.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  AsfFeaturePkg/AsfFeaturePkg.dec
+
+[LibraryClasses]
+  PeimEntryPoint
+  PeiServicesLib
+  DebugLib
+
+[Ppis]
+  gEfiPeiRscHandlerPpiGuid        ## CONSUMES
+  gEfiPeiMemoryDiscoveredPpiGuid  ## CONSUMES
+  gEfiPeiSmbus2PpiGuid            ## CONSUMES
+
+[Pcd]
+  gAsfFeaturePkgTokenSpaceGuid.PcdSmbusSlaveAddressForDashLan
+  gAsfFeaturePkgTokenSpaceGuid.PcdAsfMessageErrorLevel
+
+[Depex]
+  gEfiPeiSmbus2PpiGuid
+
+[UserExtensions.TianoCore."ExtraFiles"]
+  AsfPeiExtra.uni
+

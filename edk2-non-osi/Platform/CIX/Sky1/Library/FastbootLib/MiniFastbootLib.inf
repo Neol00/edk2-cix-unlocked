@@ -1,0 +1,45 @@
+#/** @file
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#**/
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = MiniFastbootLib
+  FILE_GUID                      = 92B3DECC-9828-2211-175F-3D0336EC4145
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = MiniFastbootLib
+
+[Binaries.AARCH64]
+  LIB|MiniFastbootLib.lib|*
+
+[BuildOptions]
+	GCC:*_*_*_CC_FLAGS = -DMINIFASTBOOT -Wno-unused-function -Wno-unused-variable
+
+[Packages]
+  EmbeddedPkg/EmbeddedPkg.dec
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+  ArmPkg/ArmPkg.dec
+
+[LibraryClasses]
+  UefiLib
+  PcdLib
+  DebugLib
+  BootLib
+  LibUfdt
+  FlashUpdateLib
+  LaunchEfiLib
+  AvbLib
+  ArmLib
+  OpteeLib
+
+[Guids]
+
+[Protocols]
+  gCixSocInfoProtocolGuid
+  gEfiUsbDeviceControlGuid
+  gEfiBlockIoProtocolGuid

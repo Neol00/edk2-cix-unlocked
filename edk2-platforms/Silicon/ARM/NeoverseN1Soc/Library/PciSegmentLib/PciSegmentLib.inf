@@ -1,0 +1,38 @@
+## @file
+# PCI Segment Library for N1Sdp SoC with multiple RCs
+#
+# Copyright (c) 2007 - 2014, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2022, ARM Limited. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001B
+  BASE_NAME                      = PciSegmentLib
+  FILE_GUID                      = b5ecc9c3-6b30-4f72-8a06-889b4ea8427e
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = PciSegmentLib
+
+[Sources]
+  PciSegmentLib.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  Platform/ARM/N1Sdp/N1SdpPlatform.dec
+  Silicon/ARM/NeoverseN1Soc/NeoverseN1Soc.dec
+
+[LibraryClasses]
+  BaseLib
+  DebugLib
+  IoLib
+
+[FixedPcd]
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixExpressBaseAddress
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieExpressBaseAddress
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixRootPortConfigBaseAddress
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixRootPortConfigBaseSize
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieRootPortConfigBaseAddress
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieRootPortConfigBaseSize

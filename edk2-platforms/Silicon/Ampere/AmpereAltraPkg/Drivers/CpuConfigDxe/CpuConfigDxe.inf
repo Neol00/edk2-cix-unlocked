@@ -1,0 +1,58 @@
+## @file
+#
+# Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001B
+  BASE_NAME                      = CpuConfigDxe
+  MODULE_UNI_FILE                = CpuConfigDxe.uni
+  FILE_GUID                      = A20D8E6E-EE6C-43C5-809F-19BB930653AE
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = CpuConfigDxeEntryPoint
+
+[Sources.common]
+  CpuConfigDxe.c
+  CpuConfigDxe.h
+  CpuConfigNVDataStruc.h
+  CpuConfigVfr.vfr
+  CpuConfigStrings.uni
+
+[Packages]
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/Ampere/AmpereAltraPkg/AmpereAltraPkg.dec
+  Silicon/Ampere/AmpereSiliconPkg/AmpereSiliconPkg.dec
+
+[LibraryClasses]
+  ArmLib
+  BaseLib
+  DebugLib
+  DevicePathLib
+  HiiLib
+  HobLib
+  IoLib
+  MemoryAllocationLib
+  NVParamLib
+  PcdLib
+  PrintLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiLib
+  UefiRuntimeServicesTableLib
+
+[Protocols]
+  gEfiHiiConfigRoutingProtocolGuid             ## CONSUMES
+  gEfiHiiConfigAccessProtocolGuid              ## PRODUCES
+  gEfiDevicePathProtocolGuid                   ## PRODUCES
+
+[Guids]
+  gCpuConfigFormSetGuid
+  gPlatformManagerFormsetGuid
+
+[Depex]
+  TRUE

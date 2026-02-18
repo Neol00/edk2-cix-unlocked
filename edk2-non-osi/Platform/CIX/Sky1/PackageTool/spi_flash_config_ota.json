@@ -1,0 +1,14 @@
+{
+    "cfs_version": 1,
+    "fip_version": 2345,
+    "flash_size": "0x800000",
+    "ota_flags": "0x80000000",
+    "image_count": 1,
+    "image_header_groups": [{
+            "image_type": 7,
+            "address": "0x3FE000",
+            "size": "0x402000",
+            "file": "Firmwares/bootloader3.img"
+        }
+    ]
+}

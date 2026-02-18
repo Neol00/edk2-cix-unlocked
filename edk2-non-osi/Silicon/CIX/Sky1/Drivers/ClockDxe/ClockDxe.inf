@@ -1,0 +1,53 @@
+## @file
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = ClockDxe
+  FILE_GUID                      = b710f783-3329-4a82-976d-e9a8b040202d
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = ClockDxeEntryPoint
+
+[Binaries.AARCH64]
+  PE32|ClockDxe.efi|*
+  DXE_DEPEX|ClockDxe.depex|*
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  BaseLib
+  BaseMemoryLib
+  DebugLib
+  MemoryAllocationLib
+  IoLib
+  PcdLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiLib
+  CsuPmIpcLib
+
+[Guids]
+
+
+[Protocols]
+  gCixClockProtocolGuid
+  gArmScmiClockProtocolGuid
+  gArmScmiClock2ProtocolGuid
+
+
+[Pcd]
+  #gCixTokenSpaceGuid.PcdSystemProductName
+
+[Depex]
+  gArmScmiClock2ProtocolGuid

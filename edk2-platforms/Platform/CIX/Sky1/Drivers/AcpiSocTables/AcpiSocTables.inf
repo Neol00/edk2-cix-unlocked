@@ -1,0 +1,115 @@
+## @file
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = SocAcpiTables
+  FILE_GUID                      = 7E374E25-8E01-4FEE-87F2-390C23C606CD
+  MODULE_TYPE                    = USER_DEFINED
+  VERSION_STRING                 = 1.0
+
+#
+# The following information is for reference only and not required by the build tools.
+#
+#  VALID_ARCHITECTURES           = AARCH64
+#
+
+[Sources]
+  Dsdt.asl
+  Fadt.aslc
+  Gtdt.aslc
+#  Madt.aslc
+  Dbg2.aslc
+  Iort.aslc
+  Sdei.aslc
+  Csrt.aslc
+  Spcr.aslc
+  Pcct.aslc
+  Pptt.aslc
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  ArmPlatformPkg/ArmPlatformPkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+
+[FixedPcd]
+  gArmPlatformTokenSpaceGuid.PcdClusterCount
+  gArmPlatformTokenSpaceGuid.PcdCoreCount
+  gArmTokenSpaceGuid.PcdGicDistributorBase
+  gArmTokenSpaceGuid.PcdGicRedistributorsBase
+  gArmTokenSpaceGuid.PcdArmPrimaryCore
+
+  gArmTokenSpaceGuid.PcdArmArchTimerSecIntrNum
+  gArmTokenSpaceGuid.PcdArmArchTimerIntrNum
+  gArmTokenSpaceGuid.PcdArmArchTimerHypIntrNum
+  gArmTokenSpaceGuid.PcdArmArchTimerVirtIntrNum
+  gArmTokenSpaceGuid.PcdArmArchTimerHypVirtIntrNum
+  gArmPlatformTokenSpaceGuid.PL011UartInterrupt
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase
+
+  gArmPlatformTokenSpaceGuid.PcdWatchdogCount
+  gArmTokenSpaceGuid.PcdGenericWatchdogControlBase
+  gArmTokenSpaceGuid.PcdGenericWatchdogRefreshBase
+  gArmTokenSpaceGuid.PcdGenericWatchdogEl2IntrNum
+
+  gCixTokenSpaceGuid.PcdPcieRootPort0Enable
+  gCixTokenSpaceGuid.PcdPcieRootPort1Enable
+  gCixTokenSpaceGuid.PcdPcieRootPort2Enable
+  gCixTokenSpaceGuid.PcdPcieRootPort3Enable
+  gCixTokenSpaceGuid.PcdPcieRootPort4Enable
+
+  gCixTokenSpaceGuid.PcdGpuReservedMemoryBase
+  gCixTokenSpaceGuid.PcdGpuReservedMemorySize
+
+  gArmPlatformTokenSpaceGuid.PcdArmLcdDdrFrameBufferBase
+  gArmPlatformTokenSpaceGuid.PcdArmLcdDdrFrameBufferSize
+
+  gArmPlatformTokenSpaceGuid.PcdSerialDbgRegisterBase
+  gArmPlatformTokenSpaceGuid.PcdSerialDbgInterrupt
+  gArmPlatformTokenSpaceGuid.PcdSerialDbgUartBaudRate
+
+  gCixPlatformTokenSpaceGuid.PcdAcpiGpio0IoMask
+  gCixPlatformTokenSpaceGuid.PcdAcpiGpio1IoMask
+  gCixPlatformTokenSpaceGuid.PcdAcpiGpio2IoMask
+  gCixPlatformTokenSpaceGuid.PcdAcpiGpio3IoMask
+  gCixPlatformTokenSpaceGuid.PcdAcpiGpio4IoMask
+  gCixPlatformTokenSpaceGuid.PcdAcpiGpio5IoMask
+  gCixPlatformTokenSpaceGuid.PcdAcpiPrefPmProf
+  gCixPlatformTokenSpaceGuid.PcdTPMPPIMemoryBase
+
+  gCixTokenSpaceGuid.PcdI2c0MutexId
+  gCixTokenSpaceGuid.PcdI2c1MutexId
+  gCixTokenSpaceGuid.PcdI2c2MutexId
+  gCixTokenSpaceGuid.PcdI2c3MutexId
+  gCixTokenSpaceGuid.PcdI2c4MutexId
+  gCixTokenSpaceGuid.PcdI2c5MutexId
+  gCixTokenSpaceGuid.PcdI2c6MutexId
+  gCixTokenSpaceGuid.PcdI2c7MutexId
+
+  gCixTokenSpaceGuid.PcdAcpiCsiDmaEnable
+  gCixTokenSpaceGuid.PcdAcpiUart0Enable
+  gCixTokenSpaceGuid.PcdAcpiUart1Enable
+  gCixTokenSpaceGuid.PcdAcpiUart2Enable
+  gCixTokenSpaceGuid.PcdAcpiUart3Enable
+  gCixTokenSpaceGuid.PcdAcpiI2s0Enable
+  gCixTokenSpaceGuid.PcdAcpiI2s1Enable
+  gCixTokenSpaceGuid.PcdAcpiI2s2Enable
+  gCixTokenSpaceGuid.PcdAcpiI2s3Enable
+  gCixTokenSpaceGuid.PcdAcpiI2s4Enable
+  gCixTokenSpaceGuid.PcdAcpiI2s5Enable
+  gCixTokenSpaceGuid.PcdAcpiI2s6Enable
+  gCixTokenSpaceGuid.PcdAcpiI2s7Enable
+  gCixTokenSpaceGuid.PcdAcpiI2s8Enable
+  gCixTokenSpaceGuid.PcdAcpiI2s9Enable
+  gCixTokenSpaceGuid.PcdAcpiHdaEnable
+
+  gCixPlatformTokenSpaceGuid.PcdTpm2AcpiBufferBase

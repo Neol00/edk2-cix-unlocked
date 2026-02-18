@@ -1,0 +1,34 @@
+## @file
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = PinMuxTableLib
+  FILE_GUID                      = C861582D-00B2-4016-A7BD-EE9B9A9DFCD1
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = PinMuxTableLib
+  CONSTRUCTOR                    = PinMuxTableLibConstructor
+
+[Sources]
+  PinMuxTableLib.c
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+
+[LibraryClasses]
+  BaseLib
+  UefiBootServicesTableLib
+
+[Protocols]
+  gCixPlatformConfigParamsManageProtocolGuid
+

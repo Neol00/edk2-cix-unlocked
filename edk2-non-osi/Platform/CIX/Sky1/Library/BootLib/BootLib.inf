@@ -1,0 +1,83 @@
+#/* @BootLib.inf
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#  Copyright (c) 2015-2021, The Linux Foundation. All rights reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#*/
+
+[Defines]
+	INF_VERSION                    = 0x00010005
+	BASE_NAME                      = BootLib
+	FILE_GUID                      = 48e6f825-676b-41a8-a42d-1b6f111b186f
+	MODULE_TYPE                    = BASE
+	VERSION_STRING                 = 1.0
+	LIBRARY_CLASS                  = BootLib
+
+[BuildOptions]
+	GCC:*_*_*_CC_FLAGS = $(LLVM_ENABLE_SAFESTACK) $(LLVM_SAFESTACK_USE_PTR) $(LLVM_SAFESTACK_COLORING)
+	GCC:*_*_*_CC_FLAGS = -Wno-error=multistatement-macros
+
+[BuildOptions.AARCH64]
+	GCC:*_*_*_CC_FLAGS = -O2 $(SDLLVM_COMPILE_ANALYZE) $(SDLLVM_ANALYZE_REPORT) -Wno-address-of-packed-member
+	GCC:*_*_*_CC_FLAGS = $(UBSAN_UEFI_GCC_FLAG_UNDEFINED)
+	GCC:*_*_*_CC_FLAGS = $(UBSAN_UEFI_GCC_FLAG_ALIGNMENT)
+
+[Binaries.AARCH64]
+  LIB|BootLib.lib|*
+
+[Packages]
+	ArmPkg/ArmPkg.dec
+	MdePkg/MdePkg.dec
+	EmbeddedPkg/EmbeddedPkg.dec
+	ArmPlatformPkg/ArmPlatformPkg.dec
+	MdeModulePkg/MdeModulePkg.dec
+	Platform/CIX/Sky1/Sky1.dec
+	Silicon/CIX/Sky1/CixPkg.dec
+	Platform/CIX/CIX.dec
+
+[LibraryClasses]
+	DxeServicesTableLib
+	UefiLib
+	CacheMaintenanceLib
+	ArmLib
+	BaseLib
+	DebugLib
+	DevicePathLib
+	PerformanceLib
+	DebugPrintErrorLevelLib
+	FdtLib
+	TimerLib
+	MemoryAllocationLib
+	AvbLib
+	UefiBootManagerLib
+	DtbUpdateLibSi
+	PartitionLib
+	FlashUpdateLib
+
+[Guids]
+	gEfiPartitionTypeGuid
+	gEfiFileSystemInfoGuid
+	gCixTokenSpaceGuid
+	gPlatformSetupVariableGuid
+
+[Protocols]
+	gEfiPartitionInfoProtocolGuid
+	gEfiDevicePathToTextProtocolGuid
+	gCixSocInfoProtocolGuid
+
+[FixedPcd]
+	gCixPlatformTokenSpaceGuid.KernelLoadAddress
+	gCixPlatformTokenSpaceGuid.RamdiskLoadAddress
+	gCixPlatformTokenSpaceGuid.KernelEndAddr
+	gCixPlatformTokenSpaceGuid.DeviceTreeLoadAddr
+	gCixPlatformTokenSpaceGuid.KernelLoadAddress32
+	gCixPlatformTokenSpaceGuid.EnableNewNodeSearchFuc
+	gArmTokenSpaceGuid.PcdSystemMemoryBase
+
+[Pcd]
+        gCixPlatformTokenSpaceGuid.AvbWithBackDoor
+
+[Depex]
+	TRUE

@@ -1,0 +1,14 @@
+## @file
+#  FDF file for post-memory BeepDebugFeature advanced feature.
+#
+#  This file is intended to be included into another package so advanced features
+#  can be conditionally included in the flash image by enabling the respective
+#  feature via its FeaturePCD.
+#
+# Copyright (C) 2022 Intel Corporation.
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+##
+
+INF FILE_GUID = $(POST_CODE_DXE_FILENAME) MdeModulePkg/Universal/StatusCodeHandler/RuntimeDxe/StatusCodeHandlerRuntimeDxe.inf
+INF FILE_GUID = $(POST_CODE_SMM_FILENAME) MdeModulePkg/Universal/StatusCodeHandler/Smm/StatusCodeHandlerSmm.inf

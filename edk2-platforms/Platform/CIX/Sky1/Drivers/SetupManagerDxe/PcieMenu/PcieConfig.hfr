@@ -1,0 +1,518 @@
+/**
+  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+
+  SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+//PCIE Form
+    form formid = PCIE_CONFIG_FORM_ID,
+        title  = STRING_TOKEN(STR_PCIE_FORM_SET_TITLE);
+        subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+
+        goto PCIE_ROOT_PORT0_CONFIG_FORM_ID,
+           prompt = STRING_TOKEN(STR_PCIERP0_OPTIONS_FORM_TITLE),
+           help = STRING_TOKEN(STR_EMPTY_STRING);
+
+        goto PCIE_ROOT_PORT1_CONFIG_FORM_ID,
+            prompt = STRING_TOKEN(STR_PCIERP1_OPTIONS_FORM_TITLE),
+            help = STRING_TOKEN(STR_EMPTY_STRING);
+
+        goto PCIE_ROOT_PORT2_CONFIG_FORM_ID,
+            prompt = STRING_TOKEN(STR_PCIERP2_OPTIONS_FORM_TITLE),
+            help = STRING_TOKEN(STR_EMPTY_STRING);
+
+        goto PCIE_ROOT_PORT3_CONFIG_FORM_ID,
+            prompt = STRING_TOKEN(STR_PCIERP3_OPTIONS_FORM_TITLE),
+            help = STRING_TOKEN(STR_EMPTY_STRING);
+        goto PCIE_ROOT_PORT4_CONFIG_FORM_ID,
+            prompt = STRING_TOKEN(STR_PCIERP4_OPTIONS_FORM_TITLE),
+            help = STRING_TOKEN(STR_EMPTY_STRING);
+    endform;
+
+    form formid = PCIE_ROOT_PORT0_CONFIG_FORM_ID,
+      title  = STRING_TOKEN(STR_PCIERP0_OPTIONS_FORM_TITLE);
+      subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+
+      oneof varid     = PlatformSetupVar.PcieRpEnable[0],
+          prompt      = STRING_TOKEN(STR_PCIE_PROMPT0),
+          help        = STRING_TOKEN(STR_PCIERP_HELP),
+          default     = FixedPcdGetBool (PcdPcieRootPort0Enable),
+          option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+suppressif ideqval PlatformSetupVar.PcieRpEnable[0] == 0x0;
+      oneof varid     =   PlatformSetupVar.PcieWidth[0],
+          prompt      =   STRING_TOKEN(STR_PCIE_WIDTH_PROMPT0),
+          help        =   STRING_TOKEN(STR_PCIE_WIDTH_HELP),
+          default     =   FixedPcdGet8 (PcdPcieRootPort0LaneNum),
+          option text =   STRING_TOKEN(STR_X1),  value = 0,  flags = RESET_REQUIRED;
+          option text =   STRING_TOKEN(STR_X2),  value = 1,  flags = RESET_REQUIRED;
+          option text =   STRING_TOKEN(STR_X4),  value = 2,  flags = RESET_REQUIRED;
+          option text =   STRING_TOKEN(STR_X8),  value = 3,  flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid     = PlatformSetupVar.PcieMaxSpeed[0],
+          prompt      = STRING_TOKEN (STR_PCIE_SPEED_PROMPT0),
+          help        = STRING_TOKEN (STR_PCIE_SPEED_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort0MaxSpeed),
+          option text = STRING_TOKEN (STR_GEN1), value = 0, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN (STR_GEN2), value = 1, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN (STR_GEN3), value = 2, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN (STR_GEN4), value = 3, flags = RESET_REQUIRED;
+      endoneof;
+suppressif TRUE;
+      oneof varid     = PlatformSetupVar.PcieTargetLinkSpeed[0],
+          prompt      = STRING_TOKEN(STR_LINK_SPEED_PROMPT),
+          help        = STRING_TOKEN(STR_LINK_SPEED_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort0SpeedGen),
+          option text = STRING_TOKEN(STR_2_5G), value = 1, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_5_0G), value = 2, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_8_0G), value = 3, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_16_0G),value = 4, flags = RESET_REQUIRED;
+      endoneof;
+endif;
+      oneof varid     = PlatformSetupVar.PcieAspmMaxSupport[0],
+          prompt      = STRING_TOKEN(STR_PCIE_ASPM_MAX_PROMPT0),
+          help        = STRING_TOKEN(STR_PCIE_ASPM_MAX_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort0MaxAspmSupport),
+          option text = STRING_TOKEN(STR_PCIE_ASPM_DISABLE),      value = 0, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L0S_STRING),   value = 1, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L1_STRING),    value = 2, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L0SL1_STRING), value = 3, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid     = PlatformSetupVar.PcieAspm[0],
+          prompt      = STRING_TOKEN(STR_PCIE_ASPM_PROMPT0),
+          help        = STRING_TOKEN(STR_PCIE_ASPM_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort0AspmSupport),
+          option text = STRING_TOKEN(STR_PCIE_ASPM_DISABLE),      value = 0, flags = RESET_REQUIRED;
+          suppressif ideqval PlatformSetupVar.PcieAspmMaxSupport[0] < 0x1;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L0S_STRING),   value = 1, flags = RESET_REQUIRED;
+          endif;
+          suppressif ideqval PlatformSetupVar.PcieAspmMaxSupport[0] < 0x2;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L1_STRING),    value = 2, flags = RESET_REQUIRED;
+          endif;
+          suppressif ideqval PlatformSetupVar.PcieAspmMaxSupport[0] < 0x3;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L0SL1_STRING), value = 3, flags = RESET_REQUIRED;
+          endif;
+        endoneof;
+
+      oneof varid     = PlatformSetupVar.PcieMaxPayload[0],
+          prompt      = STRING_TOKEN(STR_PCIE_MAX_PAYLOAD_PROMPT),
+          help        = STRING_TOKEN(STR_PCIE_MAX_PAYLOAD_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort0MaxPayload),
+          option text = STRING_TOKEN(STR_MAX_128),  value = 0,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_256),  value = 1,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_512),  value = 2,    flags = RESET_REQUIRED;
+      endoneof;
+suppressif TRUE;
+      oneof varid     = PlatformSetupVar.PcieMaxReadRequest[0],
+          prompt      = STRING_TOKEN(STR_PCIE_MAX_READ_REQUEST_PROMPT),
+          help        = STRING_TOKEN(STR_PCIE_MAX_READ_REQUEST_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort0MaxReadRequest),
+          option text = STRING_TOKEN(STR_MAX_128),  value = 0,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_256),  value = 1,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_512),  value = 2,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_1024), value = 3,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_2048), value = 4,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_4096), value = 5,    flags = RESET_REQUIRED;
+      endoneof;
+endif;
+
+      oneof varid     = PlatformSetupVar.PcieDtiEnable[0],
+          prompt      = STRING_TOKEN(STR_PCIE_DTI_PROMPT),
+          help        = STRING_TOKEN(STR_PCIE_DTI_HELP),
+          default     = FixedPcdGetBool (PcdPcieRootPort0DtiEnable),
+          option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+endif;
+     endform;
+
+    form formid = PCIE_ROOT_PORT1_CONFIG_FORM_ID,
+      title  = STRING_TOKEN(STR_PCIERP1_OPTIONS_FORM_TITLE);
+      subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+
+      oneof varid     = PlatformSetupVar.PcieRpEnable[1],
+          prompt      = STRING_TOKEN(STR_PCIE_PROMPT1),
+          help        = STRING_TOKEN(STR_PCIERP_HELP),
+          default     = FixedPcdGetBool (PcdPcieRootPort1Enable),
+          option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+suppressif ideqval PlatformSetupVar.PcieRpEnable[1] == 0x0;
+      oneof varid     =   PlatformSetupVar.PcieWidth[1],
+          prompt      =   STRING_TOKEN(STR_PCIE_WIDTH_PROMPT1),
+          help        =   STRING_TOKEN(STR_PCIE_WIDTH_HELP),
+          default     =   FixedPcdGet8 (PcdPcieRootPort1LaneNum),
+          option text =   STRING_TOKEN(STR_X1),  value = 0,  flags = RESET_REQUIRED;
+          option text =   STRING_TOKEN(STR_X2),  value = 1,  flags = RESET_REQUIRED;
+          option text =   STRING_TOKEN(STR_X4),  value = 2,  flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid     = PlatformSetupVar.PcieMaxSpeed[1],
+          prompt      = STRING_TOKEN (STR_PCIE_SPEED_PROMPT1),
+          help        = STRING_TOKEN (STR_PCIE_SPEED_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort1MaxSpeed),
+          option text = STRING_TOKEN (STR_GEN1), value = 0, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN (STR_GEN2), value = 1, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN (STR_GEN3), value = 2, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN (STR_GEN4), value = 3, flags = RESET_REQUIRED;
+      endoneof;
+suppressif TRUE;
+      oneof varid     = PlatformSetupVar.PcieTargetLinkSpeed[1],
+          prompt      = STRING_TOKEN(STR_LINK_SPEED_PROMPT),
+          help        = STRING_TOKEN(STR_LINK_SPEED_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort1SpeedGen),
+          option text = STRING_TOKEN(STR_2_5G), value = 1, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_5_0G), value = 2, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_8_0G), value = 3, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_16_0G),value = 4, flags = RESET_REQUIRED;
+      endoneof;
+endif;
+      oneof varid     = PlatformSetupVar.PcieAspmMaxSupport[1],
+          prompt      = STRING_TOKEN(STR_PCIE_ASPM_MAX_PROMPT1),
+          help        = STRING_TOKEN(STR_PCIE_ASPM_MAX_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort1MaxAspmSupport),
+          option text = STRING_TOKEN(STR_PCIE_ASPM_DISABLE),      value = 0, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L0S_STRING),   value = 1, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L1_STRING),    value = 2, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L0SL1_STRING), value = 3, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid     = PlatformSetupVar.PcieAspm[1],
+          prompt      = STRING_TOKEN(STR_PCIE_ASPM_PROMPT1),
+          help        = STRING_TOKEN(STR_PCIE_ASPM_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort1AspmSupport),
+          option text = STRING_TOKEN(STR_PCIE_ASPM_DISABLE),      value = 0, flags = RESET_REQUIRED;
+          suppressif ideqval PlatformSetupVar.PcieAspmMaxSupport[1] < 0x1;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L0S_STRING),   value = 1, flags = RESET_REQUIRED;
+          endif;
+          suppressif ideqval PlatformSetupVar.PcieAspmMaxSupport[1] < 0x2;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L1_STRING),    value = 2, flags = RESET_REQUIRED;
+          endif;
+          suppressif ideqval PlatformSetupVar.PcieAspmMaxSupport[1] < 0x3;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L0SL1_STRING), value = 3, flags = RESET_REQUIRED;
+          endif;
+        endoneof;
+
+      oneof varid     = PlatformSetupVar.PcieMaxPayload[1],
+          prompt      = STRING_TOKEN(STR_PCIE_MAX_PAYLOAD_PROMPT),
+          help        = STRING_TOKEN(STR_PCIE_MAX_PAYLOAD_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort1MaxPayload),
+          option text = STRING_TOKEN(STR_MAX_128),  value = 0,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_256),  value = 1,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_512),  value = 2,    flags = RESET_REQUIRED;
+      endoneof;
+suppressif TRUE;
+      oneof varid     = PlatformSetupVar.PcieMaxReadRequest[1],
+          prompt      = STRING_TOKEN(STR_PCIE_MAX_READ_REQUEST_PROMPT),
+          help        = STRING_TOKEN(STR_PCIE_MAX_READ_REQUEST_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort1MaxReadRequest),
+          option text = STRING_TOKEN(STR_MAX_128),  value = 0,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_256),  value = 1,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_512),  value = 2,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_1024), value = 3,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_2048), value = 4,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_4096), value = 5,    flags = RESET_REQUIRED;
+      endoneof;
+endif;
+      oneof varid     = PlatformSetupVar.PcieDtiEnable[1],
+          prompt      = STRING_TOKEN(STR_PCIE_DTI_PROMPT),
+          help        = STRING_TOKEN(STR_PCIE_DTI_HELP),
+          default     = FixedPcdGetBool (PcdPcieRootPort1DtiEnable),
+          option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+endif;
+     endform;
+
+    form formid = PCIE_ROOT_PORT2_CONFIG_FORM_ID,
+      title  = STRING_TOKEN(STR_PCIERP2_OPTIONS_FORM_TITLE);
+      subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+
+      oneof varid     = PlatformSetupVar.PcieRpEnable[2],
+          prompt      = STRING_TOKEN(STR_PCIE_PROMPT2),
+          help        = STRING_TOKEN(STR_PCIERP_HELP),
+          default     = FixedPcdGetBool (PcdPcieRootPort2Enable),
+          option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+suppressif ideqval PlatformSetupVar.PcieRpEnable[2] == 0x0;
+      oneof varid     =   PlatformSetupVar.PcieWidth[2],
+          prompt      =   STRING_TOKEN(STR_PCIE_WIDTH_PROMPT2),
+          help        =   STRING_TOKEN(STR_PCIE_WIDTH_HELP),
+          default     =   FixedPcdGet8 (PcdPcieRootPort2LaneNum),
+          option text =   STRING_TOKEN(STR_X1),  value = 0,  flags = RESET_REQUIRED;
+          option text =   STRING_TOKEN(STR_X2),  value = 1,  flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid     = PlatformSetupVar.PcieMaxSpeed[2],
+          prompt      = STRING_TOKEN (STR_PCIE_SPEED_PROMPT2),
+          help        = STRING_TOKEN (STR_PCIE_SPEED_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort2MaxSpeed),
+          option text = STRING_TOKEN (STR_GEN1), value = 0, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN (STR_GEN2), value = 1, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN (STR_GEN3), value = 2, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN (STR_GEN4), value = 3, flags = RESET_REQUIRED;
+      endoneof;
+suppressif TRUE;
+      oneof varid     = PlatformSetupVar.PcieTargetLinkSpeed[2],
+          prompt      = STRING_TOKEN(STR_LINK_SPEED_PROMPT),
+          help        = STRING_TOKEN(STR_LINK_SPEED_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort2SpeedGen),
+          option text = STRING_TOKEN(STR_2_5G), value = 1, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_5_0G), value = 2, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_8_0G), value = 3, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_16_0G),value = 4, flags = RESET_REQUIRED;
+      endoneof;
+endif;
+      oneof varid     = PlatformSetupVar.PcieAspmMaxSupport[2],
+          prompt      = STRING_TOKEN(STR_PCIE_ASPM_MAX_PROMPT2),
+          help        = STRING_TOKEN(STR_PCIE_ASPM_MAX_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort2MaxAspmSupport),
+          option text = STRING_TOKEN(STR_PCIE_ASPM_DISABLE),      value = 0, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L0S_STRING),   value = 1, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L1_STRING),    value = 2, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L0SL1_STRING), value = 3, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid     = PlatformSetupVar.PcieAspm[2],
+          prompt      = STRING_TOKEN(STR_PCIE_ASPM_PROMPT2),
+          help        = STRING_TOKEN(STR_PCIE_ASPM_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort2AspmSupport),
+          option text = STRING_TOKEN(STR_PCIE_ASPM_DISABLE),      value = 0, flags = RESET_REQUIRED;
+          suppressif ideqval PlatformSetupVar.PcieAspmMaxSupport[2] < 0x1;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L0S_STRING),   value = 1, flags = RESET_REQUIRED;
+          endif;
+          suppressif ideqval PlatformSetupVar.PcieAspmMaxSupport[2] < 0x2;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L1_STRING),    value = 2, flags = RESET_REQUIRED;
+          endif;
+          suppressif ideqval PlatformSetupVar.PcieAspmMaxSupport[2] < 0x3;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L0SL1_STRING), value = 3, flags = RESET_REQUIRED;
+          endif;
+        endoneof;
+
+      oneof varid     = PlatformSetupVar.PcieMaxPayload[2],
+          prompt      = STRING_TOKEN(STR_PCIE_MAX_PAYLOAD_PROMPT),
+          help        = STRING_TOKEN(STR_PCIE_MAX_PAYLOAD_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort2MaxPayload),
+          option text = STRING_TOKEN(STR_MAX_128),  value = 0,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_256),  value = 1,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_512),  value = 2,    flags = RESET_REQUIRED;
+      endoneof;
+suppressif TRUE;
+      oneof varid     = PlatformSetupVar.PcieMaxReadRequest[2],
+          prompt      = STRING_TOKEN(STR_PCIE_MAX_READ_REQUEST_PROMPT),
+          help        = STRING_TOKEN(STR_PCIE_MAX_READ_REQUEST_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort2MaxReadRequest),
+          option text = STRING_TOKEN(STR_MAX_128),  value = 0,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_256),  value = 1,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_512),  value = 2,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_1024), value = 3,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_2048), value = 4,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_4096), value = 5,    flags = RESET_REQUIRED;
+      endoneof;
+endif;
+      oneof varid     = PlatformSetupVar.PcieDtiEnable[2],
+          prompt      = STRING_TOKEN(STR_PCIE_DTI_PROMPT),
+          help        = STRING_TOKEN(STR_PCIE_DTI_HELP),
+          default     = FixedPcdGetBool (PcdPcieRootPort2DtiEnable),
+          option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+endif;
+     endform;
+
+    form formid = PCIE_ROOT_PORT3_CONFIG_FORM_ID,
+      title  = STRING_TOKEN(STR_PCIERP3_OPTIONS_FORM_TITLE);
+      subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+
+      oneof varid     = PlatformSetupVar.PcieRpEnable[3],
+          prompt      = STRING_TOKEN(STR_PCIE_PROMPT3),
+          help        = STRING_TOKEN(STR_PCIERP_HELP),
+          default     = FixedPcdGetBool (PcdPcieRootPort3Enable),
+          option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+suppressif ideqval PlatformSetupVar.PcieRpEnable[3] == 0x0;
+      oneof varid     =   PlatformSetupVar.PcieWidth[3],
+          prompt      =   STRING_TOKEN(STR_PCIE_WIDTH_PROMPT3),
+          help        =   STRING_TOKEN(STR_PCIE_WIDTH_HELP),
+          default     =   FixedPcdGet8 (PcdPcieRootPort3LaneNum),
+          option text =   STRING_TOKEN(STR_X1),  value = 0,  flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid     = PlatformSetupVar.PcieMaxSpeed[3],
+          prompt      = STRING_TOKEN (STR_PCIE_SPEED_PROMPT3),
+          help        = STRING_TOKEN (STR_PCIE_SPEED_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort3MaxSpeed),
+          option text = STRING_TOKEN (STR_GEN1), value = 0, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN (STR_GEN2), value = 1, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN (STR_GEN3), value = 2, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN (STR_GEN4), value = 3, flags = RESET_REQUIRED;
+      endoneof;
+suppressif TRUE;
+      oneof varid     = PlatformSetupVar.PcieTargetLinkSpeed[3],
+          prompt      = STRING_TOKEN(STR_LINK_SPEED_PROMPT),
+          help        = STRING_TOKEN(STR_LINK_SPEED_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort3SpeedGen),
+          option text = STRING_TOKEN(STR_2_5G), value = 1, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_5_0G), value = 2, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_8_0G), value = 3, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_16_0G),value = 4, flags = RESET_REQUIRED;
+      endoneof;
+endif;
+      oneof varid     = PlatformSetupVar.PcieAspmMaxSupport[3],
+          prompt      = STRING_TOKEN(STR_PCIE_ASPM_MAX_PROMPT3),
+          help        = STRING_TOKEN(STR_PCIE_ASPM_MAX_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort3MaxAspmSupport),
+          option text = STRING_TOKEN(STR_PCIE_ASPM_DISABLE),      value = 0, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L0S_STRING),   value = 1, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L1_STRING),    value = 2, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L0SL1_STRING), value = 3, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid     = PlatformSetupVar.PcieAspm[3],
+          prompt      = STRING_TOKEN(STR_PCIE_ASPM_PROMPT3),
+          help        = STRING_TOKEN(STR_PCIE_ASPM_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort3AspmSupport),
+          option text = STRING_TOKEN(STR_PCIE_ASPM_DISABLE),      value = 0, flags = RESET_REQUIRED;
+          suppressif ideqval PlatformSetupVar.PcieAspmMaxSupport[3] < 0x1;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L0S_STRING),   value = 1, flags = RESET_REQUIRED;
+          endif;
+          suppressif ideqval PlatformSetupVar.PcieAspmMaxSupport[3] < 0x2;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L1_STRING),    value = 2, flags = RESET_REQUIRED;
+          endif;
+          suppressif ideqval PlatformSetupVar.PcieAspmMaxSupport[3] < 0x3;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L0SL1_STRING), value = 3, flags = RESET_REQUIRED;
+          endif;
+        endoneof;
+
+      oneof varid     = PlatformSetupVar.PcieMaxPayload[3],
+          prompt      = STRING_TOKEN(STR_PCIE_MAX_PAYLOAD_PROMPT),
+          help        = STRING_TOKEN(STR_PCIE_MAX_PAYLOAD_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort3MaxPayload),
+          option text = STRING_TOKEN(STR_MAX_128),  value = 0,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_256),  value = 1,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_512),  value = 2,    flags = RESET_REQUIRED;
+      endoneof;
+suppressif TRUE;
+      oneof varid     = PlatformSetupVar.PcieMaxReadRequest[3],
+          prompt      = STRING_TOKEN(STR_PCIE_MAX_READ_REQUEST_PROMPT),
+          help        = STRING_TOKEN(STR_PCIE_MAX_READ_REQUEST_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort3MaxReadRequest),
+          option text = STRING_TOKEN(STR_MAX_128),  value = 0,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_256),  value = 1,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_512),  value = 2,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_1024), value = 3,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_2048), value = 4,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_4096), value = 5,    flags = RESET_REQUIRED;
+      endoneof;
+endif;
+      oneof varid     = PlatformSetupVar.PcieDtiEnable[3],
+          prompt      = STRING_TOKEN(STR_PCIE_DTI_PROMPT),
+          help        = STRING_TOKEN(STR_PCIE_DTI_HELP),
+          default     = FixedPcdGetBool (PcdPcieRootPort3DtiEnable),
+          option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+endif;
+     endform;
+
+    form formid = PCIE_ROOT_PORT4_CONFIG_FORM_ID,
+      title  = STRING_TOKEN(STR_PCIERP4_OPTIONS_FORM_TITLE);
+      subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+
+      oneof varid     = PlatformSetupVar.PcieRpEnable[4],
+          prompt      = STRING_TOKEN(STR_PCIE_PROMPT4),
+          help        = STRING_TOKEN(STR_PCIERP_HELP),
+          default     = FixedPcdGetBool (PcdPcieRootPort4Enable),
+          option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+suppressif ideqval PlatformSetupVar.PcieRpEnable[4] == 0x0;
+      oneof varid     =   PlatformSetupVar.PcieWidth[4],
+          prompt      =   STRING_TOKEN(STR_PCIE_WIDTH_PROMPT4),
+          help        =   STRING_TOKEN(STR_PCIE_WIDTH_HELP),
+          default     =   FixedPcdGet8 (PcdPcieRootPort4LaneNum),
+          option text =   STRING_TOKEN(STR_X1),  value = 0,  flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid     = PlatformSetupVar.PcieMaxSpeed[4],
+          prompt      = STRING_TOKEN (STR_PCIE_SPEED_PROMPT4),
+          help        = STRING_TOKEN (STR_PCIE_SPEED_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort4MaxSpeed),
+          option text = STRING_TOKEN (STR_GEN1), value = 0, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN (STR_GEN2), value = 1, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN (STR_GEN3), value = 2, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN (STR_GEN4), value = 3, flags = RESET_REQUIRED;
+      endoneof;
+suppressif TRUE;
+      oneof varid     = PlatformSetupVar.PcieTargetLinkSpeed[4],
+          prompt      = STRING_TOKEN(STR_LINK_SPEED_PROMPT),
+          help        = STRING_TOKEN(STR_LINK_SPEED_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort4SpeedGen),
+          option text = STRING_TOKEN(STR_2_5G), value = 1, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_5_0G), value = 2, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_8_0G), value = 3, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_16_0G),value = 4, flags = RESET_REQUIRED;
+      endoneof;
+endif;
+      oneof varid     = PlatformSetupVar.PcieAspmMaxSupport[4],
+          prompt      = STRING_TOKEN(STR_PCIE_ASPM_MAX_PROMPT4),
+          help        = STRING_TOKEN(STR_PCIE_ASPM_MAX_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort4MaxAspmSupport),
+          option text = STRING_TOKEN(STR_PCIE_ASPM_DISABLE),      value = 0, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L0S_STRING),   value = 1, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L1_STRING),    value = 2, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L0SL1_STRING), value = 3, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid     = PlatformSetupVar.PcieAspm[4],
+          prompt      = STRING_TOKEN(STR_PCIE_ASPM_PROMPT4),
+          help        = STRING_TOKEN(STR_PCIE_ASPM_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort4AspmSupport),
+          option text = STRING_TOKEN(STR_PCIE_ASPM_DISABLE),      value = 0, flags = RESET_REQUIRED;
+          suppressif ideqval PlatformSetupVar.PcieAspmMaxSupport[4] < 0x1;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L0S_STRING),   value = 1, flags = RESET_REQUIRED;
+          endif;
+          suppressif ideqval PlatformSetupVar.PcieAspmMaxSupport[4] < 0x2;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L1_STRING),    value = 2, flags = RESET_REQUIRED;
+          endif;
+          suppressif ideqval PlatformSetupVar.PcieAspmMaxSupport[4] < 0x3;
+          option text = STRING_TOKEN(STR_PCIE_ASPM_L0SL1_STRING), value = 3, flags = RESET_REQUIRED;
+          endif;
+        endoneof;
+
+      oneof varid     = PlatformSetupVar.PcieMaxPayload[4],
+          prompt      = STRING_TOKEN(STR_PCIE_MAX_PAYLOAD_PROMPT),
+          help        = STRING_TOKEN(STR_PCIE_MAX_PAYLOAD_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort4MaxPayload),
+          option text = STRING_TOKEN(STR_MAX_128),  value = 0,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_256),  value = 1,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_512),  value = 2,    flags = RESET_REQUIRED;
+      endoneof;
+suppressif TRUE;
+      oneof varid     = PlatformSetupVar.PcieMaxReadRequest[4],
+          prompt      = STRING_TOKEN(STR_PCIE_MAX_READ_REQUEST_PROMPT),
+          help        = STRING_TOKEN(STR_PCIE_MAX_READ_REQUEST_HELP),
+          default     = FixedPcdGet8 (PcdPcieRootPort4MaxReadRequest),
+          option text = STRING_TOKEN(STR_MAX_128),  value = 0,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_256),  value = 1,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_512),  value = 2,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_1024), value = 3,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_2048), value = 4,    flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_MAX_4096), value = 5,    flags = RESET_REQUIRED;
+      endoneof;
+endif;
+      oneof varid     = PlatformSetupVar.PcieDtiEnable[4],
+          prompt      = STRING_TOKEN(STR_PCIE_DTI_PROMPT),
+          help        = STRING_TOKEN(STR_PCIE_DTI_HELP),
+          default     = FixedPcdGetBool (PcdPcieRootPort4DtiEnable),
+          option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+endif;
+     endform;

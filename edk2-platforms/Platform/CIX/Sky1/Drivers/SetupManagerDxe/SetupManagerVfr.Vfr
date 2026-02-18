@@ -1,0 +1,267 @@
+/**
+  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+
+  SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+#include <Uefi/UefiMultiPhase.h>
+#include <Guid/HiiPlatformSetupFormset.h>
+#include <SetupManagerFormId.h>
+#include <PlatformSetupVar.h>
+#include <Guid/NetworkStackSetup.h>
+#include <Guid/DtPlatformFormSet.h>
+
+#define DT_ACPI_SELECT_DT    0x0
+#define DT_ACPI_SELECT_ACPI  0x1
+
+typedef struct {
+  UINT8    Pref;
+  UINT8    Reserved[3];
+} DT_ACPI_VARSTORE_DATA;
+
+#define SUBTITLE(Text) subtitle text = Text;
+#define SEPARATOR SUBTITLE(STRING_TOKEN(STR_EMPTY_STRING))
+
+formset
+  guid      = FORMSET_GUID,
+  title     = STRING_TOKEN(STR_SETUP_MENU_TITLE),
+  help      = STRING_TOKEN(STR_SETUP_MENU_HELP),
+  classguid = gEfiIfrFrontPageGuid,
+
+  efivarstore PLATFORM_SETUP_DATA,
+    attribute = EFI_VARIABLE_BOOTSERVICE_ACCESS | EFI_VARIABLE_NON_VOLATILE,
+    name  = PlatformSetupVar,
+    guid  = PLATFORM_SETUP_VARIABLE_GUID;
+
+  efivarstore DT_ACPI_VARSTORE_DATA,
+    attribute = EFI_VARIABLE_BOOTSERVICE_ACCESS | EFI_VARIABLE_NON_VOLATILE,
+    name  = DtAcpiPref,
+    guid  = DT_PLATFORM_FORMSET_GUID;
+
+  efivarstore NETWORK_STACK,
+    attribute = EFI_VARIABLE_BOOTSERVICE_ACCESS | EFI_VARIABLE_NON_VOLATILE,
+    name  = NetworkStackVar,
+    guid  = NETWORK_STACK_SETUP_VARIABLE_GUID;
+
+  form formid = SETUP_MANAGER_FORM_ID,
+    title  = STRING_TOKEN(STR_SETUP_MENU_TITLE);
+
+    subtitle text = STRING_TOKEN(STR_BIOS);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),            // Help string
+      text   = STRING_TOKEN(STR_BIOS_VERSION_NAME),       // Prompt string
+      text   = STRING_TOKEN(STR_BIOS_VERSION_VALUE);      // TextTwo
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),              // Help string
+      text   = STRING_TOKEN(STR_BIOS_RELEASE_DATE_NAME),    // Prompt string
+      text   = STRING_TOKEN(STR_BIOS_RELEASE_DATE_VALUE);   // TextTwo
+
+    SEPARATOR
+
+      date
+        name    = Date,
+        prompt  = STRING_TOKEN(STR_DATE_PROMPT),
+        help    = STRING_TOKEN(STR_DATE_HELP),
+        flags   = STORAGE_TIME,
+        default = 2004/1/1,
+
+        inconsistentif prompt = STRING_TOKEN(STR_ERROR_POPUP),
+          ideqval Date.Day == 31
+          AND
+          ideqvallist Date.Month == 2 4 6 9 11
+        endif;
+
+        //
+        // If the day is 30 AND month is 2
+        //
+        inconsistentif prompt = STRING_TOKEN(STR_ERROR_POPUP),
+          ideqval Date.Day == 30
+          AND
+          ideqval Date.Month == 2
+        endif;
+
+        //
+        // If the day is 29 AND month is 2 AND it year is NOT a leapyear
+        //
+        inconsistentif prompt = STRING_TOKEN(STR_ERROR_POPUP),
+          ideqval Date.Day == 0x1D
+          AND
+          ideqval Date.Month == 2
+          AND
+          NOT
+          ideqvallist Date.Year == 2004 2008 20012 20016 2020 2024 2028 2032 2036
+        endif;
+
+      enddate;
+
+      time
+        prompt  = STRING_TOKEN(STR_TIME_PROMPT),
+        help    = STRING_TOKEN(STR_TIME_HELP),
+        flags   = STORAGE_TIME,
+      endtime;
+
+    SEPARATOR
+
+    goto HARDWARE_INFO_FORM_SET_ID,
+      prompt = STRING_TOKEN(STR_HARDWARE_INFO_FORM_SET_TITLE),
+      help = STRING_TOKEN(STR_HARDWARE_INFO_FORM_SET_TITLE_HELP);
+
+    goto SOC_FORM_SET_ID,
+      prompt = STRING_TOKEN(STR_SOC_FORM_SET_TITLE),
+      help = STRING_TOKEN(STR_SOC_FORM_SET_TITLE_HELP);
+
+    goto PLATFORM_FORM_SET_ID,
+      prompt = STRING_TOKEN(STR_PLATFORM_FORM_SET_TITLE),
+      help = STRING_TOKEN(STR_PLATFORM_FORM_SET_TITLE_HELP);
+
+    goto PM_CONFIG_FORM_ID,
+      prompt = STRING_TOKEN(STR_PM_FORM_TITLE),
+      help   = STRING_TOKEN(STR_PM_FORM_TITLE_HELP);
+
+    label LABEL_PRIVATE_FORM_LIST;
+    label LABEL_PRIVATE_FORM_END;
+
+    SEPARATOR
+
+    text
+      help   = STRING_TOKEN(STR_RESET_ALL_DEFAULTS_HELP),
+      text   = STRING_TOKEN(STR_RESET_ALL_DEFAULTS),
+      flags  = INTERACTIVE,
+      key    = QUESTION_RESET_ALL_DEFAULTS;
+
+    text
+      help   = STRING_TOKEN(STR_CLEAR_NVRAM_HELP),
+      text   = STRING_TOKEN(STR_CLEAR_NVRAM),
+      flags  = INTERACTIVE,
+      key    = QUESTION_CLEAR_NVRAM;
+
+    subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+    subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+    subtitle text = STRING_TOKEN(STR_EXIT_STRING);
+  endform;
+
+  form formid = HARDWARE_INFO_FORM_SET_ID,
+    title  = STRING_TOKEN(STR_HARDWARE_INFO_FORM_SET_TITLE);
+    subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+
+    subtitle text = STRING_TOKEN(STR_HW_INFO);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),            // Help string
+      text   = STRING_TOKEN(STR_MEMORY_SIZE_NAME),        // Prompt string
+      text   = STRING_TOKEN(STR_MEMORY_SIZE_VALUE);       // TextTwo
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),
+      text   = STRING_TOKEN(STR_MEMORY_FREQ_NAME),
+      text   = STRING_TOKEN(STR_MEMORY_FREQ_VALUE);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),
+      text   = STRING_TOKEN(STR_CPU_SPEED_NAME),
+      text   = STRING_TOKEN(STR_CPU_SPEED_VALUE);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),
+      text   = STRING_TOKEN(STR_PCB_SKU_NAME),
+      text   = STRING_TOKEN(STR_PCB_SKU_VALUE);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),
+      text   = STRING_TOKEN(STR_BOARD_REV_NAME),
+      text   = STRING_TOKEN(STR_BOARD_REV_VALUE);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),
+      text   = STRING_TOKEN(STR_MEMORY_TYPE_NAME),
+      text   = STRING_TOKEN(STR_MEMORY_TYPE_VALUE);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),
+      text   = STRING_TOKEN(STR_PMIC_VER_NAME),
+      text   = STRING_TOKEN(STR_PMIC_VER_VALUE);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),
+      text   = STRING_TOKEN(STR_PD_VER_NAME),
+      text   = STRING_TOKEN(STR_PD_VER_VALUE);
+
+    subtitle text = STRING_TOKEN(STR_FIRMWARE_INFO);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),
+      text   = STRING_TOKEN(STR_SE_VER_NAME),
+      text   = STRING_TOKEN(STR_SE_VER_VALUE);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),
+      text   = STRING_TOKEN(STR_PBL_VER_NAME),
+      text   = STRING_TOKEN(STR_PBL_VER_VALUE);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),
+      text   = STRING_TOKEN(STR_ATF_VER_NAME),
+      text   = STRING_TOKEN(STR_ATF_VER_VALUE);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),
+      text   = STRING_TOKEN(STR_PM_VER_NAME),
+      text   = STRING_TOKEN(STR_PM_VER_VALUE);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),
+      text   = STRING_TOKEN(STR_TEE_VER_NAME),
+      text   = STRING_TOKEN(STR_TEE_VER_VALUE);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),
+      text   = STRING_TOKEN(STR_UEFI_VER_NAME),
+      text   = STRING_TOKEN(STR_UEFI_VER_VALUE);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),
+      text   = STRING_TOKEN(STR_EC_VER_NAME),
+      text   = STRING_TOKEN(STR_EC_VER_VALUE);
+  endform;
+
+  form formid = SOC_FORM_SET_ID,
+    title  = STRING_TOKEN(STR_SOC_FORM_SET_TITLE);
+    subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+
+    goto CPU_CONFIG_FORM_ID,
+      prompt = STRING_TOKEN(STR_CPU_FORM_SET_TITLE),
+      help = STRING_TOKEN(STR_CPU_FORM_SET_TITLE_HELP);
+
+    goto MEMORY_CONFIG_FORM_ID,
+      prompt = STRING_TOKEN(STR_MEMORY_FORM_SET_TITLE),
+      help = STRING_TOKEN(STR_MEMORY_FORM_SET_TITLE_HELP);
+
+    goto PCIE_CONFIG_FORM_ID,
+      prompt = STRING_TOKEN(STR_PCIE_FORM_SET_TITLE),
+      help = STRING_TOKEN(STR_PCIE_FORM_SET_TITLE_HELP);
+
+    goto USB_CONFIG_FORM_ID,
+      prompt = STRING_TOKEN(STR_USB_FORM_SET_TITLE),
+      help = STRING_TOKEN(STR_USB_FORM_SET_TITLE_HELP);
+
+    goto I2C_CONFIG_FORM_ID,
+      prompt = STRING_TOKEN(STR_I2C_FORM_SET_TITLE),
+      help   = STRING_TOKEN(STR_I2C_FORM_SET_TITLE_HELP);
+
+    goto GMAC_CONFIG_FORM_ID,
+      prompt = STRING_TOKEN(STR_GMAC_FORM_SET_TITLE),
+      help   = STRING_TOKEN(STR_GMAC_FORM_SET_TITLE_HELP);
+
+  endform;
+
+#include "Platform.hfr"
+#include "MemoryConfig.hfr"
+#include "PcieConfig.hfr"
+#include "UsbConfig.hfr"
+#include "I2cConfig.hfr"
+#include "CpuConfig.hfr"
+#include "GmacConfig.hfr"
+#include "PmConfig.hfr"
+endformset;

@@ -1,0 +1,141 @@
+/**
+  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+
+  SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+//CPU Form
+    form formid = CPU_CONFIG_FORM_ID,
+        title  = STRING_TOKEN(STR_CPU_FORM_SET_TITLE);
+        subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+
+        oneof varid   = PlatformSetupVar.CpuLpiState,
+        prompt      = STRING_TOKEN(STR_CPU_LPI_STATE_PROMPT),
+        help        = STRING_TOKEN(STR_CPU_LPI_STATE_HELP),
+        default     = FixedPcdGet8 (PcdAcpiCpuLpiState),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_CPU_LPI_STATE_0),  value = 1, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_CPU_LPI_STATE_1),  value = 2, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_CPU_LPI_STATE_2),  value = 3, flags = RESET_REQUIRED;
+        endoneof;
+
+      grayoutif TRUE;
+         oneof varid   = PlatformSetupVar.CpuCoreEnable[0],
+         prompt      = STRING_TOKEN(STR_CPU_CORE0_PROMPT),
+         help        = STRING_TOKEN(STR_EMPTY_STRING),
+         default     = 1,
+         option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+         option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+         endoneof;
+      endif;
+
+      suppressif ideqval PlatformSetupVar.CpuCoreNum < 2 ;
+         oneof varid   = PlatformSetupVar.CpuCoreEnable[1],
+         prompt      = STRING_TOKEN(STR_CPU_CORE1_PROMPT),
+         help        = STRING_TOKEN(STR_EMPTY_STRING),
+         default     = FixedPcdGetBool (PcdCpuCore1En),
+         option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+         option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+         endoneof;
+      endif;
+
+      suppressif ideqval PlatformSetupVar.CpuCoreNum < 3 ;
+         oneof varid   = PlatformSetupVar.CpuCoreEnable[2],
+         prompt      = STRING_TOKEN(STR_CPU_CORE2_PROMPT),
+         help        = STRING_TOKEN(STR_EMPTY_STRING),
+         default     = FixedPcdGetBool (PcdCpuCore2En),
+         option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+         option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+         endoneof;
+      endif;
+
+      suppressif ideqval PlatformSetupVar.CpuCoreNum < 4 ;
+         oneof varid   = PlatformSetupVar.CpuCoreEnable[3],
+         prompt      = STRING_TOKEN(STR_CPU_CORE3_PROMPT),
+         help        = STRING_TOKEN(STR_EMPTY_STRING),
+         default     = FixedPcdGetBool (PcdCpuCore3En),
+         option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+         option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+         endoneof;
+      endif;
+
+      suppressif ideqval PlatformSetupVar.CpuCoreNum < 5 ;
+         oneof varid   = PlatformSetupVar.CpuCoreEnable[4],
+         prompt      = STRING_TOKEN(STR_CPU_CORE4_PROMPT),
+         help        = STRING_TOKEN(STR_EMPTY_STRING),
+         default     = FixedPcdGetBool (PcdCpuCore4En),
+         option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+         option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+         endoneof;
+      endif;
+
+      suppressif ideqval PlatformSetupVar.CpuCoreNum < 6 ;
+         oneof varid   = PlatformSetupVar.CpuCoreEnable[5],
+         prompt      = STRING_TOKEN(STR_CPU_CORE5_PROMPT),
+         help        = STRING_TOKEN(STR_EMPTY_STRING),
+         default     = FixedPcdGetBool (PcdCpuCore5En),
+         option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+         option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+         endoneof;
+      endif;
+
+      suppressif ideqval PlatformSetupVar.CpuCoreNum < 7 ;
+         oneof varid   = PlatformSetupVar.CpuCoreEnable[6],
+         prompt      = STRING_TOKEN(STR_CPU_CORE6_PROMPT),
+         help        = STRING_TOKEN(STR_EMPTY_STRING),
+         default     = FixedPcdGetBool (PcdCpuCore6En),
+         option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+         option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+         endoneof;
+      endif;
+
+      suppressif ideqval PlatformSetupVar.CpuCoreNum < 8 ;
+         oneof varid   = PlatformSetupVar.CpuCoreEnable[7],
+         prompt      = STRING_TOKEN(STR_CPU_CORE7_PROMPT),
+         help        = STRING_TOKEN(STR_EMPTY_STRING),
+         default     = FixedPcdGetBool (PcdCpuCore7En),
+         option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+         option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+         endoneof;
+      endif;
+
+      suppressif ideqval PlatformSetupVar.CpuCoreNum < 9 ;
+         oneof varid   = PlatformSetupVar.CpuCoreEnable[8],
+         prompt      = STRING_TOKEN(STR_CPU_CORE8_PROMPT),
+         help        = STRING_TOKEN(STR_EMPTY_STRING),
+         default     = FixedPcdGetBool (PcdCpuCore8En),
+         option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+         option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+         endoneof;
+      endif;
+
+      suppressif ideqval PlatformSetupVar.CpuCoreNum < 10 ;
+         oneof varid   = PlatformSetupVar.CpuCoreEnable[9],
+         prompt      = STRING_TOKEN(STR_CPU_CORE9_PROMPT),
+         help        = STRING_TOKEN(STR_EMPTY_STRING),
+         default     = FixedPcdGetBool (PcdCpuCore9En),
+         option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+         option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+         endoneof;
+      endif;
+
+      suppressif ideqval PlatformSetupVar.CpuCoreNum < 11 ;
+         oneof varid   = PlatformSetupVar.CpuCoreEnable[10],
+         prompt      = STRING_TOKEN(STR_CPU_CORE10_PROMPT),
+         help        = STRING_TOKEN(STR_EMPTY_STRING),
+         default     = FixedPcdGetBool (PcdCpuCore10En),
+         option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+         option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+         endoneof;
+      endif;
+
+      suppressif ideqval PlatformSetupVar.CpuCoreNum < 12 ;
+         oneof varid   = PlatformSetupVar.CpuCoreEnable[11],
+         prompt      = STRING_TOKEN(STR_CPU_CORE11_PROMPT),
+         help        = STRING_TOKEN(STR_EMPTY_STRING),
+         default     = FixedPcdGetBool (PcdCpuCore11En),
+         option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+         option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+         endoneof;
+      endif;
+    endform;

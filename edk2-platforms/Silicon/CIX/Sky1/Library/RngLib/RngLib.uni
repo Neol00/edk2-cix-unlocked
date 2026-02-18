@@ -1,0 +1,13 @@
+// /** @file
+// Instance of RNG (Random Number Generator) Library.
+//
+// Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+//
+// SPDX-License-Identifier: BSD-2-Clause-Patent
+//
+// **/
+
+
+#string STR_MODULE_ABSTRACT             #language en-US "Instance of RNG Library"
+
+#string STR_MODULE_DESCRIPTION          #language en-US "RngLib that uses Hardware RNG module to generate random numbers."

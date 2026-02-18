@@ -1,0 +1,30 @@
+## @file
+#  Provides functions for communication with System Firmware (SMpro/PMpro)
+#  via interfaces like Mailbox.
+#
+#  Copyright (c) 2021, Ampere Computing LLC. All rights reserved.<BR>
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001B
+  BASE_NAME                      = SystemFirmwareInterface
+  FILE_GUID                      = 8574F1CC-BF8C-46FD-9276-5B202E2A425C
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = SystemFirmwareInterfaceLib
+
+[Sources]
+  SystemFirmwareInterfaceLib.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  Silicon/Ampere/AmpereAltraPkg/AmpereAltraPkg.dec
+
+[LibraryClasses]
+  BaseLib
+  BaseMemoryLib
+  DebugLib
+  MailboxInterfaceLib

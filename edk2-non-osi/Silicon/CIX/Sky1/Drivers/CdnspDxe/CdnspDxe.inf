@@ -1,0 +1,60 @@
+#  @file
+#
+#  Component description file for Cdnsp driver
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = CdnspDxe
+  FILE_GUID                      = 40439E4D-F09C-D6F0-29AB-54A24A5DE887
+  MODULE_TYPE                    = DXE_RUNTIME_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = CdnspEntry
+
+[Binaries.AARCH64]
+  PE32|CdnspDxe.efi|*
+  DXE_DEPEX|CdnspDxe.depex|*
+
+[Packages]
+  MdePkg/MdePkg.dec
+  ArmPkg/ArmPkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  ArmLib
+  ArmSmcLib
+  BaseLib
+  DebugLib
+  PcdLib
+  UefiLib
+  UefiDriverEntryPoint
+  MemoryAllocationLib
+  UefiBootServicesTableLib
+  IoLib
+  CacheMaintenanceLib
+  UncachedMemoryAllocationLib
+  PostCodeLib
+  FlashUpdateLib
+
+[Guids]
+  gEfiEventExitBootServicesGuid
+
+[Protocols]
+  gEfiUsbDeviceControlGuid
+  gEfiUsbfnIoProtocolGuid
+  gCixClockProtocolGuid
+  gCixResetProtocolGuid
+  gCixConfigParamsManageProtocolGuid
+  gCixPdProtocolGuid
+
+[Pcd]
+
+[Depex]
+  TRUE

@@ -1,0 +1,546 @@
+/** @file
+
+  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+
+  SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+
+#include <IndustryStandard/Acpi.h>
+#include <IndustryStandard/Acpi62.h>
+#include <IndustryStandard/IoRemappingTable.h>
+#include <Include/AcpiPlatform.h>
+#include <Include/MemoryMap.h>
+#include "Include/InterruptId.h"
+#include "CommonDefines.h"
+
+#define PMCG_COUNT       (PCIE_PMCG_ENABLE + MM_HUB_PMCG_ENABLE + SUB_SYSTEM_PMCG_ENABLE)
+#define MM_NODE_COUNT    (MM_HUB_SMMU_ENABLE + DPU_SMMU_ENABLE*10 + NPU_SMMU_ENABLE*1 + ISP_SMMU_ENABLE*1 + CSI_SMMU_ENABLE*2)
+#define IORT_NODE_COUNT  (PCIE_SMMU_ENABLE*3 + MM_NODE_COUNT + SUB_SYSTEM_SMMU_ENABLE*1 + RMR_GOP_ENABLE*1 + PCIE_SMMU_ENABLE*1 + PMCG_COUNT)
+
+#pragma pack(1)
+
+typedef struct {
+  EFI_ACPI_6_0_IO_REMAPPING_ITS_NODE    ItsNode;
+  UINT32                                ItsIdentifiers;
+} ARM_EFI_ACPI_6_0_IO_REMAPPING_ITS_NODE;
+
+typedef struct {
+  EFI_ACPI_6_0_IO_REMAPPING_SMMU3_NODE    SmmuNode;
+  EFI_ACPI_6_0_IO_REMAPPING_ID_TABLE      SmmuIdMap;
+} ARM_EFI_ACPI_6_0_IO_REMAPPING_SMMU3_NODE;
+
+typedef struct {
+  EFI_ACPI_6_0_IO_REMAPPING_RC_NODE     RcNode;
+  EFI_ACPI_6_0_IO_REMAPPING_ID_TABLE    RcIdMap;
+} ARM_EFI_ACPI_6_0_IO_REMAPPING_RC_NODE;
+
+typedef struct {
+  EFI_ACPI_6_0_IO_REMAPPING_NAMED_COMP_NODE    Node;
+  CONST CHAR8                                  Name[11];
+  EFI_ACPI_6_0_IO_REMAPPING_ID_TABLE           RcIdMapping[6];
+} SKY1_NC_NODE;
+
+typedef struct {
+  EFI_ACPI_6_0_IO_REMAPPING_RMR_NODE      RmrNodeHeadr;
+  EFI_ACPI_6_0_IO_REMAPPING_ID_TABLE      RmrIdMap[10];
+  EFI_ACPI_6_0_IO_REMAPPING_MEM_RANGE_DESC  RmrDescArray[1];
+} SKY1_EFI_ACPI_6_0_IO_REMAPPING_RMR_NODE;
+
+typedef struct {
+  EFI_ACPI_6_0_IO_REMAPPING_RMR_NODE        RmrNodeHeadr;
+  EFI_ACPI_6_0_IO_REMAPPING_ID_TABLE        RmrIdMap[10];
+  EFI_ACPI_6_0_IO_REMAPPING_MEM_RANGE_DESC  RmrDescArray[1];
+} SKY1_EFI_ACPI_6_0_IO_REMAPPING_PCIE_RMR_NODE;
+
+typedef struct {
+  EFI_ACPI_6_0_IO_REMAPPING_PMCG_NODE PmcgNode;
+} SKY1_EFI_ACPI_6_0_IO_REMAPPING_PMCG_NODE;
+
+typedef struct {
+  EFI_ACPI_6_0_IO_REMAPPING_TABLE             Header;
+ #if PCIE_SMMU_ENABLE
+  ARM_EFI_ACPI_6_0_IO_REMAPPING_ITS_NODE      ItsNode;
+  ARM_EFI_ACPI_6_0_IO_REMAPPING_SMMU3_NODE    PcieSmmuNode;
+  #if PCIE_PMCG_ENABLE
+  SKY1_EFI_ACPI_6_0_IO_REMAPPING_PMCG_NODE    PciePmcgNode;
+  #endif
+  ARM_EFI_ACPI_6_0_IO_REMAPPING_RC_NODE       RcNode;
+ #endif
+ #if MM_HUB_SMMU_ENABLE
+  EFI_ACPI_6_0_IO_REMAPPING_SMMU3_NODE        MmSmmuNode;
+  #if MM_HUB_PMCG_ENABLE
+  SKY1_EFI_ACPI_6_0_IO_REMAPPING_PMCG_NODE    MmSmmuPmcgNode;
+  #endif
+ #if DPU_SMMU_ENABLE
+  SKY1_NC_NODE                                DPU0NamedCompNode;
+  SKY1_NC_NODE                                AEU0NamedCompNode;
+  SKY1_NC_NODE                                DPU1NamedCompNode;
+  SKY1_NC_NODE                                AEU1NamedCompNode;
+  SKY1_NC_NODE                                DPU2NamedCompNode;
+  SKY1_NC_NODE                                AEU2NamedCompNode;
+  SKY1_NC_NODE                                DPU3NamedCompNode;
+  SKY1_NC_NODE                                AEU3NamedCompNode;
+  SKY1_NC_NODE                                DPU4NamedCompNode;
+  SKY1_NC_NODE                                AEU4NamedCompNode;
+ #endif
+ #if NPU_SMMU_ENABLE
+  SKY1_NC_NODE                                NPU0NamedCompNode;
+ #endif
+ #if ISP_SMMU_ENABLE
+  SKY1_NC_NODE                                ISPNamedCompNode;
+ #endif
+ #if CSI_SMMU_ENABLE
+  SKY1_NC_NODE                                CSI0DmaNamedCompNode;
+  SKY1_NC_NODE                                CSI1DmaNamedCompNode;
+ #endif
+ #endif
+ #if SUB_SYSTEM_SMMU_ENABLE
+  EFI_ACPI_6_0_IO_REMAPPING_SMMU3_NODE        SubSystemSmmuNode;
+  #if SUB_SYSTEM_PMCG_ENABLE
+  SKY1_EFI_ACPI_6_0_IO_REMAPPING_PMCG_NODE    SubSystemSmmuPmcgNode;
+  #endif
+ #endif
+ #if RMR_GOP_ENABLE
+  SKY1_EFI_ACPI_6_0_IO_REMAPPING_RMR_NODE     RmrNode;
+ #endif
+ #if PCIE_SMMU_ENABLE
+  SKY1_EFI_ACPI_6_0_IO_REMAPPING_PCIE_RMR_NODE  PcieRmrNode;
+ #endif
+} ARM_EFI_ACPI_6_0_IO_REMAPPING_TABLE;
+
+#pragma pack ()
+
+#define SKY1_ID_MAPPING_SINGLE(Out, Ref)                    \
+  {                                                         \
+    0x0,                                                    \
+    0x0,                                                    \
+    Out,                                                    \
+    OFFSET_OF(ARM_EFI_ACPI_6_0_IO_REMAPPING_TABLE, Ref),    \
+    EFI_ACPI_IORT_ID_MAPPING_FLAGS_SINGLE                   \
+  }
+
+#define SKY1_NAMED_COMPONENT_NODE(Name, Num)                \
+    {                                                       \
+      {                                                     \
+        EFI_ACPI_IORT_TYPE_NAMED_COMP,                      \
+        sizeof(SKY1_NC_NODE),                               \
+        0x0,                                                \
+        0x0,                                                \
+        Num,                                                \
+        OFFSET_OF(SKY1_NC_NODE, RcIdMapping),               \
+      },                                                    \
+      0x0,                                                  \
+      EFI_ACPI_IORT_MEM_ACCESS_PROP_CCA,                    \
+      0x0,                                                  \
+      0x0,                                                  \
+      EFI_ACPI_IORT_MEM_ACCESS_FLAGS_CPM |                  \
+      EFI_ACPI_IORT_MEM_ACCESS_FLAGS_DACS,                  \
+      40,                                                   \
+    },                                                      \
+    Name
+
+ARM_EFI_ACPI_6_0_IO_REMAPPING_TABLE  Iort =
+{
+  // EFI_ACPI_6_0_IO_REMAPPING_TABLE
+  {
+    ARM_ACPI_HEADER   // EFI_ACPI_DESCRIPTION_HEADER
+    (
+     EFI_ACPI_6_2_IO_REMAPPING_TABLE_SIGNATURE,
+     ARM_EFI_ACPI_6_0_IO_REMAPPING_TABLE,
+     EFI_ACPI_IO_REMAPPING_TABLE_REVISION_05
+    ),
+    IORT_NODE_COUNT,                          // NumNodes
+    sizeof (EFI_ACPI_6_0_IO_REMAPPING_TABLE), // NodeOffset
+    0,                                        // Reserved
+  },
+ #if PCIE_SMMU_ENABLE
+  // ItsNode
+  {
+    // EFI_ACPI_6_0_IO_REMAPPING_ITS_NODE
+    {
+      // EFI_ACPI_6_0_IO_REMAPPING_NODE
+      {
+        EFI_ACPI_IORT_TYPE_ITS_GROUP,                    // Type
+        sizeof (ARM_EFI_ACPI_6_0_IO_REMAPPING_ITS_NODE), // Length
+        0,                                               // Revision
+        0,                                               // Identifier
+        0,                                               // NumIdMappings
+        0,                                               // IdReference
+      },
+      1,    // ITS count
+    },
+    0,      // GIC ITS Identifiers
+  },
+  // PcieSmmuNode
+  {
+    // EFI_ACPI_6_0_IO_REMAPPING_SMMU3_NODE
+    {
+      // EFI_ACPI_6_0_IO_REMAPPING_NODE
+      {
+        EFI_ACPI_IORT_TYPE_SMMUv3,                                       // Type
+        sizeof (ARM_EFI_ACPI_6_0_IO_REMAPPING_SMMU3_NODE),               // Length
+        2,                                                               // Revision
+        PCIE_SMMU_ID,                                                    // Identifier
+        1,                                                               // NumIdMapping
+        OFFSET_OF (ARM_EFI_ACPI_6_0_IO_REMAPPING_SMMU3_NODE, SmmuIdMap), // IdReference
+      },
+      SMMU0_BASE,                                    // Base address
+      EFI_ACPI_IORT_SMMUv3_FLAG_COHAC_OVERRIDE |
+      (2 << 1),                                      // Flags (COHAC + HTTU HA+HD)
+      0,                                             // Reserved
+      0,                                             // VATOS address
+      EFI_ACPI_IORT_SMMUv3_MODEL_GENERIC,            // SMMUv3 Model
+      PCIEHUB_EXT_TCU_EVENT_Q_IRPT_NS_INTERRUPT_ID,  // Event
+      PCIEHUB_EXT_TCU_PRI_Q_IRPT_NS_INTERRUPT_ID,    // Pri
+      PCIEHUB_EXT_TCU_RAS_FHI_INTERRUPT_ID,          // Gerror
+      PCIEHUB_EXT_TCU_CMD_SYNC_IRPT_NS_INTERRUPT_ID, // Sync
+      0,                                             // Proximity domain
+      0,                                             // DevIDMappingIndex
+    },
+    // EFI_ACPI_6_0_IO_REMAPPING_ID_TABLE
+    {
+      0x0000,                                                   // InputBase
+      0xffff,                                                   // NumIds
+      0x0000,                                                   // OutputBase
+      OFFSET_OF (ARM_EFI_ACPI_6_0_IO_REMAPPING_TABLE, ItsNode), // OutputReference
+      0,                                                        // Flags
+    },
+  },
+  #if PCIE_PMCG_ENABLE
+  {
+  // PciePmcgNode
+    {
+      {
+        EFI_ACPI_IORT_TYPE_PMCG,
+        sizeof (EFI_ACPI_6_0_IO_REMAPPING_PMCG_NODE),
+        0x2,
+        0x0,
+        0x0,
+        0x0,
+      },
+      0xB012000,  // PMU Base address
+      0,          // GSIV. Need to be filled
+      OFFSET_OF (ARM_EFI_ACPI_6_0_IO_REMAPPING_TABLE, PcieSmmuNode),  // Node reference. Need to be filled
+      0xB010000,
+    },
+  },
+  #endif
+  // RcNode
+  {
+    // 
+    
+    {
+      // EFI_ACPI_6_0_IO_REMAPPING_NODE
+      {
+        EFI_ACPI_IORT_TYPE_ROOT_COMPLEX,                           // Type
+        sizeof (ARM_EFI_ACPI_6_0_IO_REMAPPING_RC_NODE),            // Length
+        0,                                                         // Revision
+        0,                                                         // Identifier
+        1,                                                         // NumIdMappings
+        OFFSET_OF (ARM_EFI_ACPI_6_0_IO_REMAPPING_RC_NODE, RcIdMap) // IdReference
+      },
+      EFI_ACPI_IORT_MEM_ACCESS_PROP_CCA, // CacheCoherent
+      0,                                 // AllocationHints
+      0,                                 // Reserved
+      EFI_ACPI_IORT_MEM_ACCESS_FLAGS_CPM |
+      EFI_ACPI_IORT_MEM_ACCESS_FLAGS_DACS,      // MemoryAccessFlags
+      EFI_ACPI_IORT_ROOT_COMPLEX_ATS_SUPPORTED, // AtsAttribute
+      0x0,                                      // PciSegmentNumber
+    },
+    // EFI_ACPI_6_0_IO_REMAPPING_ID_TABLE
+    {
+      0x0000,                                                        // InputBase
+      0xffff,                                                        // NumIds
+      0x0000,                                                        // OutputBase
+      OFFSET_OF (ARM_EFI_ACPI_6_0_IO_REMAPPING_TABLE, PcieSmmuNode), // OutputReference
+      0,                                                             // Flags
+    }
+  },
+ #endif
+ #if MM_HUB_SMMU_ENABLE
+  // MmSmmuNode
+  {
+    // EFI_ACPI_6_0_IO_REMAPPING_SMMU3_NODE
+    {
+      EFI_ACPI_IORT_TYPE_SMMUv3,                         // Type
+      sizeof (EFI_ACPI_6_0_IO_REMAPPING_SMMU3_NODE),     // Length
+      2,                                                 // Revision
+      MMHUB_SMMU_ID,                                     // Identifier
+      0,                                                 // NumIdMapping
+      0,                                                 // IdReference
+    },
+    SMMU2_BASE,                                  // Base address
+    EFI_ACPI_IORT_SMMUv3_FLAG_COHAC_OVERRIDE |
+    (2 << 1),                                    // Flags (COHAC + HTTU HA+HD)
+    0,                                           // Reserved
+    0,                                           // VATOS address
+    EFI_ACPI_IORT_SMMUv3_MODEL_GENERIC,          // SMMUv3 Model
+    MMHUB_EXT_TCU_EVENT_Q_IRPT_NS_INTERRUPT_ID,  // Event
+    MMHUB_EXT_TCU_PRI_Q_IRPT_NS_INTERRUPT_ID,    // Pri
+    MMHUB_EXT_TCU_RAS_FHI_INTERRUPT_ID,          // Gerror
+    MMHUB_EXT_TCU_CMD_SYNC_IRPT_NS_INTERRUPT_ID, // Sync
+    0,                                           // Proximity domain
+    0,                                           // DevIDMappingIndex
+  },
+ #if MM_HUB_PMCG_ENABLE
+  {
+    {
+      {
+        EFI_ACPI_IORT_TYPE_PMCG,
+        sizeof (EFI_ACPI_6_0_IO_REMAPPING_PMCG_NODE),
+        0x2,
+        0x0,
+        0x0,
+        0x0,
+      },
+      0xB1B2000,  // PMU Base address
+      0,          // GSIV. Need to be filled
+      OFFSET_OF (ARM_EFI_ACPI_6_0_IO_REMAPPING_TABLE, MmSmmuNode),  // Node reference. Need to be filled
+      0xB1B0000,
+    },
+  },
+ #endif
+ #if DPU_SMMU_ENABLE
+  {
+    // DPU0
+    SKY1_NAMED_COMPONENT_NODE ("\\_SB_.DPU0", 5),
+    {
+      SKY1_ID_MAPPING_SINGLE (0x00, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x01, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x03, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x04, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x05, MmSmmuNode),
+    }
+  },  {
+    // AEU0
+    SKY1_NAMED_COMPONENT_NODE ("\\_SB_.AEU0", 1),
+    {
+      SKY1_ID_MAPPING_SINGLE (0x02, MmSmmuNode),
+    }
+  },  {
+    // DPU1
+    SKY1_NAMED_COMPONENT_NODE ("\\_SB_.DPU1", 5),
+    {
+      SKY1_ID_MAPPING_SINGLE (0x06, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x07, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x09, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x0A, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x0B, MmSmmuNode),
+    }
+  },  {
+    // AEU1
+    SKY1_NAMED_COMPONENT_NODE ("\\_SB_.AEU1", 1),
+    {
+      SKY1_ID_MAPPING_SINGLE (0x08, MmSmmuNode),
+    }
+  },  {
+    // DPU2
+    SKY1_NAMED_COMPONENT_NODE ("\\_SB_.DPU2", 5),
+    {
+      SKY1_ID_MAPPING_SINGLE (0x0C, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x0D, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x0F, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x10, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x11, MmSmmuNode),
+    }
+  },  {
+    // AEU2
+    SKY1_NAMED_COMPONENT_NODE ("\\_SB_.AEU2", 1),
+    {
+      SKY1_ID_MAPPING_SINGLE (0x0E, MmSmmuNode),
+    }
+  },  {
+    // DPU3
+    SKY1_NAMED_COMPONENT_NODE ("\\_SB_.DPU3", 5),
+    {
+      SKY1_ID_MAPPING_SINGLE (0x12, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x13, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x15, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x16, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x17, MmSmmuNode),
+    }
+  },  {
+    // DPU3
+    SKY1_NAMED_COMPONENT_NODE ("\\_SB_.AEU3", 1),
+    {
+      SKY1_ID_MAPPING_SINGLE (0x14, MmSmmuNode),
+    }
+  },  {
+    // DPU4
+    SKY1_NAMED_COMPONENT_NODE ("\\_SB_.DPU4", 5),
+    {
+      SKY1_ID_MAPPING_SINGLE (0x18, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x19, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x1B, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x1C, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x1D, MmSmmuNode),
+    }
+  }, {
+    // DPU4
+    SKY1_NAMED_COMPONENT_NODE ("\\_SB_.AEU4", 1),
+    {
+      SKY1_ID_MAPPING_SINGLE (0x1A, MmSmmuNode),
+    }
+  },
+ #endif
+ #if NPU_SMMU_ENABLE
+  {
+    // NPU
+    SKY1_NAMED_COMPONENT_NODE ("\\_SB_.NPU0", 1),
+    {
+      SKY1_ID_MAPPING_SINGLE (0x1E, MmSmmuNode),
+    }
+  },
+ #endif
+ #if ISP_SMMU_ENABLE
+  {
+    // ISP ispmem
+    SKY1_NAMED_COMPONENT_NODE ("\\_SB_.ISPM", 1),
+    {
+      SKY1_ID_MAPPING_SINGLE (0x1F, MmSmmuNode),
+    }
+  },
+ #endif
+ #if CSI_SMMU_ENABLE
+  {
+    // CSI
+    SKY1_NAMED_COMPONENT_NODE ("\\_SB_.CBD0", 1),
+    {
+      SKY1_ID_MAPPING_SINGLE (0x21, MmSmmuNode),
+    }
+  },
+  {
+    // CSI
+    SKY1_NAMED_COMPONENT_NODE ("\\_SB_.CBD2", 1),
+    {
+      SKY1_ID_MAPPING_SINGLE (0x22, MmSmmuNode),
+    }
+  },
+ #endif
+ #endif
+ #if SUB_SYSTEM_SMMU_ENABLE
+  // SubSystemSmmuNode
+  {
+    // EFI_ACPI_6_0_IO_REMAPPING_SMMU3_NODE
+    {
+      EFI_ACPI_IORT_TYPE_SMMUv3,                         // Type
+      sizeof (EFI_ACPI_6_0_IO_REMAPPING_SMMU3_NODE),     // Length
+      2,                                                 // Revision
+      SUB_SYSTEM_SMMU_ID,                                // Identifier
+      0,                                                 // NumIdMapping
+      0,                                                 // IdReference
+    },
+    SMMU1_BASE,                                   // Base address
+    EFI_ACPI_IORT_SMMUv3_FLAG_COHAC_OVERRIDE |
+    (2 << 1),                                     // Flags (COHAC + HTTU HA+HD)
+    0,                                            // Reserved
+    0,                                            // VATOS address
+    EFI_ACPI_IORT_SMMUv3_MODEL_GENERIC,           // SMMUv3 Model
+    SYSHUB_EXT_TCU_EVENT_Q_IRPT_NS_INTERRUPT_ID,  // Event
+    SYSHUB_EXT_TCU_PRI_Q_IRPT_NS_INTERRUPT_ID,    // Pri
+    SYSHUB_EXT_TCU_RAS_FHI_INTERRUPT_ID,          // Gerror
+    SYSHUB_EXT_TCU_CMD_SYNC_IRPT_NS_INTERRUPT_ID, // Sync
+    0,                                            // Proximity domain
+    0,                                            // DevIDMappingIndex
+  },
+  #if SUB_SYSTEM_PMCG_ENABLE
+  {
+    {
+      {
+        EFI_ACPI_IORT_TYPE_PMCG,
+        sizeof (EFI_ACPI_6_0_IO_REMAPPING_PMCG_NODE),
+        0x2,
+        0x0,
+        0x0,
+        0x0,
+      },
+      0xB0E2000,  // PMU Base address
+      0,          // GSIV.
+      OFFSET_OF (ARM_EFI_ACPI_6_0_IO_REMAPPING_TABLE, SubSystemSmmuNode),  // Node reference. Need to be filled
+      0xB0E0000,
+    },
+  },
+  #endif
+ #endif
+ #if RMR_GOP_ENABLE
+  // SKY1_EFI_ACPI_IORT_TYPE_RMR
+  {
+    {
+      // EFI_ACPI_6_0_IO_REMAPPING_NODE
+      {
+        EFI_ACPI_IORT_TYPE_RMR,                            // Type
+        sizeof (SKY1_EFI_ACPI_6_0_IO_REMAPPING_RMR_NODE),  // Length
+        3,                                                 // Revision
+        0,                                                 // Identifier
+        10,                                                 // NumIdMapping
+        OFFSET_OF (SKY1_EFI_ACPI_6_0_IO_REMAPPING_RMR_NODE, RmrIdMap), // IdReference
+      },
+      0x11, //flags, allow remap, normal non-cacheable
+      1,    //num
+      OFFSET_OF (SKY1_EFI_ACPI_6_0_IO_REMAPPING_RMR_NODE, RmrDescArray), // MemoryRangeDesc
+    },
+    {
+      SKY1_ID_MAPPING_SINGLE (0x00, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x01, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x06, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x07, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x0C, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x0D, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x12, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x13, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x18, MmSmmuNode),
+      SKY1_ID_MAPPING_SINGLE (0x19, MmSmmuNode),
+    },
+    {
+      {
+        FixedPcdGet32 (PcdArmLcdDdrFrameBufferBase),
+        FixedPcdGet32 (PcdArmLcdDdrFrameBufferSize),
+        0,
+      },
+    },
+  },
+ #endif
+ #if PCIE_SMMU_ENABLE
+  // PCIe RMR node — pre-install bypass STEs for PCIe root port SIDs
+  // to prevent F_TRANSLATION faults during early boot before IOMMU domains attach
+  {
+    {
+      // EFI_ACPI_6_0_IO_REMAPPING_NODE
+      {
+        EFI_ACPI_IORT_TYPE_RMR,                                     // Type
+        sizeof (SKY1_EFI_ACPI_6_0_IO_REMAPPING_PCIE_RMR_NODE),      // Length
+        3,                                                          // Revision
+        0,                                                          // Identifier
+        10,                                                         // NumIdMapping
+        OFFSET_OF (SKY1_EFI_ACPI_6_0_IO_REMAPPING_PCIE_RMR_NODE, RmrIdMap), // IdReference
+      },
+      0x01, // Flags: ACPI_IORT_RMR_REMAP_PERMITTED
+      1,    // NumMemoryRangeDesc
+      OFFSET_OF (SKY1_EFI_ACPI_6_0_IO_REMAPPING_PCIE_RMR_NODE, RmrDescArray), // MemoryRangeDesc
+    },
+    {
+      // PCIe root port and device SIDs (from TRM Chapter 7)
+      SKY1_ID_MAPPING_SINGLE (0x0000, PcieSmmuNode),  // X1_0 root
+      SKY1_ID_MAPPING_SINGLE (0x0100, PcieSmmuNode),  // X1_0 dev
+      SKY1_ID_MAPPING_SINGLE (0x3000, PcieSmmuNode),  // X1_1 root
+      SKY1_ID_MAPPING_SINGLE (0x3100, PcieSmmuNode),  // X1_1 dev
+      SKY1_ID_MAPPING_SINGLE (0x6000, PcieSmmuNode),  // X2 root
+      SKY1_ID_MAPPING_SINGLE (0x6100, PcieSmmuNode),  // X2 dev
+      SKY1_ID_MAPPING_SINGLE (0x9000, PcieSmmuNode),  // X4 root
+      SKY1_ID_MAPPING_SINGLE (0x9100, PcieSmmuNode),  // X4 dev
+      SKY1_ID_MAPPING_SINGLE (0xC000, PcieSmmuNode),  // X8 root
+      SKY1_ID_MAPPING_SINGLE (0xC100, PcieSmmuNode),  // X8 dev (GPU)
+    },
+    {
+      {
+        0x80000000ULL,  // Base: start of RAM
+        0x10000ULL,     // Length: 64KB (minimum aligned range)
+        0,              // Reserved
+      },
+    },
+  },
+ #endif
+};
+
+VOID * CONST  ReferenceAcpiTable = &Iort;

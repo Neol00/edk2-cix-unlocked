@@ -1,0 +1,22 @@
+/**
+Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+
+SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+
+#langdef en-US  "English"
+/*
+* GMAC settings.
+*/
+#string STR_GMAC_FORM_SET_TITLE                #language en-US "GMAC Configuration"
+#string STR_GMAC_FORM_SET_TITLE_HELP           #language en-US "GMAC Configuration."
+
+#string STR_GMAC0_PROMPT                                 #language en-US "GMAC0"
+#string STR_GMAC0_PROMPT_HELP                            #language en-US "Enable/Disable GMAC0"
+#string STR_GMAC1_PROMPT                                 #language en-US "GMAC1"
+#string STR_GMAC1_PROMPT_HELP                            #language en-US "Enable/Disable GMAC1"
+#string STR_GMAC0_MAC_PROMPT                             #language en-US "GMAC0 MacAddress"
+#string STR_GMAC0_MAC_PROMPT_HELP                        #language en-US "GMAC0 MacAddress, Hex Format"
+#string STR_GMAC1_MAC_PROMPT                             #language en-US "GMAC1 MacAddress"
+#string STR_GMAC1_MAC_PROMPT_HELP                        #language en-US "GMAC1 MacAddress, Hex Format"

@@ -1,0 +1,27 @@
+#/** @file BaseHidParseReportLib.inf
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#**/
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = BaseHidParseReportLib
+  FILE_GUID                      = 2522C00E-C8CE-44f0-9341-CCBF2CD75465
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = BaseHidParseReportLib
+
+[Binaries.AARCH64]
+  LIB|BaseHidParseReportLib.lib|*
+
+[LibraryClasses]
+  DebugLib
+  BaseLib
+  BaseMemoryLib
+  MemoryAllocationLib
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+

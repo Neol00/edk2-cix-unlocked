@@ -1,0 +1,36 @@
+#/** @file
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#  Copyright (c) 2017-2018, Arm Limited. All rights reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x00010019
+  BASE_NAME                      = CixMtlLib
+  FILE_GUID                      = 21FB2D8F-C6C8-4B2C-A616-A30CB2FBA277
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = ArmMtlLib
+
+[Binaries.AARCH64]
+  LIB|CixMtlLib.lib|*
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  ArmPlatformPkg/ArmPlatformPkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  ArmLib
+  DebugLib
+  IoLib
+  UefiBootServicesTableLib
+
+[FixedPcd.common]
+  gCixTokenSpaceGuid.PcdCixMtlDoorBell
+  gCixTokenSpaceGuid.PcdCixMtlMailBoxBase
+  gCixTokenSpaceGuid.PcdCixMtlMailBoxSize
+  gCixTokenSpaceGuid.PcdCixApToTfaMailBoxBase
+  gCixTokenSpaceGuid.PcdCixApToTfaScmiSmcId

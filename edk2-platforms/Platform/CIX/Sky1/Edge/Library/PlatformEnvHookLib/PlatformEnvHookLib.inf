@@ -1,0 +1,73 @@
+#/**
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = PlatformEnvHookLib
+  FILE_GUID                      = C6059DC8-B686-4286-A945-E2470E5EF54F
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = PlatformEnvHookLib|DXE_DRIVER DXE_RUNTIME_DRIVER UEFI_APPLICATION UEFI_DRIVER
+  CONSTRUCTOR                    = PlatformEnvHookLibConstructor
+
+[Sources.common]
+  PlatformEnvHookLib.c
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec
+  MdePkg/MdePkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+  NetworkPkg/NetworkPkg.dec
+
+[LibraryClasses]
+  BaseMemoryLib
+  MemoryAllocationLib
+  DebugLib
+  BaseLib
+  UefiBootServicesTableLib
+  UefiRuntimeServicesTableLib
+  UefiLib
+  PinMuxLib
+  PinMuxTableLib
+  GpioLib
+  GpioTableLib
+  CixSipLib
+  EcLib
+  MailBoxLib
+  CixFwBootPerfLib
+  PostCodeLib
+
+[Guids]
+  gCixI2cDevicePathGuid
+  gEfiNetworkStackSetupGuid
+  gPlatformSetupVariableGuid
+  gEfiEventReadyToBootGuid
+
+[Protocols]
+  gEfiI2cMasterProtocolGuid
+  gEfiDevicePathProtocolGuid
+  gRa8900ceRealTimeClockLibI2cMasterProtocolGuid
+  gCixEcPlatformProtocolGuid
+
+[FixedPcd]
+  gCixPlatformTokenSpaceGuid.PcdRa8900ceI2cBus
+  gCixPlatformTokenSpaceGuid.PcdRa8900ceI2cSlaveAddress
+  gArmTokenSpaceGuid.PcdSystemMemorySize
+  gCixTokenSpaceGuid.PcdMemInfoBaseAddr
+  gCixTokenSpaceGuid.PcdSocWatchdogTimer
+  gEfiNetworkPkgTokenSpaceGuid.PcdNetworkStackSupport
+  gEfiNetworkPkgTokenSpaceGuid.PcdIPv4PXESupport
+  gEfiNetworkPkgTokenSpaceGuid.PcdIPv6PXESupport
+  gEfiNetworkPkgTokenSpaceGuid.PcdIPv4HttpSupport
+  gEfiNetworkPkgTokenSpaceGuid.PcdIPv6HttpSupport
+
+[Pcd]
+  gEmbeddedTokenSpaceGuid.PcdDmaDeviceLimit

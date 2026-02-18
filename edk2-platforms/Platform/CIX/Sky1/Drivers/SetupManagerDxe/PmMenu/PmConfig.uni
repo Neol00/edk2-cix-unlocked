@@ -1,0 +1,73 @@
+/**
+Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+
+SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+
+#langdef en-US  "English"
+/*
+* Power Management OPP Configuration settings.
+*/
+
+// Form title and help
+#string STR_PM_FORM_TITLE              #language en-US "PM OPP Configuration"
+#string STR_PM_FORM_TITLE_HELP         #language en-US "Press <Enter> to configure OPP-entry's frequency and voltage for all DVFS domains, TDP power caps."
+
+// Domain subtitle headers
+#string STR_PM_GPU_CORE_TITLE          #language en-US "--- GPU Core (Domain 0) ---"
+#string STR_PM_GPU_TOP_TITLE           #language en-US "--- GPU Top (Domain 1) ---"
+#string STR_PM_CPU_LITTLE_TITLE        #language en-US "--- CPU Little (Domain 2) ---"
+#string STR_PM_CPU_BIG_G0_TITLE        #language en-US "--- CPU Big G0 (Domain 3) ---"
+#string STR_PM_CPU_BIG_G1_TITLE        #language en-US "--- CPU Big G1 (Domain 4) ---"
+#string STR_PM_CPU_MID_G0_TITLE        #language en-US "--- CPU Mid G0 (Domain 5) ---"
+#string STR_PM_CPU_MID_G1_TITLE        #language en-US "--- CPU Mid G1 (Domain 6) ---"
+#string STR_PM_DSU_TITLE               #language en-US "--- DSU (Domain 7) ---"
+#string STR_PM_NPU_TITLE               #language en-US "--- NPU (Domain 8) ---"
+#string STR_PM_VPU_TITLE               #language en-US "--- VPU (Domain 9) ---"
+#string STR_PM_CI700_TITLE             #language en-US "--- CI700 (Domain 10) ---"
+#string STR_PM_MMHUB_TITLE             #language en-US "--- MMHUB (Domain 11) ---"
+
+// Per-entry prompt strings (entries 0-12, reused across all domains)
+#string STR_PM_E0_FREQ                 #language en-US "  Entry 0 Freq (MHz)"
+#string STR_PM_E0_VOLT                 #language en-US "  Entry 0 Volt (mV)"
+#string STR_PM_E1_FREQ                 #language en-US "  Entry 1 Freq (MHz)"
+#string STR_PM_E1_VOLT                 #language en-US "  Entry 1 Volt (mV)"
+#string STR_PM_E2_FREQ                 #language en-US "  Entry 2 Freq (MHz)"
+#string STR_PM_E2_VOLT                 #language en-US "  Entry 2 Volt (mV)"
+#string STR_PM_E3_FREQ                 #language en-US "  Entry 3 Freq (MHz)"
+#string STR_PM_E3_VOLT                 #language en-US "  Entry 3 Volt (mV)"
+#string STR_PM_E4_FREQ                 #language en-US "  Entry 4 Freq (MHz)"
+#string STR_PM_E4_VOLT                 #language en-US "  Entry 4 Volt (mV)"
+#string STR_PM_E5_FREQ                 #language en-US "  Entry 5 Freq (MHz)"
+#string STR_PM_E5_VOLT                 #language en-US "  Entry 5 Volt (mV)"
+#string STR_PM_E6_FREQ                 #language en-US "  Entry 6 Freq (MHz)"
+#string STR_PM_E6_VOLT                 #language en-US "  Entry 6 Volt (mV)"
+#string STR_PM_E7_FREQ                 #language en-US "  Entry 7 Freq (MHz)"
+#string STR_PM_E7_VOLT                 #language en-US "  Entry 7 Volt (mV)"
+#string STR_PM_E8_FREQ                 #language en-US "  Entry 8 Freq (MHz)"
+#string STR_PM_E8_VOLT                 #language en-US "  Entry 8 Volt (mV)"
+#string STR_PM_E9_FREQ                 #language en-US "  Entry 9 Freq (MHz)"
+#string STR_PM_E9_VOLT                 #language en-US "  Entry 9 Volt (mV)"
+#string STR_PM_E10_FREQ                #language en-US "  Entry 10 Freq (MHz)"
+#string STR_PM_E10_VOLT                #language en-US "  Entry 10 Volt (mV)"
+#string STR_PM_E11_FREQ                #language en-US "  Entry 11 Freq (MHz)"
+#string STR_PM_E11_VOLT                #language en-US "  Entry 11 Volt (mV)"
+#string STR_PM_E12_FREQ                #language en-US "  Entry 12 Freq (MHz)"
+#string STR_PM_E12_VOLT                #language en-US "  Entry 12 Volt (mV)"
+
+// Shared help strings for frequency and voltage
+#string STR_PM_FREQ_HELP               #language en-US "OPP entry frequency in MHz. Reset to defaults to restore stock values.\nWARNING: Too high frequency may cause instability."
+#string STR_PM_VOLT_HELP               #language en-US "OPP entry voltage in mV. Reset to defaults to restore stock values.\nWARNING: Incorrect voltage may cause instability or damage."
+
+// TDP Power Caps
+#string STR_PM_TDP_SECTION_TITLE       #language en-US "--- TDP Power Caps ---"
+#string STR_PM_TDP_CPU_LITTLE_PROMPT   #language en-US "  CPU Little TDP (mW)"
+#string STR_PM_TDP_CPU_MID_G0_PROMPT   #language en-US "  CPU Mid G0 TDP (mW)"
+#string STR_PM_TDP_CPU_MID_G1_PROMPT   #language en-US "  CPU Mid G1 TDP (mW)"
+#string STR_PM_TDP_CPU_BIG_G0_PROMPT   #language en-US "  CPU Big G0 TDP (mW)"
+#string STR_PM_TDP_CPU_BIG_G1_PROMPT   #language en-US "  CPU Big G1 TDP (mW)"
+#string STR_PM_TDP_DSU_PROMPT          #language en-US "  DSU TDP (mW)"
+#string STR_PM_TDP_GPU_PROMPT          #language en-US "  GPU TDP (mW)"
+#string STR_PM_TDP_SOC_PROMPT          #language en-US "  SoC TDP (mW)"
+#string STR_PM_TDP_HELP                #language en-US "Per-rail TDP power cap in milliwatts. Reset to defaults to restore stock values."

@@ -1,0 +1,55 @@
+#/**
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = Ite5570EcLib
+  FILE_GUID                      = 9A7681A9-E4F7-4040-9E82-386337910C64
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = EcLib
+  CONSTRUCTOR                    = EcLibConstructor
+
+[Sources.common]
+  Ite5570EcLib.c
+  Ite5570EcFunction.c
+
+[Packages]
+  EmbeddedPkg/EmbeddedPkg.dec
+  MdePkg/MdePkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  BaseMemoryLib
+  MemoryAllocationLib
+  DebugLib
+  IoLib
+  BaseLib
+  I2cLib
+  TimerLib
+
+[Guids]
+
+[Protocols]
+
+[FixedPcd]
+  gCixPlatformTokenSpaceGuid.PcdEcI2cBus
+  gCixPlatformTokenSpaceGuid.PcdEcI2cSlaveAddress
+  gCixTokenSpaceGuid.PcdI2c0BusFreq
+  gCixTokenSpaceGuid.PcdI2c1BusFreq
+  gCixTokenSpaceGuid.PcdI2c2BusFreq
+  gCixTokenSpaceGuid.PcdI2c3BusFreq
+  gCixTokenSpaceGuid.PcdI2c4BusFreq
+  gCixTokenSpaceGuid.PcdI2c5BusFreq
+  gCixTokenSpaceGuid.PcdI2c6BusFreq
+  gCixTokenSpaceGuid.PcdI2c7BusFreq
+
+[Pcd]
+  gCixPlatformTokenSpaceGuid.PcdEcI2cHostInitialized

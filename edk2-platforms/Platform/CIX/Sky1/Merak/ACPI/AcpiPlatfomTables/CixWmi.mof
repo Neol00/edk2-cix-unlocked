@@ -1,0 +1,23 @@
+/** @file
+
+  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+
+  SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+
+//--------------------------------------------------
+// ClassName : CixWmi
+// Provider : WmiProv
+// GUID : 842b3d2a-1a1f-4d71-9806-7484f9099bc0
+//--------------------------------------------------
+[WMI, Dynamic, Provider("WmiProv"), guid("{842b3d2a-1a1f-4d71-9806-7484f9099bc0}")]
+
+class CixWmi
+{
+    [key, read] string InstanceName;
+    [read] boolean Active;
+    [WmiMethodId(1), implemented] void CixWmiTest([in] uint32 Parameter, [out] uint32 ErrorCode);
+    [WmiMethodId(2), implemented] void CixWmiTest1([in] uint32 Parameter, [out] uint32 ErrorCode);
+    [WmiMethodId(0x8000), implemented] void CixLog([in] string Parameter, [out] uint32 ErrorCode);
+};

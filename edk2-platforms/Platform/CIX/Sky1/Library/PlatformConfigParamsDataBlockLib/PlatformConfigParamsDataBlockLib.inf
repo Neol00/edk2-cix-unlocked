@@ -1,0 +1,53 @@
+## @file
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = PlatformConfigParamsDataBlockLib
+  FILE_GUID                      = 538C66BD-09DB-4CB8-A2C1-E362748F7658
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = PlatformConfigParamsDataBlockLib
+
+[Sources]
+  PlatformConfigParamsDataBlockLib.c
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+
+[LibraryClasses]
+  BaseLib
+  DebugLib
+  BaseMemoryLib
+  MemoryAllocationLib
+
+[Pcd]
+  gCixTokenSpaceGuid.PcdSystemTableSelect
+  gCixTokenSpaceGuid.PcdDtbMenuEntry
+  gCixTokenSpaceGuid.PcdGfxPower
+  gCixTokenSpaceGuid.PcdTouchPanelPower
+  gCixTokenSpaceGuid.PcdTpmPower
+  gCixTokenSpaceGuid.PcdWwanPower
+  gCixTokenSpaceGuid.PcdPcieX2SlotPower
+  gCixTokenSpaceGuid.PcdFingerPrintPower
+  gCixTokenSpaceGuid.PcdWlanPower
+  gCixTokenSpaceGuid.PcdM2SsdPower
+  gCixTokenSpaceGuid.PcdOnBoardLanPower
+  gCixTokenSpaceGuid.PcdIspCamera0Power
+  gCixTokenSpaceGuid.PcdIspCamera1Power
+  gCixTokenSpaceGuid.PcdIspCamera2Power
+  gCixTokenSpaceGuid.PcdIspCamera3Power
+  gCixTokenSpaceGuid.PcdStateAfterG3
+  gCixPlatformTokenSpaceGuid.PcdRtcWakeup
+  gCixPlatformTokenSpaceGuid.PcdLightSensorCtrl
+  gCixPlatformTokenSpaceGuid.PcdAcpiSpcrEnable
+  gCixPlatformTokenSpaceGuid.PcdEcDefaultFanMode

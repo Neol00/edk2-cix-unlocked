@@ -1,0 +1,65 @@
+## @file
+#  Platform Library for N1Sdp.
+#
+#  Copyright (c) 2018-2021, ARM Limited. All rights reserved.<BR>
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = ArmNeoverseN1SocLib
+  FILE_GUID                      = 3d0eafcf-abc1-43d8-9269-709bb24f9d21
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = ArmPlatformLib
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  ArmPlatformPkg/ArmPlatformPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/ARM/NeoverseN1Soc/NeoverseN1Soc.dec
+
+[Sources.common]
+  PlatformLibMem.c
+  PlatformLib.c
+
+[Sources.AARCH64]
+  AArch64/Helper.S | GCC
+
+[FixedPcd]
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixBusMax
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixBusMin
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixExpressBaseAddress
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixMmio32Base
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixMmio32Size
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixMmio64Base
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixMmio64Size
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixRootPortConfigBaseAddress
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixRootPortConfigBaseSize
+  gArmNeoverseN1SocTokenSpaceGuid.PcdDramBlock2Base
+  gArmNeoverseN1SocTokenSpaceGuid.PcdExtMemorySpace
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieBusMax
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieBusMin
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieExpressBaseAddress
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieMmio32Base
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieMmio32Size
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieMmio64Base
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieMmio64Size
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieRootPortConfigBaseAddress
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieRootPortConfigBaseSize
+
+  gArmTokenSpaceGuid.PcdArmPrimaryCore
+  gArmTokenSpaceGuid.PcdArmPrimaryCoreMask
+  gArmTokenSpaceGuid.PcdSystemMemoryBase
+  gArmTokenSpaceGuid.PcdSystemMemorySize
+
+  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress
+
+[Guids]
+  gEfiHobListGuid          ## CONSUMES  ## SystemTable
+
+[Ppis]
+  gArmMpCoreInfoPpiGuid

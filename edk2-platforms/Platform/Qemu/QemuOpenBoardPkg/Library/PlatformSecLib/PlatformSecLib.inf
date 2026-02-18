@@ -1,0 +1,49 @@
+## @file
+#  PlatformSecLib for QEMU OpenBoardPkg
+#
+#  Copyright (c) 2022 Theo Jehl
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = PlatformSecLib
+  FILE_GUID                      = 37b1bddc-5a53-4f2a-af7d-b78d5e80dcbd
+  MODULE_TYPE                    = SEC
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = PlatformSecLib
+
+#
+# The following information is for reference only and not required by the build tools.
+#
+#  VALID_ARCHITECTURES           = IA32
+#
+
+[Sources.IA32]
+  Ia32/SecEntry.nasm
+
+[Sources]
+  PlatformSecLib.c
+
+[LibraryClasses]
+  DebugLib
+  BaseLib
+  BaseMemoryLib
+  PciLib
+  PcdLib
+  HobLib
+  MtrrLib
+
+[Packages]
+  MdePkg/MdePkg.dec
+  UefiCpuPkg/UefiCpuPkg.dec
+  QemuOpenBoardPkg/QemuOpenBoardPkg.dec
+  IntelFsp2WrapperPkg/IntelFsp2WrapperPkg.dec
+  MinPlatformPkg/MinPlatformPkg.dec
+
+[Ppis]
+  gTopOfTemporaryRamPpiGuid
+
+[Pcd]
+  gQemuOpenBoardPkgTokenSpaceGuid.PcdTemporaryRamBase
+  gQemuOpenBoardPkgTokenSpaceGuid.PcdTemporaryRamSize
+  gMinPlatformPkgTokenSpaceGuid.PcdFlashFvFspMBase

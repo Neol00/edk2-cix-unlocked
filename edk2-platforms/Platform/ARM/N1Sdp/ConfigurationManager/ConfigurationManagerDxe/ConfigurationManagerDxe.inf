@@ -1,0 +1,174 @@
+## @file
+#  Configuration Manager Dxe
+#
+#  Copyright (c) 2021, ARM Limited. All rights reserved.<BR>
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001B
+  BASE_NAME                      = ConfigurationManagerDxe
+  FILE_GUID                      = 6808406b-b2ba-43b6-8680-1438f3bc458c
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = ConfigurationManagerDxeInitialize
+
+#
+# The following information is for reference only and not required by the build tools.
+#
+#  VALID_ARCHITECTURES           = ARM AARCH64
+#
+
+[Sources]
+  AslTables/Dsdt.asl
+  AslTables/SsdtPci.asl
+  AslTables/SsdtRemotePci.asl
+  ConfigurationManager.c
+  ConfigurationManager.h
+  Hmat.c
+  Platform.h
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  ArmPlatformPkg/ArmPlatformPkg.dec
+  DynamicTablesPkg/DynamicTablesPkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Platform/ARM/N1Sdp/N1SdpPlatform.dec
+  Silicon/ARM/NeoverseN1Soc/NeoverseN1Soc.dec
+
+[LibraryClasses]
+  ArmPlatformLib
+  PrintLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiRuntimeServicesTableLib
+
+[Protocols]
+  gEdkiiConfigurationManagerProtocolGuid
+
+[FixedPcd]
+  # PL011 Serial Debug UART
+  gArmPlatformTokenSpaceGuid.PcdSerialDbgRegisterBase
+  gArmPlatformTokenSpaceGuid.PcdSerialDbgUartBaudRate
+  gArmPlatformTokenSpaceGuid.PcdSerialDbgUartClkInHz
+
+  gArmPlatformTokenSpaceGuid.PL011UartClkInHz
+  gArmPlatformTokenSpaceGuid.PL011UartInterrupt
+
+  gArmTokenSpaceGuid.PcdArmArchTimerHypIntrNum
+  gArmTokenSpaceGuid.PcdArmArchTimerIntrNum
+  gArmTokenSpaceGuid.PcdArmArchTimerSecIntrNum
+  gArmTokenSpaceGuid.PcdArmArchTimerVirtIntrNum
+
+  # SBSA Generic Watchdog
+  gArmTokenSpaceGuid.PcdGenericWatchdogControlBase
+  gArmTokenSpaceGuid.PcdGenericWatchdogEl2IntrNum
+  gArmTokenSpaceGuid.PcdGenericWatchdogRefreshBase
+
+  gArmTokenSpaceGuid.PcdGicDistributorBase
+  gArmTokenSpaceGuid.PcdGicInterruptInterfaceBase
+  gArmTokenSpaceGuid.PcdGicRedistributorsBase
+
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase
+  gEfiMdePkgTokenSpaceGuid.PcdUartDefaultBaudRate
+
+  gArmNeoverseN1SocTokenSpaceGuid.PcdExtMemorySpace
+  gArmNeoverseN1SocTokenSpaceGuid.PcdDramBlock2Base
+
+  gArmPlatformTokenSpaceGuid.PcdCoreCount
+  gArmPlatformTokenSpaceGuid.PcdClusterCount
+
+  gArmTokenSpaceGuid.PcdSystemMemoryBase
+  gArmTokenSpaceGuid.PcdSystemMemorySize
+
+  #PCIe
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieBusBaseNumber
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieBusCount
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieBusMax
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieBusMin
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieExpressBaseAddress
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieIoBase
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieIoMaxBase
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieIoSize
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieIoTranslation
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieMmio32Base
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieMmio32MaxBase
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieMmio32Size
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieMmio32Translation
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieMmio64Base
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieMmio64MaxBase
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieMmio64Size
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieMmio64Translation
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieRootPortConfigBaseAddress
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieRootPortConfigBaseSize
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieSegmentNumber
+
+  # CCIX
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixBusBaseNumber
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixBusCount
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixBusMax
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixBusMin
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixExpressBaseAddress
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixIoBase
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixIoMaxBase
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixIoSize
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixIoTranslation
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixMmio32Base
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixMmio32MaxBase
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixMmio32Size
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixMmio32Translation
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixMmio64Base
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixMmio64MaxBase
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixMmio64Size
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixMmio64Translation
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixRootPortConfigBaseAddress
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixRootPortConfigBaseSize
+  gArmNeoverseN1SocTokenSpaceGuid.PcdCcixSegmentNumber
+
+  # Coresight
+  gArmN1SdpTokenSpaceGuid.PcdCsComponentSize
+  gArmN1SdpTokenSpaceGuid.PcdCsEtf0Base
+  gArmN1SdpTokenSpaceGuid.PcdCsEtf0MaxBase
+  gArmN1SdpTokenSpaceGuid.PcdCsEtf1Base
+  gArmN1SdpTokenSpaceGuid.PcdCsEtf1MaxBase
+  gArmN1SdpTokenSpaceGuid.PcdCsEtf2Base
+  gArmN1SdpTokenSpaceGuid.PcdCsEtf2MaxBase
+  gArmN1SdpTokenSpaceGuid.PcdCsEtm0Base
+  gArmN1SdpTokenSpaceGuid.PcdCsEtm0MaxBase
+  gArmN1SdpTokenSpaceGuid.PcdCsEtm1Base
+  gArmN1SdpTokenSpaceGuid.PcdCsEtm1MaxBase
+  gArmN1SdpTokenSpaceGuid.PcdCsEtm2Base
+  gArmN1SdpTokenSpaceGuid.PcdCsEtm2MaxBase
+  gArmN1SdpTokenSpaceGuid.PcdCsEtm3Base
+  gArmN1SdpTokenSpaceGuid.PcdCsEtm3MaxBase
+  gArmN1SdpTokenSpaceGuid.PcdCsEtrBase
+  gArmN1SdpTokenSpaceGuid.PcdCsEtrMaxBase
+  gArmN1SdpTokenSpaceGuid.PcdCsFunnel0Base
+  gArmN1SdpTokenSpaceGuid.PcdCsFunnel0MaxBase
+  gArmN1SdpTokenSpaceGuid.PcdCsFunnel1Base
+  gArmN1SdpTokenSpaceGuid.PcdCsFunnel1MaxBase
+  gArmN1SdpTokenSpaceGuid.PcdCsReplicatorBase
+  gArmN1SdpTokenSpaceGuid.PcdCsReplicatorMaxBase
+  gArmN1SdpTokenSpaceGuid.PcdCsStmBase
+  gArmN1SdpTokenSpaceGuid.PcdCsStmMaxBase
+  gArmN1SdpTokenSpaceGuid.PcdCsStmStimulusBase
+  gArmN1SdpTokenSpaceGuid.PcdCsStmStimulusSize
+  gArmN1SdpTokenSpaceGuid.PcdCsTpiuBase
+  gArmN1SdpTokenSpaceGuid.PcdCsTpiuMaxBase
+
+  # Remote PCIe
+  gArmNeoverseN1SocTokenSpaceGuid.PcdRemotePcieBaseAddress
+  gArmNeoverseN1SocTokenSpaceGuid.PcdRemotePcieBusBaseNumber
+  gArmNeoverseN1SocTokenSpaceGuid.PcdRemotePcieBusMax
+  gArmNeoverseN1SocTokenSpaceGuid.PcdRemotePcieBusMin
+  gArmNeoverseN1SocTokenSpaceGuid.PcdRemotePcieIoTranslation
+  gArmNeoverseN1SocTokenSpaceGuid.PcdRemotePcieMmio32Translation
+  gArmNeoverseN1SocTokenSpaceGuid.PcdRemotePcieMmio64Translation
+  gArmNeoverseN1SocTokenSpaceGuid.PcdRemotePcieSegmentNumber
+
+[Depex]
+  TRUE

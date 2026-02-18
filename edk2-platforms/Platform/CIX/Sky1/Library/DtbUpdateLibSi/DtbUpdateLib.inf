@@ -1,0 +1,36 @@
+#/** @file
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#**/
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = DtbUpdateLibSi
+  FILE_GUID                      = 624620E7-EFBD-AF44-0EE9-B45922F12409
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = DtbUpdateLibSi
+
+[Sources.common]
+  DtbUpdateLibSi.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[Protocols]
+  gCixPlatformConfigParamsManageProtocolGuid
+
+[LibraryClasses]
+  BaseLib
+  DebugLib
+  PcdLib
+  UefiLib
+  FdtLib
+  IoLib
+  MemoryAllocationLib
+  HwHarvestLib
+
+

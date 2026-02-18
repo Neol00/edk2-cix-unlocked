@@ -1,0 +1,13 @@
+## @file
+#  FDF file for pre-memory BeepDebugFeature advanced feature.
+#
+#  This file is intended to be included into another package so advanced features
+#  can be conditionally included in the flash image by enabling the respective
+#  feature via its FeaturePCD.
+#
+# Copyright (C) 2022 Intel Corporation.
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+##
+
+INF FILE_GUID = $(BEEP_PEIM_FILENAME) MdeModulePkg/Universal/StatusCodeHandler/Pei/StatusCodeHandlerPei.inf

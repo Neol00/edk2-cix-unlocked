@@ -1,0 +1,89 @@
+## @file
+#  FDF file for post-memory advanced features.
+#
+#  This file is intended to be included into another package so advanced features
+#  can be conditionally included in the flash image by enabling the respective
+#  feature via its FeaturePCD.
+#
+# Copyright (c) 2019 - 2020, Intel Corporation. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+#
+# Debugging features
+#
+!if gAcpiDebugFeaturePkgTokenSpaceGuid.PcdAcpiDebugFeatureEnable == TRUE
+  !include AcpiDebugFeaturePkg/Include/PostMemory.fdf
+!endif
+
+!if gBeepDebugFeaturePkgTokenSpaceGuid.PcdBeepDebugFeatureEnable == TRUE
+  !include BeepDebugFeaturePkg/Include/PostMemory.fdf
+!endif
+
+!if gPostCodeDebugFeaturePkgTokenSpaceGuid.PcdPostCodeDebugFeatureEnable == TRUE
+  !include PostCodeDebugFeaturePkg/Include/PostMemory.fdf
+!endif
+
+!if gUsb3DebugFeaturePkgTokenSpaceGuid.PcdUsb3DebugFeatureEnable == TRUE
+  !include Usb3DebugFeaturePkg/Include/PostMemory.fdf
+!endif
+
+#
+# Network features
+#
+!if gNetworkFeaturePkgTokenSpaceGuid.PcdNetworkFeatureEnable == TRUE
+  !include NetworkFeaturePkg/Include/PostMemory.fdf
+!endif
+
+#
+# OutOfBandManagement features
+#
+!if gIpmiFeaturePkgTokenSpaceGuid.PcdIpmiFeatureEnable == TRUE
+  !include IpmiFeaturePkg/Include/PostMemory.fdf
+!endif
+
+!if gSpcrFeaturePkgTokenSpaceGuid.PcdSpcrFeatureEnable == TRUE
+  !include SpcrFeaturePkg/Include/PostMemory.fdf
+!endif
+
+!if gAsfFeaturePkgTokenSpaceGuid.PcdAsfFeatureEnable == TRUE
+  !include AsfFeaturePkg/Include/PostMemory.fdf
+!endif
+
+#
+# PowerManagement features
+#
+!if gS3FeaturePkgTokenSpaceGuid.PcdS3FeatureEnable == TRUE
+  !include S3FeaturePkg/Include/PostMemory.fdf
+!endif
+
+#
+# SystemInformation features
+#
+!if gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosFeatureEnable == TRUE
+  !include SmbiosFeaturePkg/Include/PostMemory.fdf
+!endif
+
+#
+# UserInterface features
+#
+!if gLogoFeaturePkgTokenSpaceGuid.PcdLogoFeatureEnable == TRUE
+  !include LogoFeaturePkg/Include/PostMemory.fdf
+!endif
+
+!if gUserAuthFeaturePkgTokenSpaceGuid.PcdUserAuthenticationFeatureEnable == TRUE
+  !include UserAuthFeaturePkg/Include/PostMemory.fdf
+!endif
+
+!if gVirtualKeyboardFeaturePkgTokenSpaceGuid.PcdVirtualKeyboardFeatureEnable == TRUE
+  !include VirtualKeyboardFeaturePkg/Include/PostMemory.fdf
+!endif
+
+#
+# Individual features
+#
+!if gPlatformPayloadFeaturePkgTokenSpaceGuid.PcdPlatformPayloadFeatureEnable == TRUE
+  !include PlatformPayloadFeaturePkg/Include/PostMemory.fdf
+!endif

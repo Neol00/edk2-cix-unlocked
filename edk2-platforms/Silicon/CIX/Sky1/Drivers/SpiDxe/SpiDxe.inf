@@ -1,0 +1,51 @@
+#/**
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved
+#  Component description file for SpiDxe module
+#
+#  Copyright (c) 2023-2024, CIX, Ltd. All rights reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = SpiDxe
+  FILE_GUID                      = 4A7306C0-0EA8-463B-8CA5-17E82F937E1D
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = SpiDxeEntryPoint
+
+[Sources]
+  SpiDxe.c
+  SpiDxe.h
+
+[Packages]
+  EmbeddedPkg/EmbeddedPkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  DebugLib
+  DxeServicesTableLib
+  IoLib
+  PcdLib
+  MemoryAllocationLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiLib
+  SpiLib
+  PostCodeLib
+
+[Guids]
+  gCixSpiDevicePathGuid
+
+[Pcd]
+
+[Protocols]
+  gCixSpiHostProtocolGuid
+  gCixConfigParamsManageProtocolGuid
+
+[Depex]
+  TRUE

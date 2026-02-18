@@ -1,0 +1,183 @@
+/** @file
+
+  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+
+  SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+
+#include <IndustryStandard/Acpi.h>
+#include <Include/AcpiPlatform.h>
+#include "Include/InterruptId.h"
+#include "Include/DMACommon.h"
+#include "Include/MemoryMap.h"
+
+#pragma pack (push, 1)
+
+#define DMA_CONTROLLER_NUM	2
+#define EFI_ACPI_VENDOR_ID	SIGNATURE_32 ('C','I','X',' ')
+#define EFI_ACPI_CSRT_REVISION	0x00000000
+
+typedef enum
+{
+  EFI_ACPI_CSRT_RESOURCE_TYPE_RESERVED,           // 0
+  EFI_ACPI_CSRT_RESOURCE_TYPE_INTERRUPT,          // 1
+  EFI_ACPI_CSRT_RESOURCE_TYPE_TIMER,              // 2
+  EFI_ACPI_CSRT_RESOURCE_TYPE_DMA,                // 3
+  EFI_ACPI_CSRT_RESOURCE_TYPE_CACHE,              // 4
+} CSRT_RESOURCE_TYPE;
+
+typedef enum
+{
+  EFI_ACPI_CSRT_RESOURCE_SUBTYPE_DMA_CHANNEL,     // 0
+  EFI_ACPI_CSRT_RESOURCE_SUBTYPE_DMA_CONTROLLER   // 1
+} CSRT_DMA_SUBTYPE;
+
+//------------------------------------------------------------------------
+// CSRT Resource Group header 24 bytes long
+//------------------------------------------------------------------------
+typedef struct
+{
+  UINT32 Length;                  // Length
+  UINT32 VendorID;                // 4 bytes
+  UINT32 SubVendorId;             // 4 bytes
+  UINT16 DeviceId;                // 2 bytes
+  UINT16 SubdeviceId;             // 2 bytes
+  UINT16 Revision;                // 2 bytes
+  UINT16 Reserved;                // 2 bytes
+  UINT32 SharedInfoLength;        // 4 bytes
+} EFI_ACPI_CSRT_RESOURCE_GROUP_HEADER;
+
+//------------------------------------------------------------------------
+// CSRT Resource Descriptor 12 bytes total
+//------------------------------------------------------------------------
+typedef struct
+{
+  UINT32 Length;                  // 4 bytes
+  UINT16 ResourceType;            // 2 bytes
+  UINT16 ResourceSubType;         // 2 bytes
+  UINT32 UID;                     // 4 bytes
+} EFI_ACPI_CSRT_RESOURCE_DESCRIPTOR_HEADER;
+
+/* Shared Info subtable */
+
+typedef struct acpi_csrt_shared_info
+{
+    UINT16                  MajorVersion;
+    UINT16                  MinorVersion;
+    UINT32                  MmioBaseLow;
+    UINT32                  MmioBaseHigh;
+    UINT32                  GsiInterrupt;
+    UINT8                   InterruptPolarity;
+    UINT8                   InterruptMode;
+    UINT8                   NumChannels;
+    UINT8                   DmaAddressWidth;
+    UINT16                  BaseRequestLine;
+    UINT16                  NumHandshakeSignals;
+    UINT32                  MaxBlockSize;
+
+    /* Resource descriptors immediately follow (Length = Group Length - SharedInfoLength) */
+
+} ACPI_CSRT_SHARED_INFO;
+
+//------------------------------------------------------------------------
+// DMA Resource Group
+//------------------------------------------------------------------------
+
+typedef struct
+{
+  EFI_ACPI_CSRT_RESOURCE_GROUP_HEADER ResDmaGroupHeader;
+  ACPI_CSRT_SHARED_INFO ResDmaControllerInfo;
+} DMA_RES_GROUP;
+
+//----------------------------------------------------------------------------
+// CSRT table structure - current revision only includes DMA
+//----------------------------------------------------------------------------
+typedef struct
+{
+  // Standard ACPI Header
+  EFI_ACPI_DESCRIPTION_HEADER CsrtHeader;
+
+  // DMA Controller Resource
+  DMA_RES_GROUP DmaResGroup[DMA_CONTROLLER_NUM];
+
+} EFI_ACPI_CSRT_TABLE;
+
+EFI_ACPI_CSRT_TABLE Csrt =
+{
+  ARM_ACPI_HEADER (
+    EFI_ACPI_6_4_CORE_SYSTEM_RESOURCE_TABLE_SIGNATURE,       // Signature "CSRT"
+    EFI_ACPI_CSRT_TABLE,
+    EFI_ACPI_CSRT_REVISION     // Revision
+  ),
+
+  // DMA Resource Groups
+  {
+    // DMA Resource Group 0
+    {
+      // DMA Resource Group Header
+      {
+        sizeof (DMA_RES_GROUP),          // Resource Group Length
+        EFI_ACPI_VENDOR_ID,              // VendorId
+        0,                               // SubvendorId
+        0,                               // DeviceId 0
+        0,                               // SubdeviceId
+        0,                               // Revision
+        0,                               // Reserved
+        sizeof (ACPI_CSRT_SHARED_INFO),  // SharedInfoLength
+      },
+      // Resource Descriptor - DMA Controller Resource
+      {
+        0,                               // MajorVersion
+        0,                               // MinorVersion
+        DMA_BASE,                        // MmioBaseLow
+        0,                               // MmioBaseHigh
+        FCH_INTR_DMA_INTERRUPT_ID,       // GsiInterrupt
+        ACPI_ACTIVE_HIGH,                // InterruptPolarity
+        ACPI_LEVEL_SENSITIVE,            // InterruptMode
+        8,                               // NumChannels
+        32,                              // DmaAddressWidth
+        CSRT_FCH_REQUEST_BASE,           // BaseRequestLine
+        CSRT_REQUEST_SIZE,               // NumHandshakeSignals
+        0,                               // MaxBlockSize
+      },
+    }, // End DMA Resource group 0
+    // DMA Resource Group 1
+    {
+      // DMA Resource Group Header
+      {
+        sizeof (DMA_RES_GROUP),          // Resource Group Length
+        EFI_ACPI_VENDOR_ID,              // VendorId
+        0,                               // SubvendorId
+        1,                               // DeviceId 1
+        0,                               // SubdeviceId
+        0,                               // Revision
+        0,                               // Reserved
+        sizeof (ACPI_CSRT_SHARED_INFO),  // SharedInfoLength
+      },
+      // Resource Descriptor - DMA Controller Resource
+      {
+        0,                               // MajorVersion
+        0,                               // MinorVersion
+        AUDIO_DMAC_BASE,                 // MmioBaseLow
+        0,                               // MmioBaseHigh
+        AUDIO_IRQ_O_AP_DMA_INTERRUPT_ID, // GsiInterrupt
+        ACPI_ACTIVE_HIGH,                // InterruptPolarity
+        ACPI_LEVEL_SENSITIVE,            // InterruptMode
+        8,                               // NumChannels
+        32,                              // DmaAddressWidth
+        CSRT_AUD_REQUEST_BASE,         // BaseRequestLine
+        CSRT_REQUEST_SIZE,               // NumHandshakeSignals
+        0,                               // MaxBlockSize
+      },
+    }, // End DMA Resource group 1
+  },
+};
+
+#pragma pack(pop)
+
+//
+// Reference the table being generated to prevent the optimizer from removing the
+// data structure from the executable
+//
+VOID * CONST  ReferenceAcpiTable = &Csrt;

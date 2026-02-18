@@ -1,0 +1,21 @@
+//
+// Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+//
+// SPDX-License-Identifier: BSD-2-Clause-Patent
+//
+
+/=#
+
+#langdef   en-US "English"
+
+#string STR_EDKII_MENU_TITLE           #language en-US  "Platform Manager"
+#string STR_EDKII_MENU_HELP            #language en-US  "This selection will take you to the Platform Manager"
+#string STR_PLATFORM_LIST              #language en-US  "Platform Configuration"
+#string STR_MISSING_STRING             #language en-US  "Missing String"
+#string STR_EMPTY_STRING               #language en-US  ""
+#string STR_EXIT_STRING                #language en-US  "Press ESC to exit."
+//
+// Ensure that this is the last string.  We are using it programmatically
+// to do string token re-usage settings for the Device Manager since we are
+// constantly recreating this page based on HII population.
+////

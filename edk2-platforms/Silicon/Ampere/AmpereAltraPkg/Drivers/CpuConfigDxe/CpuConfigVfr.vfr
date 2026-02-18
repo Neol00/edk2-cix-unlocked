@@ -1,0 +1,43 @@
+/** @file
+
+  Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+
+  SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+
+#include <Uefi/UefiMultiPhase.h>
+#include <Guid/PlatformManagerHii.h>
+#include <Guid/CpuConfigHii.h>
+#include "CpuConfigNVDataStruc.h"
+
+#define SUBNUMA_MODE_FORM_ID 1
+
+formset
+  guid      = CPU_CONFIGURATION_FORMSET_GUID,
+  title     = STRING_TOKEN(STR_CPU_FORM),
+  help      = STRING_TOKEN(STR_CPU_FORM_HELP),
+  classguid = gPlatformManagerFormsetGuid,
+
+  varstore CPU_VARSTORE_DATA,
+    name  = CpuConfigNVData,
+    guid  = CPU_CONFIGURATION_FORMSET_GUID;
+
+  form
+    formid = SUBNUMA_MODE_FORM_ID,
+    title  = STRING_TOKEN(STR_CPU_FORM);
+    subtitle text = STRING_TOKEN(STR_CPU_FORM_HELP);
+
+    oneof
+      varid   = CpuConfigNVData.CpuSubNumaMode,
+      prompt  = STRING_TOKEN(STR_CPU_SUBNUMA_MODE_PROMPT),
+      help    = STRING_TOKEN(STR_CPU_SUBNUMA_MODE_HELP),
+      flags   = RESET_REQUIRED,
+      option text = STRING_TOKEN(STR_CPU_SUBNUMA_MODE_MONOLITHIC), value = 0x0, flags = DEFAULT;
+      option text = STRING_TOKEN(STR_CPU_SUBNUMA_MODE_HEMISPHERE), value = 0x1, flags = 0;
+      option text = STRING_TOKEN(STR_CPU_SUBNUMA_MODE_QUADRANT), value = 0x2, flags = 0;
+    endoneof;
+
+  endform;
+
+endformset;

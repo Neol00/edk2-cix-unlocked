@@ -1,0 +1,68 @@
+#/** @file
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#  Copyright (c) 2016, Linaro, Ltd. All rights reserved.
+#  Copyright (c) 2011-2014, ARM Ltd. All rights reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = MemoryInitPeiLib
+  FILE_GUID                      = 4bbc9c10-a100-43fb-8311-332ba497d1b4
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = MemoryInitPeiLib|SEC PEIM
+
+[Sources]
+  MemoryInitPeiLib.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec
+  ArmPkg/ArmPkg.dec
+  ArmPlatformPkg/ArmPlatformPkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  DebugLib
+  HobLib
+  ArmMmuLib
+  ArmPlatformLib
+
+[Guids]
+  gEfiMemoryTypeInformationGuid
+
+[FeaturePcd]
+  gEmbeddedTokenSpaceGuid.PcdPrePiProduceMemoryTypeInformationHob
+
+[FixedPcd]
+  gArmTokenSpaceGuid.PcdSystemMemoryBase
+  gArmTokenSpaceGuid.PcdSystemMemorySize
+  gArmTokenSpaceGuid.PcdFdBaseAddress
+  gArmTokenSpaceGuid.PcdFdSize
+  gCixPlatformTokenSpaceGuid.PcdKernelBootImgBase
+  gCixPlatformTokenSpaceGuid.PcdKernelBootImgSize
+  gArmPlatformTokenSpaceGuid.PcdArmLcdDdrFrameBufferBase
+  gArmPlatformTokenSpaceGuid.PcdArmLcdDdrFrameBufferSize
+  gCixPlatformTokenSpaceGuid.PcdReservedLinuxBase
+  gCixPlatformTokenSpaceGuid.PcdReservedLinuxSize
+  gCixPlatformTokenSpaceGuid.PcdReservedAndroidBase
+  gCixPlatformTokenSpaceGuid.PcdReservedAndroidSize
+  gCixTokenSpaceGuid.PcdGpuEnable
+  gCixTokenSpaceGuid.PcdGpuReservedMemoryBase
+  gCixTokenSpaceGuid.PcdGpuReservedMemorySize
+  gCixTokenSpaceGuid.PcdNpuEnable
+  gCixTokenSpaceGuid.PcdNpuReservedMemoryBase
+  gCixTokenSpaceGuid.PcdNpuReservedMemorySize
+  gCixPlatformTokenSpaceGuid.PcdReservedSecureMemoryBase
+  gCixPlatformTokenSpaceGuid.PcdReservedSecureMemorySize
+  gCixPlatformTokenSpaceGuid.PcdReservedShareMemoryBase
+  gCixPlatformTokenSpaceGuid.PcdReservedShareMemorySize
+
+[Depex]
+  TRUE

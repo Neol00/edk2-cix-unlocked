@@ -1,0 +1,11 @@
+// /** @file
+// Platform Logo image definition file.
+//
+// Copyright 2024 Radxa Computer (Shenzhen) Co., Ltd. All Rights Reserved.
+// Copyright (c) 2016 - 2018, Intel Corporation. All rights reserved.<BR>
+//
+// SPDX-License-Identifier: BSD-2-Clause-Patent
+//
+// **/
+
+#image IMG_LOGO Logo.bmp

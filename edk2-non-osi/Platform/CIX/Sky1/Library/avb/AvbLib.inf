@@ -1,0 +1,66 @@
+#/* @AvbLib.inf
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#  Copyright (c) 2017-2018, 2020, The Linux Foundation. All rights reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#*/
+
+[Defines]
+	INF_VERSION                    = 0x00010005
+	BASE_NAME                      = AvbLib
+	FILE_GUID                      = 4290415d-a219-41c2-8c00-31382eeb1d86
+	MODULE_TYPE                    = BASE
+	VERSION_STRING                 = 1.0
+	LIBRARY_CLASS                  = AvbLib
+
+[BuildOptions]
+	GCC:*_*_*_CC_FLAGS = -DAVB_COMPILATION -DAVB_ENABLE_DEBUG -Wno-unused-variable
+	GCC:*_*_*_CC_FLAGS = -v
+	GCC:*_*_*_CC_FLAGS = $(LLVM_ENABLE_SAFESTACK) $(LLVM_SAFESTACK_USE_PTR) $(LLVM_SAFESTACK_COLORING)
+
+[BuildOptions.AARCH64]
+	GCC:*_*_*_CC_FLAGS = $(SDLLVM_COMPILE_ANALYZE) $(SDLLVM_ANALYZE_REPORT)
+
+[Binaries.AARCH64]
+  LIB|AvbLib.lib|*
+
+[Packages]
+	ArmPkg/ArmPkg.dec
+	MdePkg/MdePkg.dec
+	EmbeddedPkg/EmbeddedPkg.dec
+	ArmPlatformPkg/ArmPlatformPkg.dec
+	MdeModulePkg/MdeModulePkg.dec
+	Platform/CIX/Sky1/Sky1.dec
+
+[LibraryClasses]
+	DxeServicesTableLib
+	UefiLib
+	ArmLib
+	BaseLib
+	DebugLib
+	DevicePathLib
+	DebugPrintErrorLevelLib
+	FdtLib
+	MemoryAllocationLib
+	OpteeLib
+
+[Guids]
+
+[Protocols]
+	gEfiPartitionInfoProtocolGuid
+
+[Depex]
+	TRUE
+
+[FixedPcd]
+  gCixPlatformTokenSpaceGuid.AvbDisableVerification
+  gCixPlatformTokenSpaceGuid.BootAndroidRecovery
+  gCixPlatformTokenSpaceGuid.BootImgBackDoorAddr
+  gCixPlatformTokenSpaceGuid.VendorBootImgBackDoorAddr
+  gCixPlatformTokenSpaceGuid.DtboImgBackDoorAddr
+  gCixPlatformTokenSpaceGuid.VbmetaImgBackDoorAddr
+
+[Pcd]
+  gCixPlatformTokenSpaceGuid.AvbWithBackDoor

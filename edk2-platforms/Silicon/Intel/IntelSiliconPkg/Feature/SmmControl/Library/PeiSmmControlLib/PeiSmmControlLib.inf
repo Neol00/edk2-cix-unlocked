@@ -1,0 +1,34 @@
+## @file
+# Library description file for the SmmControl PPI
+#
+# Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010017
+  BASE_NAME                      = PeiSmmControlLib
+  FILE_GUID                      = F45D521A-C0DF-4283-A3CA-65AD01B479E7
+  VERSION_STRING                 = 1.0
+  MODULE_TYPE                    = PEIM
+  LIBRARY_CLASS                  = SmmControlLib
+
+[LibraryClasses]
+  IoLib
+  DebugLib
+  MemoryAllocationLib
+  PeiServicesLib
+
+[Packages]
+  MdePkg/MdePkg.dec
+  IntelSiliconPkg/IntelSiliconPkg.dec
+
+[Sources]
+  PeiSmmControlLib.c
+
+[Pcd]
+  gIntelSiliconPkgTokenSpaceGuid.PcdAcpiBaseAddress  ## CONSUMES
+
+[Ppis]
+  gEfiPeiMmControlPpiGuid                            ## PRODUCES

@@ -1,0 +1,50 @@
+## @file
+# Component information file for the Serial Port Terminal Redirection library.
+#
+#  This library adds a Terminal Device connected to SerialDxe to the UEFI Console
+#  Variables. This allows BIOS Setup, UEFI Shell, etc. to be used on a headless
+#  system via a null modem and terminal
+#
+# Copyright (c) 2020, Intel Corporation. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+[Defines]
+  INF_VERSION                    = 0x00010006
+  BASE_NAME                      = SerialPortTerminalLib
+  FILE_GUID                      = E12BFA46-95F2-4ADC-9774-7E38DE78741E
+  MODULE_TYPE                    = UEFI_DRIVER
+  VERSION_STRING                 = 1.2
+  LIBRARY_CLASS                  = NULL|UEFI_DRIVER DXE_DRIVER DXE_RUNTIME_DRIVER
+  CONSTRUCTOR                    = SerialPortTerminalLibConstructor
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+
+[Sources]
+  SerialPortTerminalLib.c
+  SerialPortTerminalLib.h
+
+[LibraryClasses]
+  BaseMemoryLib
+  DevicePathLib
+  DebugLib
+  UefiDriverEntryPoint
+  UefiBootManagerLib
+  UefiLib
+
+[Guids]
+  gEfiPcAnsiGuid
+  gEfiVT100Guid
+  gEfiVT100PlusGuid
+  gEfiVTUTF8Guid
+  gEfiTtyTermGuid
+
+[Pcd]
+  gEfiMdePkgTokenSpaceGuid.PcdUartDefaultBaudRate
+  gEfiMdePkgTokenSpaceGuid.PcdUartDefaultDataBits
+  gEfiMdePkgTokenSpaceGuid.PcdUartDefaultParity
+  gEfiMdePkgTokenSpaceGuid.PcdUartDefaultStopBits
+  gEfiMdePkgTokenSpaceGuid.PcdDefaultTerminalType

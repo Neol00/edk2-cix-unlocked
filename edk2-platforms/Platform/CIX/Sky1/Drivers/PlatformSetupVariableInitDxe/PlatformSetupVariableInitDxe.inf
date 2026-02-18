@@ -1,0 +1,245 @@
+#/**
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#**/
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = PlatformSetupVariableInitDxe
+  FILE_GUID                      = 4C7FCED5-9CD6-4F33-AD33-A2EC35DFDE71
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = PlatformSetupVariableInitDxeEntry
+
+#
+# The following information is for reference only and not required by the build
+# tools.
+#
+#  VALID_ARCHITECTURES           = AARCH64
+#
+[Sources]
+  PlatformSetupVariableInitDxe.c
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  ArmPlatformPkg/ArmPlatformPkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+  NetworkPkg/NetworkPkg.dec
+
+[LibraryClasses]
+  BaseLib
+  DebugLib
+  BaseMemoryLib
+  MemoryAllocationLib
+  PcdLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiLib
+  UefiRuntimeServicesTableLib
+  CpuInfoLib
+
+[Guids]
+  gPlatformSetupVariableGuid
+  gEfiEndOfDxeEventGroupGuid
+  gEfiNetworkStackSetupGuid
+  gCixGlobalVariableGuid
+  gDtPlatformFormSetGuid
+
+[Protocols]
+  gCixConfigParamsManageProtocolGuid
+  gCixPlatformConfigParamsManageProtocolGuid
+  gCixSetupVarInitCompleteProtocolGuid
+
+[FixedPcd]
+  gCixTokenSpaceGuid.PcdPcieRootPort0Enable
+  gCixTokenSpaceGuid.PcdPcieRootPort1Enable
+  gCixTokenSpaceGuid.PcdPcieRootPort2Enable
+  gCixTokenSpaceGuid.PcdPcieRootPort3Enable
+  gCixTokenSpaceGuid.PcdPcieRootPort4Enable
+  gCixTokenSpaceGuid.PcdPcieRootPort0LaneNum
+  gCixTokenSpaceGuid.PcdPcieRootPort1LaneNum
+  gCixTokenSpaceGuid.PcdPcieRootPort2LaneNum
+  gCixTokenSpaceGuid.PcdPcieRootPort3LaneNum
+  gCixTokenSpaceGuid.PcdPcieRootPort4LaneNum
+  gCixTokenSpaceGuid.PcdPcieRootPort0MaxSpeed
+  gCixTokenSpaceGuid.PcdPcieRootPort1MaxSpeed
+  gCixTokenSpaceGuid.PcdPcieRootPort2MaxSpeed
+  gCixTokenSpaceGuid.PcdPcieRootPort3MaxSpeed
+  gCixTokenSpaceGuid.PcdPcieRootPort4MaxSpeed
+  gCixTokenSpaceGuid.PcdPcieRootPort0SpeedGen
+  gCixTokenSpaceGuid.PcdPcieRootPort1SpeedGen
+  gCixTokenSpaceGuid.PcdPcieRootPort2SpeedGen
+  gCixTokenSpaceGuid.PcdPcieRootPort3SpeedGen
+  gCixTokenSpaceGuid.PcdPcieRootPort4SpeedGen
+  gCixTokenSpaceGuid.PcdPcieRootPort0MaxAspmSupport
+  gCixTokenSpaceGuid.PcdPcieRootPort1MaxAspmSupport
+  gCixTokenSpaceGuid.PcdPcieRootPort2MaxAspmSupport
+  gCixTokenSpaceGuid.PcdPcieRootPort3MaxAspmSupport
+  gCixTokenSpaceGuid.PcdPcieRootPort4MaxAspmSupport
+  gCixTokenSpaceGuid.PcdPcieRootPort0AspmSupport
+  gCixTokenSpaceGuid.PcdPcieRootPort1AspmSupport
+  gCixTokenSpaceGuid.PcdPcieRootPort2AspmSupport
+  gCixTokenSpaceGuid.PcdPcieRootPort3AspmSupport
+  gCixTokenSpaceGuid.PcdPcieRootPort4AspmSupport
+  gCixTokenSpaceGuid.PcdPcieRootPort0MaxPayload
+  gCixTokenSpaceGuid.PcdPcieRootPort1MaxPayload
+  gCixTokenSpaceGuid.PcdPcieRootPort2MaxPayload
+  gCixTokenSpaceGuid.PcdPcieRootPort3MaxPayload
+  gCixTokenSpaceGuid.PcdPcieRootPort4MaxPayload
+  gCixTokenSpaceGuid.PcdPcieRootPort0MaxReadRequest
+  gCixTokenSpaceGuid.PcdPcieRootPort1MaxReadRequest
+  gCixTokenSpaceGuid.PcdPcieRootPort2MaxReadRequest
+  gCixTokenSpaceGuid.PcdPcieRootPort3MaxReadRequest
+  gCixTokenSpaceGuid.PcdPcieRootPort4MaxReadRequest
+  gCixTokenSpaceGuid.PcdPcieRootPort0DtiEnable
+  gCixTokenSpaceGuid.PcdPcieRootPort1DtiEnable
+  gCixTokenSpaceGuid.PcdPcieRootPort2DtiEnable
+  gCixTokenSpaceGuid.PcdPcieRootPort3DtiEnable
+  gCixTokenSpaceGuid.PcdPcieRootPort4DtiEnable
+  gCixTokenSpaceGuid.PcdI2c0En
+  gCixTokenSpaceGuid.PcdI2c1En
+  gCixTokenSpaceGuid.PcdI2c2En
+  gCixTokenSpaceGuid.PcdI2c3En
+  gCixTokenSpaceGuid.PcdI2c4En
+  gCixTokenSpaceGuid.PcdI2c5En
+  gCixTokenSpaceGuid.PcdI2c6En
+  gCixTokenSpaceGuid.PcdI2c7En
+  gCixTokenSpaceGuid.PcdI2c0BusFreq
+  gCixTokenSpaceGuid.PcdI2c1BusFreq
+  gCixTokenSpaceGuid.PcdI2c2BusFreq
+  gCixTokenSpaceGuid.PcdI2c3BusFreq
+  gCixTokenSpaceGuid.PcdI2c4BusFreq
+  gCixTokenSpaceGuid.PcdI2c5BusFreq
+  gCixTokenSpaceGuid.PcdI2c6BusFreq
+  gCixTokenSpaceGuid.PcdI2c7BusFreq
+  gEfiNetworkPkgTokenSpaceGuid.PcdNetworkStackSupport
+  gEfiNetworkPkgTokenSpaceGuid.PcdIPv4PXESupport
+  gEfiNetworkPkgTokenSpaceGuid.PcdIPv6PXESupport
+  gEfiNetworkPkgTokenSpaceGuid.PcdIPv4HttpSupport
+  gEfiNetworkPkgTokenSpaceGuid.PcdIPv6HttpSupport
+
+  #USB2.0 Control
+  gCixTokenSpaceGuid.PcdUsb2Control0Enable
+  gCixTokenSpaceGuid.PcdUsb2Control0MaxSpeed
+  gCixTokenSpaceGuid.PcdUsb2Control1Enable
+  gCixTokenSpaceGuid.PcdUsb2Control1MaxSpeed
+  gCixTokenSpaceGuid.PcdUsb2Control2Enable
+  gCixTokenSpaceGuid.PcdUsb2Control2MaxSpeed
+  gCixTokenSpaceGuid.PcdUsb2Control3Enable
+  gCixTokenSpaceGuid.PcdUsb2Control3MaxSpeed
+
+  #USB3.0 drd Control
+  gCixTokenSpaceGuid.PcdUsb3Control0Enable
+  gCixTokenSpaceGuid.PcdUsb3Control0MaxSpeed
+  gCixTokenSpaceGuid.PcdUsb3Control0DataRole
+
+  gCixTokenSpaceGuid.PcdUsb3Control1Enable
+  gCixTokenSpaceGuid.PcdUsb3Control1MaxSpeed
+  gCixTokenSpaceGuid.PcdUsb3Control1DataRole
+
+  #USB TypeC drd
+  gCixTokenSpaceGuid.PcdUsbCDrdControl0Enable
+  gCixTokenSpaceGuid.PcdUsbCDrdControl0MaxSpeed
+  gCixTokenSpaceGuid.PcdUsbCDrdControl0DataRole
+
+  #USB Typec Host
+  gCixTokenSpaceGuid.PcdUsbCControl0Enable
+  gCixTokenSpaceGuid.PcdUsbCControl0MaxSpeed
+  gCixTokenSpaceGuid.PcdUsbCControl1Enable
+  gCixTokenSpaceGuid.PcdUsbCControl1MaxSpeed
+  gCixTokenSpaceGuid.PcdUsbCControl2Enable
+  gCixTokenSpaceGuid.PcdUsbCControl2MaxSpeed
+
+  gCixTokenSpaceGuid.PcdStateAfterG3
+  gCixTokenSpaceGuid.PcdSystemTableSelect
+  gCixTokenSpaceGuid.PcdPrimaryDisplay
+  gCixTokenSpaceGuid.PcdDtbMenuEntry
+  gCixTokenSpaceGuid.PcdBiosReset
+  gCixTokenSpaceGuid.PcdSocWatchdogTimer
+  gCixTokenSpaceGuid.PcdVddSocVoltage
+  gCixTokenSpaceGuid.PcdVddGpuVoltage
+  gCixTokenSpaceGuid.PcdVddDpuVoltage
+  gCixTokenSpaceGuid.PcdVddCpuBigCore0Voltage
+  gCixTokenSpaceGuid.PcdVddCpuBigCore1Voltage
+  gCixTokenSpaceGuid.PcdVddCpuMidCore0Voltage
+  gCixTokenSpaceGuid.PcdVddCpuMidCore1Voltage
+  gCixTokenSpaceGuid.PcdVddCpuLitCoreVoltage
+  gCixTokenSpaceGuid.PcdGfxPower
+  gCixTokenSpaceGuid.PcdTouchPanelPower
+  gCixTokenSpaceGuid.PcdTpmPower
+  gCixTokenSpaceGuid.PcdWwanPower
+  gCixTokenSpaceGuid.PcdPcieX2SlotPower
+  gCixTokenSpaceGuid.PcdFingerPrintPower
+  gCixTokenSpaceGuid.PcdWlanPower
+  gCixTokenSpaceGuid.PcdM2SsdPower
+  gCixTokenSpaceGuid.PcdOnBoardLanPower
+  gCixTokenSpaceGuid.PcdIspCamera0Power
+  gCixTokenSpaceGuid.PcdIspCamera1Power
+  gCixTokenSpaceGuid.PcdIspCamera2Power
+  gCixTokenSpaceGuid.PcdIspCamera3Power
+  gCixTokenSpaceGuid.PcdCpuCoreClkGating
+  gCixTokenSpaceGuid.PcdDsuClkGating
+  gCixTokenSpaceGuid.PcdGicdClkGating
+  gCixTokenSpaceGuid.PcdCi700ClkGating
+  gCixTokenSpaceGuid.PcdSysNi700ClkGating
+  gCixTokenSpaceGuid.PcdMmNi700ClkGating
+  gCixTokenSpaceGuid.PcdPcieNi700ClkGating
+  gCixTokenSpaceGuid.PcdSmnNi700ClkGating
+  gCixTokenSpaceGuid.PcdGpuClkGating
+  gCixTokenSpaceGuid.PcdDpu0ClkGating
+  gCixTokenSpaceGuid.PcdDpu1ClkGating
+  gCixTokenSpaceGuid.PcdDpu2ClkGating
+  gCixTokenSpaceGuid.PcdDpu3ClkGating
+  gCixTokenSpaceGuid.PcdDpu4ClkGating
+  gCixTokenSpaceGuid.PcdVpuClkGating
+  gCixTokenSpaceGuid.PcdMemBreakPoint
+  gCixTokenSpaceGuid.PcdMemEyeScan
+  gCixTokenSpaceGuid.PcdMemFreq
+  gCixTokenSpaceGuid.PcdMemHarvesting
+  gCixTokenSpaceGuid.PcdMemWckAlwaysOn
+  gCixTokenSpaceGuid.PcdMemDataMask
+  gCixTokenSpaceGuid.PcdMemRfmEn
+  gCixTokenSpaceGuid.PcdMemAutoPrechargeEn
+  gCixTokenSpaceGuid.PcdMemPbrEn
+  gCixTokenSpaceGuid.PcdMemMbistEn
+  gCixTokenSpaceGuid.PcdMemMbistMode
+  gCixTokenSpaceGuid.PcdMemWrLEcc
+  gCixTokenSpaceGuid.PcdMemRdLEcc
+  gCixTokenSpaceGuid.PcdMemIEcc
+  gCixTokenSpaceGuid.PcdMemPortPriority
+  gCixTokenSpaceGuid.PcdMemBdwP0
+  gCixTokenSpaceGuid.PcdMemBdwP1
+  gCixTokenSpaceGuid.PcdMemRPriorityP0
+  gCixTokenSpaceGuid.PcdMemWPriorityP0
+  gCixTokenSpaceGuid.PcdMemBdwOvflowP0
+  gCixTokenSpaceGuid.PcdMemRPriorityP1
+  gCixTokenSpaceGuid.PcdMemWPriorityP1
+  gCixTokenSpaceGuid.PcdMemBdwOvflowP1
+  gCixTokenSpaceGuid.PcdGmac0Enable
+  gCixTokenSpaceGuid.PcdGmac1Enable
+  gCixTokenSpaceGuid.PcdGmac0MacAddress
+  gCixTokenSpaceGuid.PcdGmac1MacAddress
+  gCixPlatformTokenSpaceGuid.PcdRtcWakeup
+  gCixPlatformTokenSpaceGuid.PcdLightSensorCtrl
+  #ACPI CPU Core
+  gCixTokenSpaceGuid.PcdCpuCore1En
+  gCixTokenSpaceGuid.PcdCpuCore2En
+  gCixTokenSpaceGuid.PcdCpuCore3En
+  gCixTokenSpaceGuid.PcdCpuCore4En
+  gCixTokenSpaceGuid.PcdCpuCore5En
+  gCixTokenSpaceGuid.PcdCpuCore6En
+  gCixTokenSpaceGuid.PcdCpuCore7En
+  gCixTokenSpaceGuid.PcdCpuCore8En
+  gCixTokenSpaceGuid.PcdCpuCore9En
+  gCixTokenSpaceGuid.PcdCpuCore10En
+  gCixTokenSpaceGuid.PcdCpuCore11En
+  gCixTokenSpaceGuid.PcdAcpiCpuLpiState
+  gCixPlatformTokenSpaceGuid.PcdAcpiSpcrEnable
+  gCixPlatformTokenSpaceGuid.PcdEcDefaultFanMode
+[Depex]
+  TRUE

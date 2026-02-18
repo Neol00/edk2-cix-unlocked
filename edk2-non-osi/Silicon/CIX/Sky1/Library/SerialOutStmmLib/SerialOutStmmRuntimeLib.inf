@@ -1,0 +1,37 @@
+#/** @file
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = SerialOutStmmRuntimeLib
+  FILE_GUID                      = A2250045-D5A3-4B8F-A81E-096C9165F733
+  MODULE_TYPE                    = DXE_RUNTIME_DRIVER
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = SerialOutStmmLib
+  CONSTRUCTOR                    = SerialOutStmmRuntimeLibConstructor
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  ArmPlatformPkg/ArmPlatformPkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  BaseLib
+  MemoryAllocationLib
+
+[Guids]
+  gEfiEventVirtualAddressChangeGuid
+  gCixMmSerialOutCommunicateGuid
+
+[Protocols]
+  gEfiMmCommunication2ProtocolGuid
+
+[Binaries.AARCH64]
+  LIB|SerialOutStmmRuntimeLib.lib|*
+

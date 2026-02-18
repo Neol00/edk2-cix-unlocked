@@ -1,0 +1,72 @@
+## @file
+#
+# Copyright (c) 2020-2021, Ampere Computing LLC. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  DEC_SPECIFICATION              = 0x0001001B
+  PACKAGE_NAME                   = AmpereAltraPkg
+  PACKAGE_GUID                   = 481F7D0D-7525-4B76-AF12-58E7B82C46C2
+  PACKAGE_VERSION                = 0.1
+
+[Includes]
+  Include
+
+[LibraryClasses]
+  ##  @libraryclass  Defines a set of methods to retrieve CPU info.
+  AmpereCpuLib|Silicon/Ampere/AmpereAltraPkg/Include/Library/AmpereCpuLib.h
+
+  ##  @libraryclass  Defines a set of methods to get/set NVParam.
+  NVParamLib|Silicon/Ampere/AmpereAltraPkg/Include/Library/NVParamLib.h
+
+  ##  @libraryclass  Defines a set of methods to access Mailbox interface.
+  MailboxInterfaceLib|Silicon/Ampere/AmpereAltraPkg/Include/Library/MailboxInterfaceLib.h
+
+  ##  @libraryclass  Defines a set of methods to communicate with SCP.
+  SystemFirmwareInterfaceLib|Silicon/Ampere/AmpereAltraPkg/Include/Library/SystemFirmwareInterfaceLib.h
+
+  ##  @libraryclass  Defines a set of methods to read/write to I2C devices.
+  I2cLib|Silicon/Ampere/AmpereAltraPkg/Include/Library/I2cLib.h
+
+  ##  @libraryclass  Defines a set of methods to get/set GPIO.
+  GpioLib|Silicon/Ampere/AmpereAltraPkg/Include/Library/GpioLib.h
+
+  ##  @libraryclass  Defines a set of methods to communicate with secure parition over MM interface.
+  MmCommunicationLib|Silicon/Ampere/AmpereAltraPkg/Include/Library/MmCommunicationLib.h
+
+  ##  @libraryclass  Defines a set of methods to generate random numbers by using Hardware RNG.
+  TrngLib|Silicon/Ampere/AmpereAltraPkg/Include/Library/TrngLib.h
+
+  ##  @libraryclass  Defines a set of methods to access flash memory.
+  FlashLib|Silicon/Ampere/AmpereAltraPkg/Include/Library/FlashLib.h
+
+  ##  @libraryclass  Defines a set of platform dependent functions
+  BoardPcieLib|Silicon/Ampere/AmpereAltraPkg/Include/Library/BoardPcieLib.h
+
+  ##  @libraryclass  Defines a set of methods to initialize Pcie
+  Ac01PcieLib|Silicon/Ampere/AmpereAltraPkg/Include/Library/Ac01PcieLib.h
+
+[Guids]
+  ## NVParam MM GUID
+  gNVParamMmGuid               = { 0xE4AC5024, 0x29BE, 0x4ADC, { 0x93, 0x36, 0x87, 0xB5, 0xA0, 0x76, 0x23, 0x2D } }
+
+  ## SPI NOR Proxy MM GUID
+  gSpiNorMmGuid                = { 0xC8D76438, 0x4D3C, 0x4BEA, { 0xBF, 0x86, 0x92, 0x6B, 0x83, 0x07, 0xA2, 0x39 } }
+
+  ## Include/Guid/PlatformInfoHob.h
+  gPlatformInfoHobGuid         = { 0x7f73e372, 0x7183, 0x4022, { 0xb3, 0x76, 0x78, 0x30, 0x32, 0x6d, 0x79, 0xb4 } }
+
+  ## Include/Guid/RootComplexInfoHob.h
+  gRootComplexInfoHobGuid      = { 0x568a258a, 0xcaa1, 0x47e9, { 0xbb, 0x89, 0x65, 0xa3, 0x73, 0x9b, 0x58, 0x75 } }
+
+  ## Include/Guid/RootComplexConfigHii.h
+  gRootComplexConfigFormSetGuid = { 0xE84E70D6, 0xE4B2, 0x4C6E, { 0x98,  0x51, 0xCB, 0x2B, 0xAC, 0x77, 0x7D, 0xBB } }
+
+  ## Include/Guid/CpuConfigHii.h
+  gCpuConfigFormSetGuid        = { 0x43FAA144, 0xA2DF, 0x4050, { 0xA7, 0xFD, 0xEE, 0x17, 0xC9, 0xB8, 0x88, 0x8E } }
+
+  ## Include/Guid/AcpiConfigHii.h
+  gAcpiConfigFormSetGuid = { 0x0ceb6764, 0xd415, 0x4b01, { 0xa8, 0x43, 0xd1, 0x01, 0xbc, 0xb0, 0xd8, 0x29 } }

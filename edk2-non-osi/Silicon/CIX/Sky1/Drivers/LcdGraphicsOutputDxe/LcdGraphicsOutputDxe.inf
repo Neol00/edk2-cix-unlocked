@@ -1,0 +1,57 @@
+/** @file
+ *
+ *  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved. *
+ *
+ *  SPDX-License-Identifier: BSD-2-Clause-Patent
+ *
+ **/
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = LcdGraphicsOutputDxe
+  FILE_GUID                      = 70cb8a73-5b96-32b9-8f78-f6248a92f3fe
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = LcdGraphicsOutputDxeInitialize
+
+[Binaries.AARCH64]
+  PE32|LcdGraphicsOutputDxe.efi|*
+  DXE_DEPEX|LcdGraphicsOutputDxe.depex|*
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  MdePkg/MdePkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec
+  ArmPlatformPkg/ArmPlatformPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+
+[LibraryClasses]
+  ArmLib
+  BaseLib
+  BaseMemoryLib
+  CacheMaintenanceLib
+  DebugLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiLib
+
+[Protocols]
+  gEfiDevicePathProtocolGuid
+  gEfiGraphicsOutputProtocolGuid
+  gCixCrtcProtocolGuid
+  gCixConnectorProtocolGuid
+  gCixConfigParamsManageProtocolGuid
+  gCixPlatformConfigParamsManageProtocolGuid
+
+[FeaturePcd]
+  gArmPlatformTokenSpaceGuid.PcdGopDisableOnExitBootServices
+
+[FixedPcd]
+  # Framebuffer Memory
+  gArmPlatformTokenSpaceGuid.PcdArmLcdDdrFrameBufferBase
+  gArmPlatformTokenSpaceGuid.PcdArmLcdDdrFrameBufferSize
+
+[Depex]
+  gCixPdProtocolGuid

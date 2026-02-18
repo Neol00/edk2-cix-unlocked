@@ -1,0 +1,44 @@
+#/**
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = RTS5453hPdLib
+  FILE_GUID                      = 1ff49d1a-920e-4204-ac38-0a08453a3a2e
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = PdLib|DXE_DRIVER  DXE_RUNTIME_DRIVER DXE_SMM_DRIVER UEFI_APPLICATION UEFI_DRIVER SMM_CORE
+
+[Sources.common]
+  Rts5453hPdLib.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  BaseLib
+  DebugLib
+  MemoryAllocationLib
+  UefiLib
+  UefiBootServicesTableLib
+
+[Guids]
+  gCixI2cDevicePathGuid
+
+[Protocols]
+  gEfiI2cMasterProtocolGuid
+  gEfiDevicePathProtocolGuid
+
+[FixedPcd]
+  gCixPlatformTokenSpaceGuid.PcdPdDevCount
+  gCixPlatformTokenSpaceGuid.PcdPdDevI2cBuses
+  gCixPlatformTokenSpaceGuid.PcdPdDevI2cSlaveAddresses

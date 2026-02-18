@@ -1,0 +1,46 @@
+#
+#  Copyright (c) 2013-2021, Arm Limited. All rights reserved.<BR>
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+
+[Defines]
+  INF_VERSION                    = 0x00010016
+  BASE_NAME                      = GlobalWatchdogDxe
+  FILE_GUID                      = FCBDE4D7-7E7D-F2AA-F82C-D037C390C28C
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = GlobalWatchdogDxeEntry
+
+[Sources.common]
+  GlobalWatchdogDxe.c
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  ArmPlatformPkg/ArmPlatformPkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  ArmGenericTimerCounterLib
+  BaseLib
+  BaseMemoryLib
+  DebugLib
+  IoLib
+  PcdLib
+  UefiLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  HwHarvestLib
+  PostCodeLib
+
+[Pcd.common]
+
+
+[Protocols]
+  gEfiWatchdogTimerArchProtocolGuid
+
+[Depex]
+  gEfiWatchdogTimerArchProtocolGuid

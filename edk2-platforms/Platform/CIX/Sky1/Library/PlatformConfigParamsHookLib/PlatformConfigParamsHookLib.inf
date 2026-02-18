@@ -1,0 +1,54 @@
+#/**
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = PlatformConfigParamsHookLib
+  FILE_GUID                      = 69A4F040-FBDF-4EFE-8376-BDD4B31232FC
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = PlatformConfigParamsHookLib|DXE_DRIVER DXE_RUNTIME_DRIVER UEFI_APPLICATION UEFI_DRIVER
+  CONSTRUCTOR                    = PlatformConfigParamsHookLibConstructor
+
+[Sources.common]
+  PlatformConfigParamsHookLib.c
+
+[Packages]
+  EmbeddedPkg/EmbeddedPkg.dec
+  MdePkg/MdePkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  BaseMemoryLib
+  MemoryAllocationLib
+  DebugLib
+  BaseLib
+  I2cLib
+  UefiBootServicesTableLib
+  UefiLib
+  EcLib
+  TimerLib
+
+[Guids]
+
+[Protocols]
+
+[FixedPcd]
+  gCixPlatformTokenSpaceGuid.PcdRa8900ceI2cBus
+  gCixPlatformTokenSpaceGuid.PcdRa8900ceI2cSlaveAddress
+  gCixTokenSpaceGuid.PcdI2c0BusFreq
+  gCixTokenSpaceGuid.PcdI2c1BusFreq
+  gCixTokenSpaceGuid.PcdI2c2BusFreq
+  gCixTokenSpaceGuid.PcdI2c3BusFreq
+  gCixTokenSpaceGuid.PcdI2c4BusFreq
+  gCixTokenSpaceGuid.PcdI2c5BusFreq
+  gCixTokenSpaceGuid.PcdI2c6BusFreq
+  gCixTokenSpaceGuid.PcdI2c7BusFreq
+

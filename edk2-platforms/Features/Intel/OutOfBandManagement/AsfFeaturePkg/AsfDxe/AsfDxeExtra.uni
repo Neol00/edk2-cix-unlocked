@@ -1,0 +1,13 @@
+// /** @file
+// Asf Dxe Module
+//
+// Follow Asf spec to send progress or error message to Smbus device
+//
+// Copyright (c) 1985 - 2022, AMI. All rights reserved.<BR>
+// SPDX-License-Identifier: BSD-2-Clause-Patent
+//
+// **/
+
+#string STR_PROPERTIES_MODULE_NAME
+#language en-US
+"Asf DXE"

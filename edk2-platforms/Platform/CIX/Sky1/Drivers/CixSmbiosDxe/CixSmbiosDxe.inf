@@ -1,0 +1,61 @@
+#/** @file
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = CixSmbiosDxe
+  FILE_GUID                      = 3BFC114C-98F1-492E-97D1-98567E4F20D0
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+
+  ENTRY_POINT                    = CixSmbiosDxeEntry
+
+#
+# The following information is for reference only and not required by the build tools.
+#
+#  VALID_ARCHITECTURES           = AARCH64
+#
+
+[Sources]
+  CixSmbiosDxe.c
+  CixSmbiosDxe.h
+  SmbiosType16.c
+  SmbiosType17.c
+  SmbiosType19.c
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  ArmLib
+  BaseMemoryLib
+  BaseLib
+  DebugLib
+  IoLib
+  MemoryAllocationLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  CpuInfoLib
+
+[Guids]
+
+[FixedPcd]
+  gArmTokenSpaceGuid.PcdSystemMemoryBase
+  gArmTokenSpaceGuid.PcdSystemMemorySize
+
+[Protocols]
+  gEfiSmbiosProtocolGuid                      # PROTOCOL ALWAYS_CONSUMED
+  gCixSocInfoProtocolGuid
+
+[Guids]
+
+[Depex]
+  gEfiSmbiosProtocolGuid AND gCixSocInfoProtocolGuid

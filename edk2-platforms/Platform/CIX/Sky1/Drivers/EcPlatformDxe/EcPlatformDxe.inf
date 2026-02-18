@@ -1,0 +1,47 @@
+#/**
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#**/
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = EcPlatformDxe
+  FILE_GUID                      = 1448F299-7269-45BA-8C01-673A173FE03D
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = EcPlatformDxeEntry
+
+[Sources]
+  EcPlatformDxe.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+
+[LibraryClasses]
+  UefiDriverEntryPoint
+  UefiBootServicesTableLib
+  UefiLib
+  DebugLib
+  MemoryAllocationLib
+  BaseLib
+  DevicePathLib
+  EcLib
+
+[Pcd]
+  gCixPlatformTokenSpaceGuid.PcdEcAcpiI2cEn
+  gCixPlatformTokenSpaceGuid.PcdEcI2cBus
+  gCixPlatformTokenSpaceGuid.PcdEcI2cSlaveAddress
+
+[Guids]
+
+[Protocols]
+  gEfiI2cMasterProtocolGuid
+  gEfiDevicePathProtocolGuid
+  gCixEcPlatformProtocolGuid
+  gCixConfigParamsManageProtocolGuid
+
+[Depex]
+  gEfiI2cMasterProtocolGuid

@@ -1,0 +1,62 @@
+/** @file
+
+  Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+
+  SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+
+#include <Guid/PlatformManagerHii.h>
+#include "MemInfoScreenNVDataStruct.h"
+
+formset
+  guid    = MEM_INFO_FORM_SET_GUID,
+  title   = STRING_TOKEN(STR_MEM_INFO_FORM),
+  help    = STRING_TOKEN(STR_MEM_INFO_FORM_HELP),
+  classguid = gPlatformManagerFormsetGuid,
+
+  //
+  // Define a variable Storage
+  //
+  varstore MEM_INFO_VARSTORE_DATA,
+    varid = MEM_INFO_VARSTORE_ID,
+    name  = MemInfoIfrNVData,
+    guid  = MEM_INFO_FORM_SET_GUID;
+
+  form
+    formid = MEM_INFO_FORM_ID,
+    title = STRING_TOKEN(STR_MEM_INFO_FORM);
+
+    subtitle text = STRING_TOKEN(STR_MEM_INFO_FORM);
+
+    label LABEL_UPDATE;
+    // dynamic content here
+    label LABEL_END;
+
+  endform;
+
+  form
+    formid = MEM_INFO_FORM_PERFORMANCE_ID,
+    title = STRING_TOKEN(STR_MEM_INFO_PERFORMANCE_FORM);
+
+    subtitle text = STRING_TOKEN(STR_MEM_INFO_PERFORMANCE_FORM);
+
+    label LABEL_UPDATE;
+    // dynamic content here
+    label LABEL_END;
+
+  endform;
+
+  form
+    formid = MEM_INFO_FORM_NVDIMM_ID,
+    title = STRING_TOKEN(STR_MEM_INFO_NVDIMM_FORM);
+
+    subtitle text = STRING_TOKEN(STR_MEM_INFO_NVDIMM_FORM);
+
+    label LABEL_UPDATE;
+    // dynamic content here
+    label LABEL_END;
+
+  endform;
+
+endformset;

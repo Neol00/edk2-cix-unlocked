@@ -1,0 +1,39 @@
+#/**
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = ConfigParamsHookNullLib
+  FILE_GUID                      = 69A4F040-FBDF-4EFE-8376-BDD4B31232FC
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = ConfigParamsHookLib|DXE_DRIVER DXE_RUNTIME_DRIVER UEFI_APPLICATION UEFI_DRIVER
+  CONSTRUCTOR                    = ConfigParamsHookLibConstructor
+
+[Sources.common]
+  ConfigParamsHookNullLib.c
+
+[Packages]
+  EmbeddedPkg/EmbeddedPkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  BaseMemoryLib
+  MemoryAllocationLib
+  DebugLib
+  BaseLib
+  UefiBootServicesTableLib
+  UefiLib
+
+[Guids]
+
+[Protocols]
+
+[FixedPcd]

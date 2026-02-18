@@ -1,0 +1,17 @@
+//
+// Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+//
+// SPDX-License-Identifier: BSD-2-Clause-Patent
+//
+
+#langdef en-US  "English"
+
+#string STR_CPU_FORM                                #language en-US "CPU Configuration"
+#string STR_CPU_FORM_HELP                           #language en-US "CPU Configuration"
+#string STR_CPU_FORM_SEPERATE_LINE                  #language en-US ""
+
+#string STR_CPU_SUBNUMA_MODE_PROMPT                 #language en-US "ANC mode"
+#string STR_CPU_SUBNUMA_MODE_HELP                   #language en-US "Provides 3 modes: Monolithic, Hemisphere, Quadrant. System with Monolithic mode has single NUMA partition per socket. System with Hemisphere has 2 NUMA partitions per socket. System with Quandrant has 4 NUMA partitions per socket"
+#string STR_CPU_SUBNUMA_MODE_MONOLITHIC             #language en-US "Monolithic"
+#string STR_CPU_SUBNUMA_MODE_HEMISPHERE             #language en-US "Hemisphere"
+#string STR_CPU_SUBNUMA_MODE_QUADRANT               #language en-US "Quadrant"

@@ -1,0 +1,82 @@
+## @file
+#
+# Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  DEC_SPECIFICATION              = 0x0001001B
+  PACKAGE_NAME                   = AmpereSiliconPkg
+  PACKAGE_GUID                   = F9EB69A8-7569-4C0E-87D1-3CC9EB7CBF09
+  PACKAGE_VERSION                = 0.1
+
+################################################################################
+#
+# Include Section - list of Include Paths that are provided by this package.
+#                   Comments are used for Keywords and Module Types.
+#
+# Supported Module Types:
+#  BASE SEC PEI_CORE PEIM DXE_CORE DXE_DRIVER DXE_RUNTIME_DRIVER DXE_SMM_DRIVER DXE_SAL_DRIVER UEFI_DRIVER UEFI_APPLICATION
+#
+################################################################################
+[Includes.common]
+  Include                        # Root include for the package
+
+[LibraryClasses]
+
+[Guids]
+  gAmpereTokenSpaceGuid = { 0xdbd4436e, 0x89cb, 0x44dc, { 0xb5, 0xc0, 0x49, 0xc3, 0x91, 0x35, 0xbf, 0xdf } }
+
+  #
+  # Platform Manager formset UUID
+  #
+  ## Include/Guid/PlatformManagerHii.h
+  gPlatformManagerFormsetGuid  = { 0x83ABD546, 0x7AD9, 0x4DE7, { 0xBD, 0x52, 0x12, 0x23, 0xF6, 0xE8, 0xFD, 0x4B } }
+
+  #
+  # Platform Manager entry UUID
+  #
+  ## Include/Guid/PlatformManagerHii.h
+  gPlatformManagerEntryEventGuid = { 0x28A4731E, 0x14A9, 0x488A, { 0xA8, 0x19, 0xFF, 0x27, 0x80, 0x6E, 0xDB, 0x0E } }
+
+  #
+  # Platform Manager exit UUID
+  #
+  ## Include/Guid/PlatformManagerHii.h
+  gPlatformManagerExitEventGuid  = { 0xE8887242, 0x4EFF, 0x4323, { 0x81, 0xF4, 0xC9, 0x5F, 0xD5, 0x8D, 0x80, 0xD5 } }
+
+[Ppis]
+
+[PcdsFixedAtBuild]
+  #
+  # NVRAM
+  #
+  gAmpereTokenSpaceGuid.PcdPlatformConfigUuid|"C416535D-970B-41B9-859A-3CAF0FAF198C"|VOID*|0x00000010
+
+  #
+  # SMpro PMpro Pcds
+  #
+  gAmpereTokenSpaceGuid.PcdSmproDbBaseReg|0x100000540000|UINT64|0x00000001
+  gAmpereTokenSpaceGuid.PcdSmproEfuseShadow0|0x10000054a000|UINT64|0x00000002
+  gAmpereTokenSpaceGuid.PcdSmproNsMailboxIndex|0x1|UINT32|0x00000003
+  gAmpereTokenSpaceGuid.PcdPmproDbBaseReg|0x100001540000|UINT64|0x00000004
+
+  #
+  # SMBIOS Type 1 Pcd
+  #
+  gAmpereTokenSpaceGuid.PcdSmbiosTables1MajorVersion|0|UINT8|0x00000005
+  gAmpereTokenSpaceGuid.PcdSmbiosTables1MinorVersion|0|UINT8|0x00000006
+
+[PcdsFixedAtBuild, PcdsDynamic, PcdsDynamicEx]
+  #
+  # Firmware Volume Pcds
+  #
+  gAmpereTokenSpaceGuid.PcdFvBlockSize|0|UINT32|0xB0000001
+
+  #
+  # SMBIOS, default or template values
+  #
+  # SMBIOS Type 0 - BIOS Information
+  gAmpereTokenSpaceGuid.PcdSmbiosTables0BiosReleaseDate|"MM/DD/YYYY"|VOID*|0xB0000002 # Must follow this MM/DD/YYYY SMBIOS date format

@@ -1,0 +1,70 @@
+## @file
+#
+#  Copyright 2024 Radxa Computer (Shenzhen) Co., Ltd. All Rights Reserved.
+#  Copyright 2023 Cix Technology (Shanghai) Co., Ltd. All Rights Reserved.
+#  Copyright (c) 2017, Linaro, Ltd. All rights reserved.<BR>
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION               = 0x00010019
+  BASE_NAME                 = PlatformConfigDxe
+  FILE_GUID                 = 1ffdaa93-a1d1-40eb-adc8-37eeb86a7995
+  MODULE_TYPE               = DXE_DRIVER
+  VERSION_STRING            = 1.0
+  ENTRY_POINT               = PlatformConfigDxeEntryPoint
+
+#
+# The following information is for reference only and not required by the build tools.
+#
+#  VALID_ARCHITECTURES      = IA32 X64 ARM AARCH64
+#
+
+[Sources]
+  PlatformConfigDxe.c
+  PlatformConfigHii.vfr
+  PlatformConfigHii.uni
+
+[Packages]
+  EmbeddedPkg/EmbeddedPkg.dec
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  NetworkPkg/NetworkPkg.dec
+  Platform/Radxa/Platforms/CIX/Sky1/Drivers/PlatformConfigDxe/PlatformConfigDxe.dec
+  Platform/Radxa/Radxa.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+
+[LibraryClasses]
+  BaseLib
+  DebugLib
+  HiiLib
+  MemoryAllocationLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiRuntimeServicesTableLib
+
+[Guids]
+  gPlatformConfigFormSetGuid
+
+[Protocols]
+  gEfiHiiConfigAccessProtocolGuid               ## CONSUMES
+
+[Pcd]
+
+[FixedPcd]
+  gEfiNetworkPkgTokenSpaceGuid.PcdNetworkStackSupport
+  gEfiNetworkPkgTokenSpaceGuid.PcdIPv4PXESupport
+  gEfiNetworkPkgTokenSpaceGuid.PcdIPv6PXESupport
+  gEfiNetworkPkgTokenSpaceGuid.PcdIPv4HttpSupport
+  gEfiNetworkPkgTokenSpaceGuid.PcdIPv6HttpSupport
+  gCixTokenSpaceGuid.PcdStateAfterG3
+  gCixPlatformTokenSpaceGuid.PcdAcpiSpcrEnable
+  gCixPlatformTokenSpaceGuid.PcdCpuFMax
+  gCixPlatformTokenSpaceGuid.PcdGpuFMax
+  gCixPlatformTokenSpaceGuid.PcdEcDefaultFanMode
+
+[Depex]
+  TRUE

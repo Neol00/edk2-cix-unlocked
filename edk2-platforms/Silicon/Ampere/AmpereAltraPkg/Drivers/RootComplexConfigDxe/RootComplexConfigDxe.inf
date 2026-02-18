@@ -1,0 +1,61 @@
+## @file
+#
+# Copyright (c) 2021, Ampere Computing LLC. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001B
+  BASE_NAME                      = RootComplexConfigDxe
+  FILE_GUID                      = 9820A15A-ECFE-404B-97C8-A2B76F0AB103
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = RootComplexDriverEntry
+
+[Sources.common]
+  RootComplexConfigDxe.c
+  RootComplexConfigDxe.h
+  RootComplexConfigDxe.uni
+  RootComplexConfigNVDataStruct.h
+  RootComplexConfigVfr.vfr
+
+[Packages]
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/Ampere/AmpereAltraPkg/AmpereAltraPkg.dec
+  Silicon/Ampere/AmpereSiliconPkg/AmpereSiliconPkg.dec
+
+[LibraryClasses]
+  AmpereCpuLib
+  BaseLib
+  BaseMemoryLib
+  DebugLib
+  DevicePathLib
+  HiiLib
+  HobLib
+  MemoryAllocationLib
+  NVParamLib
+  PrintLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiRuntimeServicesTableLib
+
+[Protocols]
+  gEfiDevicePathProtocolGuid
+  gEfiHiiStringProtocolGuid                     ## CONSUMES
+  gEfiHiiConfigRoutingProtocolGuid              ## CONSUMES
+  gEfiHiiConfigAccessProtocolGuid               ## PRODUCES
+  gEfiHiiDatabaseProtocolGuid                   ## CONSUMES
+  gEfiConfigKeywordHandlerProtocolGuid          ## CONSUMES
+
+[Guids]
+  gEfiIfrTianoGuid                              ## CONSUMES
+  gPlatformInfoHobGuid                          ## CONSUMES
+  gPlatformManagerFormsetGuid                   ## CONSUMES
+  gRootComplexConfigFormSetGuid                 ## CONSUMES
+  gRootComplexInfoHobGuid                       ## CONSUMES
+
+[Depex]
+  TRUE

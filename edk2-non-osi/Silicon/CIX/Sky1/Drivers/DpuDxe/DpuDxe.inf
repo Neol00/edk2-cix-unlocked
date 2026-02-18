@@ -1,0 +1,50 @@
+## @file
+#  The DPU driver file.
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved
+#
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = DpuDxe
+  FILE_GUID                      = 2ff1885b-51e2-39f4-bf58-c47e4d55a7e9
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+
+  ENTRY_POINT                    = VideoOutInitialize
+
+[Binaries.AARCH64]
+  PE32|DpuDxe.efi|*
+  DXE_DEPEX|DpuDxe.depex|*
+
+[Packages]
+  EmbeddedPkg/EmbeddedPkg.dec
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+
+[LibraryClasses]
+  TimerLib
+  IoLib
+  DebugLib
+  BaseLib
+  MemoryAllocationLib
+  DisplayLib
+  UefiDriverEntryPoint
+  FchTimerLib
+  GpioLib
+
+[Protocols]
+  gCixCrtcProtocolGuid
+  gCixConnectorProtocolGuid
+  gCixPowerProtocolGuid
+  gCixResetProtocolGuid
+  gCixClockProtocolGuid
+  gCixTypecPhyProtocolGuid
+
+[Depex]
+  TRUE

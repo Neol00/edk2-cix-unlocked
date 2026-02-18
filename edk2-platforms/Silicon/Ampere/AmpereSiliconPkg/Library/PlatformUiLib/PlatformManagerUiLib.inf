@@ -1,0 +1,47 @@
+## @file
+#
+# Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001B
+  BASE_NAME                      = PlatformManagerUiLib
+  MODULE_UNI_FILE                = PlatformManagerUiLib.uni
+  FILE_GUID                      = 9264993E-2E15-478A-8928-14573E34C606
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = NULL|DXE_DRIVER UEFI_APPLICATION
+  CONSTRUCTOR                    = PlatformManagerUiLibConstructor
+  DESTRUCTOR                     = PlatformManagerUiLibDestructor
+
+[Sources]
+  PlatformManager.h
+  PlatformManagerVfr.Vfr
+  PlatformManagerStrings.uni
+  PlatformManager.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  Silicon/Ampere/AmpereSiliconPkg/AmpereSiliconPkg.dec
+
+[LibraryClasses]
+  DevicePathLib
+  BaseLib
+  MemoryAllocationLib
+  UefiBootServicesTableLib
+  BaseMemoryLib
+  DebugLib
+  HiiLib
+  UefiLib
+  UefiHiiServicesLib
+
+[Guids]
+  gPlatformManagerFormsetGuid                   ## CONSUMES ## GUID (Indicate the formset class guid to be displayed)
+  gEfiIfrTianoGuid                              ## CONSUMES ## GUID (Extended IFR Guid Opcode)
+  gEfiIfrFrontPageGuid                          ## CONSUMES ## GUID (Indicate the formset in this library need to display in which page)
+  gPlatformManagerEntryEventGuid                ## CONSUMES ## GUID (Indicate enter PlatformManager)
+  gPlatformManagerExitEventGuid                 ## CONSUMES ## GUID (Indicate exit PlatformManager)

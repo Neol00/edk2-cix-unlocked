@@ -1,0 +1,114 @@
+/** @file
+*
+*  Copyright 2024 Radxa Computer (Shenzhen) Co., Ltd. All Rights Reserved.
+*  Copyright 2023 Cix Technology (Shanghai) Co., Ltd. All Rights Reserved.
+*  Copyright (c) 2017, Linaro, Ltd. All rights reserved.
+*
+*  SPDX-License-Identifier: BSD-2-Clause-Patent
+*
+**/
+
+#include <DtPlatformDxe.h>
+#include <Uefi/UefiMultiPhase.h>
+#include "PlatformConfigHii.h"
+
+formset
+  guid      = PLATFORM_CONFIG_FORMSET_GUID,
+  title     = STRING_TOKEN(STR_FORM_SET_TITLE),
+  help      = STRING_TOKEN(STR_FORM_SET_TITLE_HELP),
+  classguid = EFI_HII_PLATFORM_SETUP_FORMSET_GUID,
+
+  efivarstore PLATFORM_SETUP_DATA,
+    attribute = EFI_VARIABLE_BOOTSERVICE_ACCESS | EFI_VARIABLE_NON_VOLATILE,
+    name  = PlatformSetupVar,
+    guid  = PLATFORM_SETUP_VARIABLE_GUID;
+
+  efivarstore DT_ACPI_VARSTORE_DATA,
+    attribute = EFI_VARIABLE_BOOTSERVICE_ACCESS | EFI_VARIABLE_NON_VOLATILE,
+    name  = DtAcpiPref,
+    guid  = DT_PLATFORM_FORMSET_GUID;
+
+  efivarstore NETWORK_STACK,
+    attribute = EFI_VARIABLE_BOOTSERVICE_ACCESS | EFI_VARIABLE_NON_VOLATILE,
+    name  = NetworkStackVar,
+    guid  = NETWORK_STACK_SETUP_VARIABLE_GUID;
+
+  form formid = PLATFORM_CONFIG_FORM_ID,
+    title  = STRING_TOKEN(STR_MAIN_FORM_TITLE);
+    subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+
+    oneof varid     = PlatformSetupVar.StateAfterG3,
+      questionid    = QUESTION_STATE_AFTER_G3_ID,
+      prompt        = STRING_TOKEN(STR_RESTORE_AC_POWER_LOSS),
+      help          = STRING_TOKEN(STR_RESTORE_AC_POWER_LOSS_HELP),
+      flags         = NUMERIC_SIZE_1 | INTERACTIVE | RESET_REQUIRED,
+      default       = FixedPcdGet8 (PcdStateAfterG3),
+      option text   = STRING_TOKEN(STR_S5_AFTER_G3_STRING),        value = 0, flags = RESET_REQUIRED;
+      option text   = STRING_TOKEN(STR_S0_AFTER_G3_STRING),        value = 1, flags = RESET_REQUIRED;
+    endoneof;
+
+    suppressif ideqval DtAcpiPref.Pref == DT_ACPI_SELECT_DT;
+      oneof varid   = PlatformSetupVar.SpcrEnable,
+        prompt      = STRING_TOKEN(STR_ENABLE_SPCR_TABLE),
+        help        = STRING_TOKEN(STR_ENABLE_SPCR_TABLE_HELP),
+        default     = FixedPcdGet8 (PcdAcpiSpcrEnable),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = DEFAULT | RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED), value = 1, flags = RESET_REQUIRED;
+      endoneof;
+    endif;
+
+    oneof varid   = PlatformSetupVar.EcFanMode,
+      prompt      = STRING_TOKEN(STR_EC_FAN_MODE_PROMPT),
+      help        = STRING_TOKEN(STR_EC_FAN_MODE_PROMPT_HELP),
+      default     = FixedPcdGet8 (PcdEcDefaultFanMode),
+      option text = STRING_TOKEN(STR_AUTO_MODE), value = 0, flags = RESET_REQUIRED;
+      option text = STRING_TOKEN(STR_PERF_MODE), value = 1, flags = RESET_REQUIRED;
+    endoneof;
+
+    oneof varid     = NetworkStackVar.Enable,
+      prompt        = STRING_TOKEN(STR_NETWORK_STACK_PROMPT),
+      help          = STRING_TOKEN(STR_NETWORK_STACK_PROMPT_HELP),
+      default       = FixedPcdGet8 (PcdNetworkStackSupport),
+      option text   = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+      option text   = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+    endoneof;
+    suppressif ideqval NetworkStackVar.Enable == 0x0;
+      oneof varid   = NetworkStackVar.Ipv4Pxe,
+        prompt      = STRING_TOKEN(STR_IPV4_PXE_BOOT_PROMPT),
+        help        = STRING_TOKEN(STR_IPV4_PXE_BOOT_PROMPT_HELP),
+        default     = FixedPcdGet8 (PcdIPv4PXESupport),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = NetworkStackVar.Ipv6Pxe,
+        prompt      = STRING_TOKEN(STR_IPV6_PXE_BOOT_PROMPT),
+        help        = STRING_TOKEN(STR_IPV6_PXE_BOOT_PROMPT_HELP),
+        default     = FixedPcdGet8 (PcdIPv6PXESupport),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = NetworkStackVar.Ipv4Http,
+        prompt      = STRING_TOKEN(STR_IPV4_HTTP_BOOT_PROMPT),
+        help        = STRING_TOKEN(STR_IPV4_HTTP_BOOT_PROMPT_HELP),
+        default     = FixedPcdGet8 (PcdIPv4HttpSupport),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = NetworkStackVar.Ipv6Http,
+        prompt      = STRING_TOKEN(STR_IPV6_HTTP_BOOT_PROMPT),
+        help        = STRING_TOKEN(STR_IPV6_HTTP_BOOT_PROMPT_HELP),
+        default     = FixedPcdGet8 (PcdIPv6HttpSupport),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+    endif;
+
+    subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+    subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+    subtitle text = STRING_TOKEN(STR_EXIT_STRING);
+  endform;
+
+endformset;

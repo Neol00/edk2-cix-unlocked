@@ -1,0 +1,23 @@
+## @file
+#  QemuOpenFwCfgLib.inf
+#
+#  Simple implementation of the QemuFwCfgLib that reads data from the QEMU
+#  FW_CFG device
+#
+#  Copyright (c) 2022 Theo Jehl
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = QemuFwCfgLib
+  FILE_GUID                      = 70EE7BD9-08FF-4D0E-AA7B-4320844F939A
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = QemuOpenFwCfgLib
+
+[Sources]
+  QemuOpenFwCfgLib.c
+
+[LibraryClasses]
+  IoLib

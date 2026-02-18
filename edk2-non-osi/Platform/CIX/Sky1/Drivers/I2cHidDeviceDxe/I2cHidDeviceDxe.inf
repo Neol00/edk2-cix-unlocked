@@ -1,0 +1,52 @@
+#/** @file I2cHidDeviceDxe.inf
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = I2cHidDeviceDxe
+  FILE_GUID                      = 4E60AF09-2861-4bc9-9DC8-249642F43568
+  MODULE_TYPE                    = DXE_RUNTIME_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = I2cHidDeviceDxeEntry
+
+[Binaries.AARCH64]
+  PE32|I2cHidDeviceDxe.efi|*
+  DXE_DEPEX|I2cHidDeviceDxe.depex|*
+
+[Packages]
+  MdePkg/MdePkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  BaseLib
+  IoLib
+  PcdLib
+  DebugLib
+  BaseMemoryLib
+  DxeServicesTableLib
+  MemoryAllocationLib
+  UefiDriverEntryPoint
+  UefiBootServicesTableLib
+  UefiRuntimeLib
+  UefiLib
+  TimerLib
+  PcdLib
+  I2cLib
+
+[Guids]
+  gEfiEndOfDxeEventGroupGuid
+  gCixI2cHidDevicePathGuid
+
+[Protocols]
+  gEfiI2cMasterProtocolGuid
+
+[Pcd]
+  gCixPlatformTokenSpaceGuid.PcdHidI2cBus
+  gCixPlatformTokenSpaceGuid.PcdHidI2cIrqPin
+
+[Depex]
+  TRUE

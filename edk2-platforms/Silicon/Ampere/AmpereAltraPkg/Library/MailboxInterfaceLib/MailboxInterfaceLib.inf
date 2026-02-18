@@ -1,0 +1,37 @@
+## @file
+#  The library implements the hardware Mailbox (Doorbell) interface for communication
+#  between the Application Processor (ARMv8) and the System Control Processors (SMpro/PMpro).
+#
+#  Copyright (c) 2021, Ampere Computing LLC. All rights reserved.<BR>
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001B
+  BASE_NAME                      = MailboxInterface
+  FILE_GUID                      = EE482BD0-A91A-45BE-83B1-2157A0FB94C3
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = MailboxInterfaceLib
+
+[Sources]
+  MailboxInterfaceLib.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  Silicon/Ampere/AmpereAltraPkg/AmpereAltraPkg.dec
+  Silicon/Ampere/AmpereSiliconPkg/AmpereSiliconPkg.dec
+
+[LibraryClasses]
+  AmpereCpuLib
+  BaseLib
+  BaseMemoryLib
+  DebugLib
+  IoLib
+  TimerLib
+
+[FixedPcd]
+  gAmpereTokenSpaceGuid.PcdSmproDbBaseReg
+  gAmpereTokenSpaceGuid.PcdPmproDbBaseReg

@@ -1,0 +1,16 @@
+//
+// This module installs Boot Progress Dxe that report boot progress to SMpro.
+//
+// This module registers report status code listener to report boot progress
+// for SMpro.
+//
+// Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+//
+// SPDX-License-Identifier: BSD-2-Clause-Patent
+//
+//
+
+
+#string STR_MODULE_ABSTRACT             #language en-US "Installs Boot Progress Driver"
+
+#string STR_MODULE_DESCRIPTION          #language en-US "This module registers report status code listener to collect and report boot progress to SMpro."

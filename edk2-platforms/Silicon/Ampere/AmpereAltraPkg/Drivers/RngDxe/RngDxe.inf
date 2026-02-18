@@ -1,0 +1,43 @@
+## @file
+#
+# Copyright (c) 2021, Ampere Computing LLC. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001B
+  BASE_NAME                      = RngDxe
+  FILE_GUID                      = 4FCC006E-C740-4027-BC97-787907C8D286
+  MODULE_TYPE                    = DXE_RUNTIME_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = RngDriverEntry
+  MODULE_UNI_FILE                = RngDxe.uni
+
+[Sources.common]
+  RngDxe.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  Silicon/Ampere/AmpereAltraPkg/AmpereAltraPkg.dec
+
+[LibraryClasses]
+  BaseLib
+  DebugLib
+  TrngLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiLib
+
+[Guids]
+  gEfiRngAlgorithmRaw                 ## SOMETIMES_PRODUCES    ## GUID        # Unique ID of the algorithm for RNG
+
+[Protocols]
+  gEfiRngProtocolGuid                ## PRODUCES
+
+[UserExtensions.TianoCore."ExtraFiles"]
+  RngDxeExtra.uni
+
+[Depex]
+  TRUE

@@ -1,0 +1,89 @@
+/** @file
+
+  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+
+  SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+#include <IndustryStandard/MemoryMappedConfigurationSpaceAccessTable.h>
+#include <Library/AcpiLib.h>
+#include <Library/ArmLib.h>
+#include <Library/PcdLib.h>
+
+#include <IndustryStandard/Acpi.h>
+#include <Include/AcpiPlatform.h>
+
+#define MCFG_VERSION  0x1
+
+#pragma pack(1)
+typedef struct
+{
+   UINT64 BaseAddress;
+   UINT16 SegGroupNum;
+   UINT8  StartBusNum;
+   UINT8  EndBusNum;
+   UINT32 Reserved2;
+}EFI_MCFG_CONFIG_STRUCTURE;
+
+typedef struct
+{
+  EFI_ACPI_MEMORY_MAPPED_CONFIGURATION_BASE_ADDRESS_TABLE_HEADER Header;
+  EFI_ACPI_MEMORY_MAPPED_ENHANCED_CONFIGURATION_SPACE_BASE_ADDRESS_ALLOCATION_STRUCTURE Structure[5];
+} EFI_ACPI_PCI_MEMORY_MAPPED_CONFIGURATION_SPACE_ACCESS_DESCRIPTION_TABLE;
+
+#pragma pack()
+
+EFI_ACPI_PCI_MEMORY_MAPPED_CONFIGURATION_SPACE_ACCESS_DESCRIPTION_TABLE Mcfg=
+{
+  {
+    ARM_ACPI_HEADER (
+      EFI_ACPI_6_0_PCI_EXPRESS_MEMORY_MAPPED_CONFIGURATION_SPACE_BASE_ADDRESS_DESCRIPTION_TABLE_SIGNATURE,
+      EFI_ACPI_PCI_MEMORY_MAPPED_CONFIGURATION_SPACE_ACCESS_DESCRIPTION_TABLE,
+      EFI_ACPI_MEMORY_MAPPED_CONFIGURATION_SPACE_ACCESS_TABLE_REVISION
+    ),
+    EFI_ACPI_RESERVED_QWORD, // Reserved
+  },
+  {
+    {
+      0x20000000,                                       //ECAM Base Address
+      0x0,                                              //Segment Group Number
+      0xC0,                                             //Start Bus Number
+      0xFF,                                             //End Bus Number
+      0x00000000,                                       //Reserved
+    },
+    {
+      0x20000000,                                       //ECAM Base Address
+      0x0,                                              //Segment Group Number
+      0x90,                                             //Start Bus Number
+      0xAF,                                             //End Bus Number
+      0x00000000,                                       //Reserved
+    },
+    {
+      0x20000000,                                       //ECAM Base Address
+      0x0,                                              //Segment Group Number
+      0x60,                                             //Start Bus Number
+      0X7F,                                             //End Bus Number
+      0x00000000,                                       //Reserved
+    },
+    {
+      0x20000000,                                       //ECAM Base Address
+      0x0,                                              //Segment Group Number
+      0x30,                                             //Start Bus Number
+      0x4F,                                             //End Bus Number
+      0x00000000,                                       //Reserved
+    },
+    {
+      0x20000000,                                       //ECAM Base Address
+      0x0,                                              //Segment Group Number
+      0x00,                                             //Start Bus Number
+      0x1F,                                             //End Bus Number
+      0x00000000,                                       //Reserved
+    },
+  }
+};
+
+//
+// Reference the table being generated to prevent the optimizer from removing the
+// data structure from the executable
+//
+VOID* CONST ReferenceAcpiTable = &Mcfg;

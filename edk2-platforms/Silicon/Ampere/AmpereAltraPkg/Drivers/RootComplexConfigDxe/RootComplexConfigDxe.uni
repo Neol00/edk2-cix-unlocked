@@ -1,0 +1,102 @@
+//
+// Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+//
+// SPDX-License-Identifier: BSD-2-Clause-Patent
+//
+
+#langdef en-US "English"
+
+#string STR_PCIE_FORM                   #language en-US "PCIe Root Complex Configuration"
+#string STR_PCIE_FORM_HELP              #language en-US "Configure Root Complex"
+
+#string STR_PCIE_FORM_SEPERATE_LINE     #language en-US ""
+
+/////
+
+#string STR_PCIE_GOTO                   #language en-US ""
+#string STR_PCIE_GOTO_HELP              #language en-US "Change On Board Root Complex Settings."
+
+#string STR_PCIE_RC_STATUS              #language en-US ""
+#string STR_PCIE_RC_STATUS_HELP         #language en-US "Enable / Disable Root Complex"
+
+#string STR_PCIE_RCA_BIFUR              #language en-US "Bifurcation x16"
+#string STR_PCIE_RCA_BIFUR_HELP         #language en-US "Set bifurcation mode for x16 Root Complex Type-A"
+
+#string STR_PCIE_RCB_LO_BIFUR           #language en-US "Bifurcation 1st x8"
+#string STR_PCIE_RCB_LO_BIFUR_HELP      #language en-US "Set bifurcation mode for 1st x8 Root Complex Type-B"
+
+#string STR_PCIE_RCB_HI_BIFUR           #language en-US "Bifurcation 2nd x8"
+#string STR_PCIE_RCB_HI_BIFUR_HELP      #language en-US "Set bifurcation mode for 2nd x8 Root Complex Type-B"
+
+/////
+
+#string STR_PCIE_RC0_FORM               #language en-US "Root Complex 0 Configuration"
+#string STR_PCIE_RC0_FORM_HELP          #language en-US "Root Complex 0 Configuration"
+
+#string STR_PCIE_RC1_FORM               #language en-US "Root Complex 1 Configuration"
+#string STR_PCIE_RC1_FORM_HELP          #language en-US "Root Complex 1 Configuration"
+
+#string STR_PCIE_RC2_FORM               #language en-US "Root Complex 2 Configuration"
+#string STR_PCIE_RC2_FORM_HELP          #language en-US "Root Complex 2 Configuration"
+
+#string STR_PCIE_RC3_FORM               #language en-US "Root Complex 3 Configuration"
+#string STR_PCIE_RC3_FORM_HELP          #language en-US "Root Complex 3 Configuration"
+
+#string STR_PCIE_RC4_FORM               #language en-US "Root Complex 4 Configuration"
+#string STR_PCIE_RC4_FORM_HELP          #language en-US "Root Complex 4 Configuration"
+
+#string STR_PCIE_RC5_FORM               #language en-US "Root Complex 5 Configuration"
+#string STR_PCIE_RC5_FORM_HELP          #language en-US "Root Complex 5 Configuration"
+
+#string STR_PCIE_RC6_FORM               #language en-US "Root Complex 6 Configuration"
+#string STR_PCIE_RC6_FORM_HELP          #language en-US "Root Complex 6 Configuration"
+
+#string STR_PCIE_RC7_FORM               #language en-US "Root Complex 7 Configuration"
+#string STR_PCIE_RC7_FORM_HELP          #language en-US "Root Complex 7 Configuration"
+
+#string STR_PCIE_RC8_FORM               #language en-US "Root Complex 8 Configuration"
+#string STR_PCIE_RC8_FORM_HELP          #language en-US "Root Complex 8 Configuration"
+
+#string STR_PCIE_RC9_FORM               #language en-US "Root Complex 9 Configuration"
+#string STR_PCIE_RC9_FORM_HELP          #language en-US "Root Complex 9 Configuration"
+
+#string STR_PCIE_RC10_FORM              #language en-US "Root Complex 10 Configuration"
+#string STR_PCIE_RC10_FORM_HELP         #language en-US "Root Complex 10 Configuration"
+
+#string STR_PCIE_RC11_FORM              #language en-US "Root Complex 11 Configuration"
+#string STR_PCIE_RC11_FORM_HELP         #language en-US "Root Complex 11 Configuration"
+
+#string STR_PCIE_RC12_FORM              #language en-US "Root Complex 12 Configuration"
+#string STR_PCIE_RC12_FORM_HELP         #language en-US "Root Complex 12 Configuration"
+
+#string STR_PCIE_RC13_FORM              #language en-US "Root Complex 13 Configuration"
+#string STR_PCIE_RC13_FORM_HELP         #language en-US "Root Complex 13 Configuration"
+
+#string STR_PCIE_RC14_FORM              #language en-US "Root Complex 14 Configuration"
+#string STR_PCIE_RC14_FORM_HELP         #language en-US "Root Complex 14 Configuration"
+
+#string STR_PCIE_RC15_FORM              #language en-US "Root Complex 15 Configuration"
+#string STR_PCIE_RC15_FORM_HELP         #language en-US "Root Complex 15 Configuration"
+
+#string STR_PCIE_BIFUR_SELECT_VALUE0    #language en-US "x16"
+#string STR_PCIE_BIFUR_SELECT_VALUE1    #language en-US "x8+x8"
+#string STR_PCIE_BIFUR_SELECT_VALUE2    #language en-US "x8+x4+x4"
+#string STR_PCIE_BIFUR_SELECT_VALUE3    #language en-US "x4+x4+x4+x4"
+#string STR_PCIE_BIFUR_SELECT_VALUE4    #language en-US "x8"
+#string STR_PCIE_BIFUR_SELECT_VALUE5    #language en-US "x4+x4"
+#string STR_PCIE_BIFUR_SELECT_VALUE6    #language en-US "x4+x2+x2"
+#string STR_PCIE_BIFUR_SELECT_VALUE7    #language en-US "x2+x2+x2+x2"
+
+#string STR_PCIE_SOCKET                 #language en-US "Socket"
+#string STR_PCIE_SOCKET_HELP            #language en-US "Socket 0 - Master; Socket 1 - Slave"
+#string STR_PCIE_SOCKET_VALUE           #language en-US ""
+
+#string STR_PCIE_RC_TYPE                #language en-US "Type"
+#string STR_PCIE_RC_TYPE_HELP           #language en-US "Type-A: x16 lanes bifurcated down to x4; Type-B: 2 of x8 lanes, each bifurcated down to x2"
+#string STR_PCIE_RC_TYPE_VALUE          #language en-US ""
+
+#string STR_PCIE_SMMU_PMU_PROMPT        #language en-US "SMMU Pmu"
+#string STR_PCIE_SMMU_PMU_HELP          #language en-US "Enable/Disable PMU feature for SMMU"
+
+#string STR_PCIE_STRONG_ORDERING_PROMPT #language en-US "PCIe Strong Ordering"
+#string STR_PCIE_STRONG_ORDERING_HELP   #language en-US "Enable/disable PCIe Strong Ordering with internal bus"

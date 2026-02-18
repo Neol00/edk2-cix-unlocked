@@ -1,0 +1,47 @@
+#  @file
+#  Component description file for I2cLib module
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = I2cLib
+  FILE_GUID                      = 5945EA46-66E7-4659-97C6-26D93676A4C2
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = I2cLib
+  CONSTRUCTOR                    = I2cLibConstructor
+
+[Binaries.AARCH64]
+  LIB|I2cLib.lib|*
+
+[LibraryClasses]
+  IoLib
+  BaseLib
+  TimerLib
+  DebugLib
+  UefiBootServicesTableLib
+  CixS3IoLib
+
+[Packages]
+  MdePkg/MdePkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+
+[Pcd]
+  gCixTokenSpaceGuid.PcdI2c0BusFreq
+  gCixTokenSpaceGuid.PcdI2c1BusFreq
+  gCixTokenSpaceGuid.PcdI2c2BusFreq
+  gCixTokenSpaceGuid.PcdI2c3BusFreq
+  gCixTokenSpaceGuid.PcdI2c4BusFreq
+  gCixTokenSpaceGuid.PcdI2c5BusFreq
+  gCixTokenSpaceGuid.PcdI2c6BusFreq
+  gCixTokenSpaceGuid.PcdI2c7BusFreq
+
+[Protocols]
+  gCixClockProtocolGuid
+  gCixResetProtocolGuid

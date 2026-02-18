@@ -1,0 +1,42 @@
+## @file
+#
+# Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001B
+  BASE_NAME                      = Ac01PcieLib
+  FILE_GUID                      = 8ABFA0FC-313E-11E8-B467-0ED5F89F718B
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = Ac01PcieLib
+
+[Sources]
+  PcieCore.c
+  PcieCore.h
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/Ampere/AmpereAltraBinPkg/AmpereAltraBinPkg.dec
+  Silicon/Ampere/AmpereAltraPkg/AmpereAltraPkg.dec
+
+[LibraryClasses]
+  ArmGenericTimerCounterLib
+  BaseLib
+  BoardPcieLib
+  DebugLib
+  HobLib
+  IoLib
+  PciePhyLib
+  SystemFirmwareInterfaceLib
+  TimerLib
+
+[Guids]
+  gPlatformInfoHobGuid
+
+[Depex]
+  TRUE

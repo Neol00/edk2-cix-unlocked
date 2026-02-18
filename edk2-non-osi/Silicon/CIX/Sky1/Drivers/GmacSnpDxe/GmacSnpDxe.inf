@@ -1,0 +1,68 @@
+#/** @file
+#  Simple Networking Protocol Driver (SNP) DXE Driver
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved
+#
+#  Copyright (c) 2023, CIX, Ltd. All rights reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#  The original software modules are licensed as follows:
+#
+#  Copyright (c) 2012-2014, ARM Limited. All rights reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#**/
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = GmacSnpDxe
+  FILE_GUID                      = 843FF72C-B918-4153-9721-75A6DFC09DD6
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = GmacSnpDxeEntry
+
+[Binaries.AARCH64]
+  PE32|GmacSnpDxe.efi|*
+  DXE_DEPEX|GmacSnpDxe.depex|*
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  NetworkPkg/NetworkPkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  ArmLib
+  BaseLib
+  BaseMemoryLib
+  DebugLib
+  DevicePathLib
+  DmaLib
+  IoLib
+  PcdLib
+  NetLib
+  TimerLib
+  UefiDriverEntryPoint
+  UefiLib
+  PostCodeLib
+  UefiBootServicesTableLib
+  HwMutexLib
+  NonDiscoverableDeviceRegistrationLib
+
+[Protocols]
+  gEdkiiNonDiscoverableDeviceProtocolGuid
+  gEfiDevicePathProtocolGuid
+  gEfiSimpleNetworkProtocolGuid
+  gHardwareInterruptProtocolGuid
+  gCixConfigParamsManageProtocolGuid
+  gCixResetProtocolGuid
+  gCixClockProtocolGuid
+
+[Guids]
+
+[Pcd]
+
+[Depex]
+  TRUE

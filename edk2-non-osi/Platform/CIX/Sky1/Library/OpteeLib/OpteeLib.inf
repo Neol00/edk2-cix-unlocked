@@ -1,0 +1,30 @@
+#/** @file
+#  OP-TEE lib using secure monitor calls
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved
+#
+#  Copyright (c) 2018, Linaro Ltd. All rights reserved.<BR>
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = OpteeLib
+  FILE_GUID                      = BCD50D08-9568-45B2-84DF-30AE0279AD46
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = OpteeLib
+
+[Binaries.AARCH64]
+  LIB|OpteeLib.lib|*
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  MdePkg/MdePkg.dec
+
+[LibraryClasses]
+  ArmMmuLib
+  ArmSmcLib
+  BaseLib

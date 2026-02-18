@@ -1,0 +1,46 @@
+/**
+Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+
+SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+
+#langdef en-US  "English"
+/*
+* I2C settings.
+*/
+#string STR_I2C_FORM_SET_TITLE                #language en-US "I2C Configuration"
+#string STR_I2C_FORM_SET_TITLE_HELP           #language en-US "I2C Configuration."
+
+#string STR_I2C0_OPTIONS_FORM_TITLE           #language en-US "I2C Controller 1"
+#string STR_I2C1_OPTIONS_FORM_TITLE           #language en-US "I2C Controller 2"
+#string STR_I2C2_OPTIONS_FORM_TITLE           #language en-US "I2C Controller 3"
+#string STR_I2C3_OPTIONS_FORM_TITLE           #language en-US "I2C Controller 4"
+#string STR_I2C4_OPTIONS_FORM_TITLE           #language en-US "I2C Controller 5"
+#string STR_I2C5_OPTIONS_FORM_TITLE           #language en-US "I2C Controller 6"
+#string STR_I2C6_OPTIONS_FORM_TITLE           #language en-US "I2C Controller 7"
+#string STR_I2C7_OPTIONS_FORM_TITLE           #language en-US "I2C Controller 8"
+
+#string STR_I2C0_PROMPT                       #language en-US "I2C Controller 1"
+#string STR_I2C1_PROMPT                       #language en-US "I2C Controller 2"
+#string STR_I2C2_PROMPT                       #language en-US "I2C Controller 3"
+#string STR_I2C3_PROMPT                       #language en-US "I2C Controller 4"
+#string STR_I2C4_PROMPT                       #language en-US "I2C Controller 5"
+#string STR_I2C5_PROMPT                       #language en-US "I2C Controller 6"
+#string STR_I2C6_PROMPT                       #language en-US "I2C Controller 7"
+#string STR_I2C7_PROMPT                       #language en-US "I2C Controller 8"
+#string STR_I2C_HELP                          #language en-US "Control I2C Setting."
+
+#string STR_I2C0_BUS_FREQ_PROMPT              #language en-US "I2C Bus Frequency"
+#string STR_I2C1_BUS_FREQ_PROMPT              #language en-US "I2C Bus Frequency"
+#string STR_I2C2_BUS_FREQ_PROMPT              #language en-US "I2C Bus Frequency"
+#string STR_I2C3_BUS_FREQ_PROMPT              #language en-US "I2C Bus Frequency"
+#string STR_I2C4_BUS_FREQ_PROMPT              #language en-US "I2C Bus Frequency"
+#string STR_I2C5_BUS_FREQ_PROMPT              #language en-US "I2C Bus Frequency"
+#string STR_I2C6_BUS_FREQ_PROMPT              #language en-US "I2C Bus Frequency"
+#string STR_I2C7_BUS_FREQ_PROMPT              #language en-US "I2C Bus Frequency"
+#string STR_I2C_BUS_FREQ_HELP                 #language en-US "I2C Bus Frequency Setting."
+
+#string STR_I2C_BUS_FREQ_100K                 #language en-US "100KHz"
+#string STR_I2C_BUS_FREQ_400K                 #language en-US "400KHz"
+#string STR_I2C_BUS_FREQ_1M                   #language en-US "1MHz"

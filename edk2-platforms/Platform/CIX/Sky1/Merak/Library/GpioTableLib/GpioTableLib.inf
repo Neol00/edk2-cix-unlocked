@@ -1,0 +1,33 @@
+## @file
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = GpioTableLib
+  FILE_GUID                      = AECA6BC9-8040-4953-9F0C-5F6D7C454BBC
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = GpioTableLib
+  CONSTRUCTOR                    = GpioTableLibConstructor
+
+[Sources]
+  GpioTableLib.c
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+
+[LibraryClasses]
+  BaseLib
+  UefiBootServicesTableLib
+
+[Protocols]
+  gCixPlatformConfigParamsManageProtocolGuid

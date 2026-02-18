@@ -1,0 +1,50 @@
+## @file
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001B
+  BASE_NAME                      = ConfigParamsManageDxe
+  FILE_GUID                      = 8BA8F66D-B32A-4048-8325-8CC0A171C4E6
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = ConfigParamsManageDxeEntryPoint
+
+[Sources.common]
+  ConfigParamsManageDxe.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  UefiDriverEntryPoint
+  BaseLib
+  PrintLib
+  AcpiLib
+  MemoryAllocationLib
+  BaseMemoryLib
+  DebugLib
+  UefiBootServicesTableLib
+  ConfigParamsDataBlockLib
+  ConfigParamsHookLib
+  PostCodeLib
+
+[Protocols]
+  gCixConfigParamsManageProtocolGuid
+
+[Guids]
+
+[FeaturePcd]
+
+[Pcd]
+
+[FixedPcd]
+
+[Depex]
+  TRUE

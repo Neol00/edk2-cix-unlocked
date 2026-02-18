@@ -1,0 +1,72 @@
+#/** @file
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#  Copyright (c) 2017-2018, Andrei Warkentin <andrey.warkentin@gmail.com>
+#  Copyright (c) 2014-2016, Linaro Limited. All rights reserved.
+#  Copyright (c) 2011-2019, ARM Limited. All rights reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = PlatformLib
+  FILE_GUID                      = eb3c5659-56c6-4ae6-8989-df7fefd9c565
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = ArmPlatformLib|SEC PEIM
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec
+  ArmPkg/ArmPkg.dec
+  ArmPlatformPkg/ArmPlatformPkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  ArmLib
+  FdtLib
+  IoLib
+  MemoryAllocationLib
+  PcdLib
+  PrintLib
+  SocInitLib
+  BaseMemoryLib
+  ShMemLib
+
+[Sources.common]
+  ArmPlatformLib.c
+  ArmPlatformLibMem.c
+[Sources.AARCH64]
+  AArch64/ArmPlatformHelper.S
+[FixedPcd]
+  gArmTokenSpaceGuid.PcdFdBaseAddress
+  gArmTokenSpaceGuid.PcdFvBaseAddress
+  gArmPlatformTokenSpaceGuid.PcdCoreCount
+  gArmTokenSpaceGuid.PcdArmPrimaryCoreMask
+  gArmTokenSpaceGuid.PcdArmPrimaryCore
+  gArmTokenSpaceGuid.PcdFdSize
+  gEmbeddedTokenSpaceGuid.PcdDmaDeviceOffset
+  gArmTokenSpaceGuid.PcdSystemMemoryBase
+  gArmTokenSpaceGuid.PcdSystemMemorySize
+  gArmPlatformTokenSpaceGuid.PcdArmLcdDdrFrameBufferBase
+  gArmPlatformTokenSpaceGuid.PcdArmLcdDdrFrameBufferSize
+
+[Pcd]
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialClockRate
+  gCixPlatformTokenSpaceGuid.PcdReservedSecureMemoryBase
+  gCixPlatformTokenSpaceGuid.PcdReservedSecureMemorySize
+  gCixPlatformTokenSpaceGuid.PcdReservedShareMemoryBase
+  gCixPlatformTokenSpaceGuid.PcdReservedShareMemorySize
+  gCixTokenSpaceGuid.PcdCixApToTfaMailBoxBase
+  gCixTokenSpaceGuid.PcdCixApToTfaMailBoxSize
+  gCixPlatformTokenSpaceGuid.PcdRamLogBaseAddress
+  gCixPlatformTokenSpaceGuid.PcdRamLogSize
+  gCixPlatformTokenSpaceGuid.PcdRamLogLastBootSaveAddress
+  gCixTokenSpaceGuid.PcdBootCorePmuCounterNum
+  gCixPlatformTokenSpaceGuid.PcdDramHighSpaceBase
+
+[Ppis]
+  gArmMpCoreInfoPpiGuid

@@ -1,0 +1,58 @@
+## @file
+#
+# Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001B
+  BASE_NAME                      = AcpiConfigDxe
+  FILE_GUID                      = F36685AE-2623-4231-ABC0-2C151451E6B7
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = AcpiConfigEntryPoint
+
+[Sources.common]
+  AcpiConfigDxe.c
+  AcpiConfigDxe.h
+  AcpiConfigVfr.vfr
+  AcpiConfigStrings.uni
+
+[Packages]
+  EmbeddedPkg/EmbeddedPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/Ampere/AmpereAltraPkg/AmpereAltraPkg.dec
+  Silicon/Ampere/AmpereSiliconPkg/AmpereSiliconPkg.dec
+
+[LibraryClasses]
+  AcpiLib
+  BaseLib
+  BaseMemoryLib
+  DebugLib
+  DevicePathLib
+  HiiLib
+  HobLib
+  MemoryAllocationLib
+  SystemFirmwareInterfaceLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiLib
+
+[Guids]
+  gPlatformManagerFormsetGuid
+  gAcpiConfigFormSetGuid
+  gEfiEventReadyToBootGuid
+  gPlatformInfoHobGuid
+
+[Protocols]
+  gEfiAcpiSdtProtocolGuid                       ## COMSUMES
+  gEfiDevicePathProtocolGuid                    ## CONSUMES
+  gEfiHiiConfigRoutingProtocolGuid              ## CONSUMES
+  gEfiHiiConfigAccessProtocolGuid               ## PRODUCES
+
+[Depex]
+  gEfiVariableArchProtocolGuid AND
+  gEfiVariableWriteArchProtocolGuid

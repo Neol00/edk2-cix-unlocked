@@ -1,0 +1,364 @@
+/**
+  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+
+  SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+    form formid = PLATFORM_FORM_SET_ID,
+      title  = STRING_TOKEN(STR_PLATFORM_FORM_SET_TITLE);
+      subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+
+      oneof varid   = NetworkStackVar.Enable,
+        prompt      = STRING_TOKEN(STR_NETWORK_STACK_PROMPT),
+        help        = STRING_TOKEN(STR_NETWORK_STACK_PROMPT_HELP),
+        default     = FixedPcdGet8 (PcdNetworkStackSupport),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+suppressif ideqval NetworkStackVar.Enable == 0x0;
+      oneof varid   = NetworkStackVar.Ipv4Pxe,
+        prompt      = STRING_TOKEN(STR_IPV4_PXE_BOOT_PROMPT),
+        help        = STRING_TOKEN(STR_IPV4_PXE_BOOT_PROMPT_HELP),
+        default     = FixedPcdGet8 (PcdIPv4PXESupport),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = NetworkStackVar.Ipv6Pxe,
+        prompt      = STRING_TOKEN(STR_IPV6_PXE_BOOT_PROMPT),
+        help        = STRING_TOKEN(STR_IPV6_PXE_BOOT_PROMPT_HELP),
+        default     = FixedPcdGet8 (PcdIPv6PXESupport),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = NetworkStackVar.Ipv4Http,
+        prompt      = STRING_TOKEN(STR_IPV4_HTTP_BOOT_PROMPT),
+        help        = STRING_TOKEN(STR_IPV4_HTTP_BOOT_PROMPT_HELP),
+        default     = FixedPcdGet8 (PcdIPv4HttpSupport),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = NetworkStackVar.Ipv6Http,
+        prompt      = STRING_TOKEN(STR_IPV6_HTTP_BOOT_PROMPT),
+        help        = STRING_TOKEN(STR_IPV6_HTTP_BOOT_PROMPT_HELP),
+        default     = FixedPcdGet8 (PcdIPv6HttpSupport),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+endif;
+      oneof varid   = PlatformSetupVar.StateAfterG3,
+        questionid  = QUESTION_STATE_AFTER_G3_ID,
+        prompt      = STRING_TOKEN(STR_RESTORE_AC_POWER_LOSS),
+        help        = STRING_TOKEN(STR_RESTORE_AC_POWER_LOSS_HELP),
+        flags       = NUMERIC_SIZE_1 | INTERACTIVE | RESET_REQUIRED,
+        default     = FixedPcdGet8 (PcdStateAfterG3),
+        option text = STRING_TOKEN(STR_S5_AFTER_G3_STRING),        value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_S0_AFTER_G3_STRING),        value = 1, flags = RESET_REQUIRED;
+      endoneof;
+suppressif TRUE;
+      oneof varid   = PlatformSetupVar.PrimaryDisplay,
+        prompt      = STRING_TOKEN(STR_PRIMARY_DISPLAY_PROMPT),
+        help        = STRING_TOKEN(STR_PRIMARY_DISPLAY_PROMPT_HELP),
+        option text = STRING_TOKEN(STR_AUTO), value = 0, flags = DEFAULT | RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_INTERNAL_DPU),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.DtbMenuEntry,
+        prompt      = STRING_TOKEN(STR_DTB_MEMU_ENTRY_PROMPT),
+        help        = STRING_TOKEN(STR_DTB_MEMU_ENTRY_PROMPT_HELP),
+        option text = STRING_TOKEN(STR_TABLE_0), value = 0, flags = DEFAULT | RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_TABLE_1), value = 1, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_TABLE_2), value = 2, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_TABLE_3), value = 3, flags = RESET_REQUIRED;
+      endoneof;
+endif;
+      oneof varid   = PlatformSetupVar.SocWatchdogTimer,
+        prompt      = STRING_TOKEN(STR_SOC_WATCH_DOG_TIMER_PROMPT),
+        help        = STRING_TOKEN(STR_SOC_WATCH_DOG_TIMER_PROMPT_HELP),
+        default     = FixedPcdGet8 (PcdSocWatchdogTimer),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.RtcWakeup,
+        prompt      = STRING_TOKEN(STR_RTC_WAKE_UP_PROMPT),
+        help        = STRING_TOKEN(STR_RTC_WAKE_UP_PROMPT_HELP),
+        default     = FixedPcdGet8 (PcdRtcWakeup),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.LightSensorCtrl,
+        prompt      = STRING_TOKEN(STR_LIGHT_SENSOR_CONTROL_PROMPT),
+        help        = STRING_TOKEN(STR_LIGHT_SENSOR_CONTROL_PROMPT_HELP),
+        default     = FixedPcdGet8 (PcdLightSensorCtrl),
+        option text = STRING_TOKEN(STR_EC_MODE), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_AP_MODE), value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.SpcrEnable,
+        prompt      = STRING_TOKEN(STR_ENABLE_SPCR_TABLE),
+        help        = STRING_TOKEN(STR_ENABLE_SPCR_TABLE_HELP),
+        default     = FixedPcdGet8 (PcdAcpiSpcrEnable),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED), value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.EcFanMode,
+        prompt      = STRING_TOKEN(STR_EC_FAN_MODE_PROMPT),
+        help        = STRING_TOKEN(STR_EC_FAN_MODE_PROMPT_HELP),
+        default     = FixedPcdGet8 (PcdEcDefaultFanMode),
+        option text = STRING_TOKEN(STR_AUTO_MODE), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_PERF_MODE), value = 1, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_QUIET_MODE), value = 2, flags = RESET_REQUIRED;
+      endoneof;
+
+suppressif ideqval DtAcpiPref.Pref == DT_ACPI_SELECT_DT;
+      goto DEVICE_POWER_CONTROL_FORM_ID,
+        prompt = STRING_TOKEN(STR_DEVICE_POWER_CONTROL_FORM_TITLE),
+        help   = STRING_TOKEN(STR_DEVICE_POWER_CONTROL_FORM_TITLE_HELP);
+endif;
+suppressif TRUE;
+      goto CLOCK_GATING_CONTROL_FORM_ID,
+        prompt = STRING_TOKEN(STR_CLOCK_GATING_CONTROL_FORM_TITLE),
+        help   = STRING_TOKEN(STR_DEVICE_POWER_CONTROL_FORM_TITLE_HELP);
+endif;
+    endform;
+
+    form formid = DEVICE_POWER_CONTROL_FORM_ID,
+      title  = STRING_TOKEN(STR_DEVICE_POWER_CONTROL_FORM_TITLE);
+      subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+
+      oneof varid   = PlatformSetupVar.GfxPower,
+        prompt      = STRING_TOKEN(STR_GFX_POWER_PROMPT),
+        help        = STRING_TOKEN(STR_GFX_POWER_PROMPT_HELP),
+        default     = FixedPcdGet16 (PcdGfxPower),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.TouchPanelPower,
+        prompt      = STRING_TOKEN(STR_TOUCH_PANEL_POWER_PROMPT),
+        help        = STRING_TOKEN(STR_TOUCH_PANEL_POWER_PROMPT_HELP),
+        default     = FixedPcdGet16 (PcdTouchPanelPower),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.TpmPower,
+        prompt      = STRING_TOKEN(STR_TPM_POWER_PROMPT),
+        help        = STRING_TOKEN(STR_TPM_POWER_PROMPT_HELP),
+        default     = FixedPcdGet16 (PcdTpmPower),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.WwanPower,
+        prompt      = STRING_TOKEN(STR_WWAN_POWER_PROMPT),
+        help        = STRING_TOKEN(STR_WWAN_POWER_PROMPT_HELP),
+        default     = FixedPcdGet16 (PcdWwanPower),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.PcieX2SlotPower,
+        prompt      = STRING_TOKEN(STR_PCIE_X2_SLOT_POWER_PROMPT),
+        help        = STRING_TOKEN(STR_PCIE_X2_SLOT_POWER_PROMPT_HELP),
+        default     = FixedPcdGet16 (PcdPcieX2SlotPower),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.FingerPrintPower,
+        prompt      = STRING_TOKEN(STR_FINGER_PRINT_POWER_PROMPT),
+        help        = STRING_TOKEN(STR_FINGER_PRINT_POWER_PROMPT_HELP),
+        default     = FixedPcdGet16 (PcdFingerPrintPower),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.WlanPower,
+        prompt      = STRING_TOKEN(STR_WLAN_POWER_PROMPT),
+        help        = STRING_TOKEN(STR_WLAN_POWER_PROMPT_HELP),
+        default     = FixedPcdGet16 (PcdWlanPower),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.M2SsdPower,
+        prompt      = STRING_TOKEN(STR_M2_SSD_PROMPT),
+        help        = STRING_TOKEN(STR_M2_SSD_PROMPT_HELP),
+        default     = FixedPcdGet16 (PcdM2SsdPower),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.OnBoardLanPower,
+        prompt      = STRING_TOKEN(STR_ONBOARD_LAN_PROMPT),
+        help        = STRING_TOKEN(STR_ONBOARD_LAN_PROMPT_HELP),
+        default     = FixedPcdGet16 (PcdOnBoardLanPower),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.IspCamera0Power,
+        prompt      = STRING_TOKEN(STR_ISP_CAMERA0_PROMPT),
+        help        = STRING_TOKEN(STR_ISP_CAMERA0_PROMPT_HELP),
+        default     = FixedPcdGet16 (PcdIspCamera0Power),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.IspCamera1Power,
+        prompt      = STRING_TOKEN(STR_ISP_CAMERA1_PROMPT),
+        help        = STRING_TOKEN(STR_ISP_CAMERA1_PROMPT_HELP),
+        default     = FixedPcdGet16 (PcdIspCamera1Power),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.IspCamera2Power,
+        prompt      = STRING_TOKEN(STR_ISP_CAMERA2_PROMPT),
+        help        = STRING_TOKEN(STR_ISP_CAMERA2_PROMPT_HELP),
+        default     = FixedPcdGet16 (PcdIspCamera2Power),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.IspCamera3Power,
+        prompt      = STRING_TOKEN(STR_ISP_CAMERA3_PROMPT),
+        help        = STRING_TOKEN(STR_ISP_CAMERA3_PROMPT_HELP),
+        default     = FixedPcdGet16 (PcdIspCamera3Power),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+    endform;
+
+    form formid = CLOCK_GATING_CONTROL_FORM_ID,
+      title  = STRING_TOKEN(STR_CLOCK_GATING_CONTROL_FORM_TITLE);
+      subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+
+      oneof varid   = PlatformSetupVar.CpuCoreClkGating,
+        prompt      = STRING_TOKEN(STR_CPU_CORE_CLK_GATING_PROMPT),
+        help        = STRING_TOKEN(STR_CPU_CORE_CLK_GATING_PROMPT_HELP),
+        default     = FixedPcdGet8(PcdCpuCoreClkGating),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.DsuClkGating,
+        prompt      = STRING_TOKEN(STR_DSU_CLK_GATING_PROMPT),
+        help        = STRING_TOKEN(STR_DSU_CLK_GATING_PROMPT_HELP),
+        default     = FixedPcdGet8(PcdDsuClkGating),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.GicdClkGating,
+        prompt      = STRING_TOKEN(STR_GICD_CLK_GATING_PROMPT),
+        help        = STRING_TOKEN(STR_GICD_CLK_GATING_PROMPT_HELP),
+        default     = FixedPcdGet8(PcdGicdClkGating),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.Ci700ClkGating,
+        prompt      = STRING_TOKEN(STR_CI700_CLK_GATING_PROMPT),
+        help        = STRING_TOKEN(STR_CI700_CLK_GATING_PROMPT_HELP),
+        default     = FixedPcdGet8(PcdCi700ClkGating),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.SysNi700ClkGating,
+        prompt      = STRING_TOKEN(STR_SYS_NI700_CLK_GATING_PROMPT),
+        help        = STRING_TOKEN(STR_SYS_NI700_CLK_GATING_PROMPT_HELP),
+        default     = FixedPcdGet8(PcdSysNi700ClkGating),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.MmNi700ClkGating,
+        prompt      = STRING_TOKEN(STR_MM_NI700_CLK_GATING_PROMPT),
+        help        = STRING_TOKEN(STR_MM_NI700_CLK_GATING_PROMPT_HELP),
+        default     = FixedPcdGet8(PcdMmNi700ClkGating),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.PcieNi700ClkGating,
+        prompt      = STRING_TOKEN(STR_PCIE_NI700_CLK_GATING_PROMPT),
+        help        = STRING_TOKEN(STR_PCIE_NI700_CLK_GATING_PROMPT_HELP),
+        default     = FixedPcdGet8(PcdPcieNi700ClkGating),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.SmnNi700ClkGating,
+        prompt      = STRING_TOKEN(STR_SMN_NI700_CLK_GATING_PROMPT),
+        help        = STRING_TOKEN(STR_SMN_NI700_CLK_GATING_PROMPT_HELP),
+        default     = FixedPcdGet8(PcdSmnNi700ClkGating),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.GpuClkGating,
+        prompt      = STRING_TOKEN(STR_GPU_CLK_GATING_PROMPT),
+        help        = STRING_TOKEN(STR_GPU_CLK_GATING_PROMPT_HELP),
+        default     = FixedPcdGet8(PcdGpuClkGating),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.Dpu0ClkGating,
+        prompt      = STRING_TOKEN(STR_DPU0_CLK_GATING_PROMPT),
+        help        = STRING_TOKEN(STR_DPU0_CLK_GATING_PROMPT_HELP),
+        default     = FixedPcdGet8(PcdDpu0ClkGating),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.Dpu1ClkGating,
+        prompt      = STRING_TOKEN(STR_DPU1_CLK_GATING_PROMPT),
+        help        = STRING_TOKEN(STR_DPU1_CLK_GATING_PROMPT_HELP),
+        default     = FixedPcdGet8(PcdDpu1ClkGating),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.Dpu2ClkGating,
+        prompt      = STRING_TOKEN(STR_DPU2_CLK_GATING_PROMPT),
+        help        = STRING_TOKEN(STR_DPU2_CLK_GATING_PROMPT_HELP),
+        default     = FixedPcdGet8(PcdDpu2ClkGating),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.Dpu3ClkGating,
+        prompt      = STRING_TOKEN(STR_DPU3_CLK_GATING_PROMPT),
+        help        = STRING_TOKEN(STR_DPU3_CLK_GATING_PROMPT_HELP),
+        default     = FixedPcdGet8(PcdDpu3ClkGating),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.Dpu4ClkGating,
+        prompt      = STRING_TOKEN(STR_DPU4_CLK_GATING_PROMPT),
+        help        = STRING_TOKEN(STR_DPU4_CLK_GATING_PROMPT_HELP),
+        default     = FixedPcdGet8(PcdDpu4ClkGating),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      oneof varid   = PlatformSetupVar.VpuClkGating,
+        prompt      = STRING_TOKEN(STR_VPU_CLK_GATING_PROMPT),
+        help        = STRING_TOKEN(STR_VPU_CLK_GATING_PROMPT_HELP),
+        default     = FixedPcdGet8(PcdVpuClkGating),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+    endform;

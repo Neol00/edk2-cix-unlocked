@@ -1,0 +1,51 @@
+## @file
+#  This module installs Boot Progress Dxe.
+#
+#  This module registers report status code listener to report boot progress
+#  to SMpro.
+#
+#  Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001B
+  BASE_NAME                      = BootProgressDxe
+  MODULE_UNI_FILE                = BootProgressDxe.uni
+  FILE_GUID                      = 6E12F248-F0C1-11EA-B37C-9798918A2163
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = BootProgressDxeEntryPoint
+
+#
+# The following information is for reference only and not required by the build tools.
+#
+#  VALID_ARCHITECTURES           = AARCH64
+#
+
+[Sources]
+  BootProgressDxe.c
+
+[Packages]
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/Ampere/AmpereAltraPkg/AmpereAltraPkg.dec
+
+[LibraryClasses]
+  AmpereCpuLib
+  BaseLib
+  DebugLib
+  DxeServicesLib
+  SystemFirmwareInterfaceLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiLib
+  UefiRuntimeServicesTableLib
+
+[Protocols]
+  gEfiRscHandlerProtocolGuid                    ## CONSUMES
+
+[Depex]
+  gEfiRscHandlerProtocolGuid

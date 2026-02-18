@@ -1,0 +1,42 @@
+#  @file
+#  Component description file for USBLib  module
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = UsbLib
+  FILE_GUID                      = E11CF9E3-5B11-F994-5F62-2D1CF5D6EB96
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = UsbLib
+
+[Binaries.AARCH64]
+  LIB|UsbLib.lib|*
+
+[LibraryClasses]
+  IoLib
+  BaseLib
+  DebugLib
+  UefiBootServicesTableLib
+  BaseMemoryLib
+  MemoryAllocationLib
+  NonDiscoverableDeviceRegistrationLib
+
+[Packages]
+  MdePkg/MdePkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+
+[FeaturePcd]
+
+[Protocols]
+  gCixClockProtocolGuid
+  gCixResetProtocolGuid
+  gCixPdProtocolGuid
+  gCixTypecPhyProtocolGuid

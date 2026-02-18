@@ -1,0 +1,57 @@
+{
+    "cfs_version": 1,
+    "fip_version": 1234,
+    "align_size": 4096,
+    "flash_size": "0x1000000",
+    "ec_addr": "0x10000",
+    "firmware_header_addr": "0x100000",
+    "sec_debug_addr": "0x107000",
+    "xip_addr": "0x108000",
+    "ec_file": "Firmwares/ec_fw.bin",
+    "sec_debug_file": "",
+    "xip_file": "Firmwares/dummy.bin",
+    "image_count": 7,
+    "image_header_groups": [{
+            "image_type": 1,
+            "address": "0x188000",
+            "size": "0x100000",
+            "file": "Firmwares/bootloader1.img"
+        },
+        {
+            "image_type": 2,
+            "address": "0x288000",
+            "size": "0x0F8000",
+            "file": "Firmwares/bootloader2.img"
+        },
+        {
+            "image_type": 100,
+            "address": "0x380000",
+            "size": "0x78000",
+            "file": "Firmwares/dummy.bin"
+        },
+        {
+            "image_type": 3,
+            "address": "0x3F8000",
+            "size": "0x4000",
+            "file": "Firmwares/memory_config.bin"
+        },
+        {
+            "image_type": 4,
+            "address": "0x3FC000",
+            "size": "0x1000",
+            "file": "Firmwares/csu_pm_config.bin"
+        },
+        {
+            "image_type": 6,
+            "address": "0x3FD000",
+            "size": "0x1000",
+            "file": "Firmwares/se_config.bin"
+        },
+        {
+            "image_type": 7,
+            "address": "0x3FE000",
+            "size": "0x202000",
+            "file": "Firmwares/bootloader3.img"
+        }
+    ]
+}

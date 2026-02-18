@@ -1,0 +1,301 @@
+## @file
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#  Copyright (c) 2011 - 2019, ARM Limited. All rights reserved.
+#  Copyright (c) 2017 - 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
+#  Copyright (c) 2015 - 2016, Intel Corporation. All rights reserved.
+#  Copyright (c) 2014, Linaro Limited. All rights reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+################################################################################
+#
+# FD Section
+# The [FD] Section is made up of the definition statements and a
+# description of what goes into  the Flash Device Image.  Each FD section
+# defines one flash "device" image.  A flash device image may be one of
+# the following: Removable media bootable image (like a boot floppy
+# image,) an Option ROM image (that would be "flashed" into an add-in
+# card,) a System "Flash"  image (that would be burned into a system's
+# flash) or an Update ("Capsule") image that will be used to update and
+# existing system flash.
+#
+################################################################################
+
+[FD.SKY1_BL33_UEFI]
+BaseAddress   = 0x84400000|gArmTokenSpaceGuid.PcdFdBaseAddress
+Size          = 0x00200000|gArmTokenSpaceGuid.PcdFdSize
+ErasePolarity = 1
+
+BlockSize     = 0x00001000
+NumBlocks     = 0x200
+
+################################################################################
+#
+# Following are lists of FD Region layout which correspond to the locations of different
+# images within the flash device.
+#
+# Regions must be defined in ascending order and may not overlap.
+#
+# A Layout Region start with a eight digit hex offset (leading "0x" required) followed by
+# the pipe "|" character, followed by the size of the region, also in hex with the leading
+# "0x" characters. Like:
+# Offset|Size
+# PcdOffsetCName|PcdSizeCName
+# RegionType <FV, DATA, or FILE>
+#
+################################################################################
+#
+# UEFI image size 0x200000
+#
+0x00000000|0x00200000
+gArmTokenSpaceGuid.PcdFvBaseAddress|gArmTokenSpaceGuid.PcdFvSize
+FV = FVMAIN_COMPACT
+
+##################################################################################
+###
+### FV Section
+###
+### [FV] section is used to define what components or modules are placed within a flash
+### device file.  This section also defines order the components and modules are positioned
+### within the image.  The [FV] section consists of define statements, set statements and
+### module statements.
+###
+##################################################################################
+
+[FV.FvMain]
+FvNameGuid         = 9a15aa37-d555-4a4e-b541-86391ff68164
+BlockSize          = 0x40
+NumBlocks          = 0         # This FV gets compressed so make it just big enough
+FvAlignment        = 16        # FV alignment and FV attributes setting.
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = TRUE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+
+
+  APRIORI DXE {
+    INF MdeModulePkg/Universal/PCD/Dxe/Pcd.inf
+    INF ArmPkg/Drivers/CpuDxe/CpuDxe.inf
+    INF MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf
+!if $(SOC_PWR_CLK_RST_ENABLE) == TRUE
+    # SCMI Driver
+    INF Platform/CIX/Sky1/Drivers/ArmScmiDxe/ArmScmiDxe.inf
+    # power
+    INF Silicon/CIX/Sky1/Drivers/PowerDxe/PowerDxe.inf
+    # clock
+    INF Silicon/CIX/Sky1/Drivers/ClockDxe/ClockDxe.inf
+!endif
+    # reset
+    INF Silicon/CIX/Sky1/Drivers/ResetDxe/ResetDxe.inf
+    INF Platform/CIX/Sky1/Drivers/S3SaveStateDxe/S3SaveStateDxe.inf
+    INF Silicon/CIX/Sky1/Drivers/SocDxe/SocDxe.inf
+!if $(STMM_SUPPORT) == TRUE
+    INF Platform/CIX/Sky1/Drivers/MmCommunicationDxe/ArmMmCommunication.inf
+!endif
+!if $(STMM_SUPPORT) == TRUE
+    INF Silicon/CIX/Sky1/Drivers/NorFlashDxe/NorFlashSmmRuntimeDxe.inf
+!else
+    INF Silicon/CIX/Sky1/Drivers/NorFlashDxe/NorFlashDxe.inf
+!endif
+!if $(VARIABLE_SUPPORT) == "SPI" && $(STMM_SUPPORT) == FALSE
+    INF MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.inf
+!endif
+!if $(VARIABLE_SUPPORT) == "SPI" && $(STMM_SUPPORT) == TRUE
+    INF MdeModulePkg/Universal/Variable/RuntimeDxe/VariableSmmRuntimeDxe.inf
+!else
+    INF MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe.inf
+!endif
+
+  INF ArmPkg/Drivers/ArmGic/ArmGicDxe.inf
+  INF ArmPkg/Drivers/TimerDxe/TimerDxe.inf
+  INF Silicon/CIX/Sky1/Drivers/GenericWatchdogDxe/GenericWatchdogDxe.inf
+  }
+
+# inf file list has be move to Sky1Common.fdf.inc
+# please put xxx.inf to Sky1Common.fdf.inc
+!include Platform/CIX/Sky1/Sky1Common.fdf.inc
+  INF Platform/CIX/Sky1/Drivers/DtbUpdateDxeSi/DtbUpdateDxe.inf
+
+!if $(ACPI_ENABLE) == TRUE
+  INF RuleOverride = ACPITABLE2 Platform/CIX/Sky1/Edge/ACPI/AcpiPlatfomTables/AcpiPlatfomTables.inf
+  INF Platform/CIX/Sky1/Edge/ACPI/AcpiPlatformDxe/AcpiPlatformDxe.inf
+!endif
+
+  #
+  # UEFI application (Shell Embedded Boot Loader)
+  #
+!if $(SHELL_EMBEDDED_ENABLE) == TRUE
+  INF ShellPkg/Application/Shell/Shell.inf
+!endif
+  //{8943387b-c4ad-3199-42a9-dabc5b411615}
+  FILE FREEFORM  = 8943387b-c4ad-3199-42a9-dabc5b411615 { # gPkcs7CertDataGuid
+      SECTION RAW = Platform/CIX/Sky1/Bin/ntroot.cer //root pubkey
+  }
+!if $(SMBIOS_ENABLE) == TRUE
+  INF Platform/CIX/Sky1/Edge/PlatformSmbios/PlatformSmbios.inf
+!endif
+
+[FV.FVMAIN_COMPACT]
+FvAlignment        = 16
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = TRUE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+
+  INF Platform/CIX/Sky1/PrePi/PeiUniCore.inf
+  !if $(FW_VERSION_ENABLE) == TRUE
+  INF Platform/CIX/Sky1/Drivers/FwVersionDxe/FwVersionDxe.inf
+  !endif
+  FILE FV_IMAGE = 9E21FD93-9C72-4c15-8C4B-E77F1DB2D792 {
+    SECTION GUIDED EE4E5898-3914-4259-9D6E-DC7BD79403CF PROCESSING_REQUIRED = TRUE {
+      SECTION FV_IMAGE = FVMAIN
+    }
+  }
+
+
+##################################################################################
+###
+### Rules are use with the [FV] section's module INF type to define
+### how an FFS file is created for a given INF file. The following Rule are the default
+### rules for the different module type. User can add the customized rules to define the
+### content of the FFS file.
+###
+##################################################################################
+##
+##
+##############################################################################
+### Example of a DXE_DRIVER FFS file with a Checksum encapsulation section   #
+##############################################################################
+###
+###[Rule.Common.DXE_DRIVER]
+###  FILE DRIVER = $(NAMED_GUID) {
+###    DXE_DEPEX    DXE_DEPEX               Optional $(INF_OUTPUT)/$(MODULE_NAME).depex
+###    COMPRESS PI_STD {
+###      GUIDED {
+###        PE32     PE32                    $(INF_OUTPUT)/$(MODULE_NAME).efi
+###        UI       STRING="$(MODULE_NAME)" Optional
+###        VERSION  STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+###      }
+###    }
+###  }
+###
+##############################################################################
+
+[Rule.Common.SEC]
+  FILE SEC = $(NAMED_GUID) RELOCS_STRIPPED FIXED {
+    TE  TE Align = Auto                 $(INF_OUTPUT)/$(MODULE_NAME).efi
+  }
+
+[Rule.Common.PEI_CORE]
+  FILE PEI_CORE = $(NAMED_GUID) FIXED {
+    TE     TE Align = Auto              $(INF_OUTPUT)/$(MODULE_NAME).efi
+    UI     STRING ="$(MODULE_NAME)" Optional
+  }
+
+[Rule.Common.PEIM]
+  FILE PEIM = $(NAMED_GUID) FIXED {
+     PEI_DEPEX PEI_DEPEX Optional       $(INF_OUTPUT)/$(MODULE_NAME).depex
+     TE       TE Align = Auto           $(INF_OUTPUT)/$(MODULE_NAME).efi
+     UI       STRING="$(MODULE_NAME)" Optional
+  }
+
+[Rule.Common.DXE_CORE]
+  FILE DXE_CORE = $(NAMED_GUID) {
+    PE32     PE32                       $(INF_OUTPUT)/$(MODULE_NAME).efi
+    UI       STRING="$(MODULE_NAME)" Optional
+  }
+
+[Rule.Common.UEFI_DRIVER]
+  FILE DRIVER = $(NAMED_GUID) {
+    DXE_DEPEX    DXE_DEPEX              Optional $(INF_OUTPUT)/$(MODULE_NAME).depex
+    PE32         PE32                   $(INF_OUTPUT)/$(MODULE_NAME).efi
+    UI           STRING="$(MODULE_NAME)" Optional
+  }
+
+[Rule.Common.DXE_DRIVER]
+  FILE DRIVER = $(NAMED_GUID) {
+    DXE_DEPEX    DXE_DEPEX              Optional $(INF_OUTPUT)/$(MODULE_NAME).depex
+    PE32         PE32                   $(INF_OUTPUT)/$(MODULE_NAME).efi
+    UI           STRING="$(MODULE_NAME)" Optional
+    RAW          ACPI  Optional               |.acpi
+    RAW          ASL   Optional               |.aml
+  }
+
+[Rule.Common.DXE_RUNTIME_DRIVER]
+  FILE DRIVER = $(NAMED_GUID) {
+    DXE_DEPEX    DXE_DEPEX              Optional $(INF_OUTPUT)/$(MODULE_NAME).depex
+    PE32         PE32                   $(INF_OUTPUT)/$(MODULE_NAME).efi
+    UI           STRING="$(MODULE_NAME)" Optional
+  }
+
+[Rule.Common.UEFI_APPLICATION]
+  FILE APPLICATION = $(NAMED_GUID) {
+    UI     STRING ="$(MODULE_NAME)"     Optional
+    PE32   PE32                         $(INF_OUTPUT)/$(MODULE_NAME).efi
+  }
+
+[Rule.Common.UEFI_DRIVER.BINARY]
+  FILE DRIVER = $(NAMED_GUID) {
+    DXE_DEPEX DXE_DEPEX Optional      |.depex
+    PE32      PE32                    |.efi
+    UI        STRING="$(MODULE_NAME)" Optional
+    VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.UEFI_APPLICATION.BINARY]
+  FILE APPLICATION = $(NAMED_GUID) {
+    PE32      PE32                    |.efi
+    UI        STRING="$(MODULE_NAME)" Optional
+    VERSION   STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.USER_DEFINED.ACPITABLE]
+  FILE FREEFORM = $(NAMED_GUID) {
+    RAW ACPI               |.acpi
+    RAW ASL                |.aml
+  }
+
+  [Rule.Common.USER_DEFINED.ACPITABLE2]
+  FILE FREEFORM = $(NAMED_GUID) {
+    RAW ASL                |.aml
+  }
+
+[Rule.Common.DXE_DRIVER.BINARY]
+  FILE DRIVER = $(NAMED_GUID) {
+    DXE_DEPEX DXE_DEPEX Optional      |.depex
+    PE32      PE32                    |.efi
+    UI        STRING="$(MODULE_NAME)" Optional
+  }
+
+
+[Rule.Common.DXE_RUNTIME_DRIVER.BINARY]
+  FILE DRIVER = $(NAMED_GUID) {
+    DXE_DEPEX DXE_DEPEX Optional      |.depex
+    PE32      PE32                    |.efi
+    UI        STRING="$(MODULE_NAME)" Optional
+  }

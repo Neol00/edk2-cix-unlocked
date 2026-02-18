@@ -1,0 +1,60 @@
+## @file
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = CixFirmwareUpdateDxe
+  FILE_GUID                      = 16efdec8-3f12-490c-9c98-386b2329eaed
+  MODULE_TYPE                    = DXE_RUNTIME_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = CixFirmwareUpdateDxeEntryPoint
+
+[BuildOptions]
+  GCC:DEBUG_*_*_CC_FLAGS               = -DDEBUG_MODE
+
+[Sources]
+  FwUpdateProtocolDxe.c
+  EcUpdate.c
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  ArmPlatformPkg/ArmPlatformPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  BaseLib
+  BaseMemoryLib
+  DebugLib
+  MemoryAllocationLib
+  IoLib
+  PcdLib
+  UefiBootServicesTableLib
+  UefiRuntimeServicesTableLib
+  UefiDriverEntryPoint
+  UefiLib
+  NorFlashLib
+  DevicePathLib
+
+[Guids]
+  gEcFirmwareFileGuid
+  gCixNorFlashDevicePathGuid
+
+[Protocols]
+  gCixFirmwareUpdateProtocolGuid
+  gEfiDiskIoProtocolGuid
+  gEfiDevicePathToTextProtocolGuid
+  gEfiFirmwareVolume2ProtocolGuid
+
+[Pcd]
+
+
+[Depex]
+  gEfiDiskIoProtocolGuid

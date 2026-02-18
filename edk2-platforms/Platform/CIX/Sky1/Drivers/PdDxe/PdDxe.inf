@@ -1,0 +1,57 @@
+#/** @file
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved
+#  Component description file for PDController module
+#
+#  Copyright (c) 2022, CIX, Ltd. All rights reserved.
+#  Copyright (c) 2011 - 2021, Arm Limited. All rights reserved.<BR>
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = PdDxe
+  FILE_GUID                      = 3b08b59e-b317-4824-8c53-871c9b8571f5
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = PdDxeEntryPoint
+
+[Sources.common]
+  PdDxe.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+
+[LibraryClasses]
+  BaseLib
+  DebugLib
+  UefiLib
+  UefiDriverEntryPoint
+  UefiBootServicesTableLib
+  DxeServicesTableLib
+  PdLib
+  TimerLib
+  GpioLib
+  PostCodeLib
+
+[Guids]
+
+[Protocols]
+  gCixTypecPhyProtocolGuid
+  gCixPdProtocolGuid
+
+[Pcd.common]
+
+[Pcd]
+  gCixPlatformTokenSpaceGuid.PcdPdDevCount
+  gCixPlatformTokenSpaceGuid.PcdPdDevAlertPins
+  gCixPlatformTokenSpaceGuid.PcdTypecPortDefaultModes
+  gCixPlatformTokenSpaceGuid.PcdTypecPortDefaultOrientations
+
+[Depex]
+  gEfiI2cMasterProtocolGuid

@@ -1,0 +1,49 @@
+## @file
+# FDF file generating AdvancedFeature FV for inclusion in a MinPlatform design.
+#
+# There are three FV produced, FvAdvancedPreMemory.fv, FvAdvancedUncompressed.fv, and
+# FvAdvanced.fv.  The sizes are arbitrary as these are not expected to be used as is
+# in today's usages.  Boards will tune FV by selecting or deseleting features and building.
+#
+# @copyright
+# Copyright (C) 2022 Intel Corporation
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+##
+
+[Defines]
+  DEFINE UNCOMPRESSED_FV_ADVANCED_FILENAME = 6d606b5c-2d45-4705-a700-73324306be06
+
+[FV.FvAdvancedPreMemory]
+  !include MinPlatformPkg/Include/Fdf/CommonSpiFvHeaderInfo.fdf
+  FvNameGuid         = ea9da344-a7f3-468c-ae84-2d22fc03b28e
+
+  !include AdvancedFeaturePkg/Include/PreMemory.fdf
+
+[FV.FvAdvancedUncompressed]
+  !include MinPlatformPkg/Include/Fdf/CommonSpiFvHeaderInfo.fdf
+  FvNameGuid         = $(UNCOMPRESSED_FV_ADVANCED_FILENAME)
+
+  !include AdvancedFeaturePkg/Include/PostMemory.fdf
+
+[FV.FvAdvanced]
+  !include MinPlatformPkg/Include/Fdf/CommonSpiFvHeaderInfo.fdf
+  FvNameGuid         = 445b121d-28d6-4801-8958-8253cf426cf7
+
+  FILE FV_IMAGE = $(UNCOMPRESSED_FV_ADVANCED_FILENAME) {
+    SECTION GUIDED EE4E5898-3914-4259-9D6E-DC7BD79403CF PROCESSING_REQUIRED = TRUE {
+      SECTION FV_IMAGE = FvAdvancedUncompressed
+    }
+  }
+
+
+################################################################################
+#
+# Rules are use with the [FV] section's module INF type to define
+# how an FFS file is created for a given INF file. The following Rule are the default
+# rules for the different module type. User can add the customized rules to define the
+# content of the FFS file.
+#
+################################################################################
+
+!include MinPlatformPkg/Include/Fdf/RuleInclude.fdf

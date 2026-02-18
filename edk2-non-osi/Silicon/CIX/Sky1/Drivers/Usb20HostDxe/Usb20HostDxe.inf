@@ -1,0 +1,52 @@
+#  @file
+#
+#  Component description file for USB 2.0 Host driver
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#
+[Defines]
+  INF_VERSION                     = 0x0001001A
+  BASE_NAME                       = Usb20HostDxe
+  FILE_GUID                       = 7B93FA36-68B2-49D8-A5FB-30542C691EB3
+  MODULE_TYPE                     = DXE_DRIVER
+  VERSION_STRING                  = 1.0
+  ENTRY_POINT                     = InitializeUsb20Host
+
+[Binaries.AARCH64]
+  PE32|Usb20HostDxe.efi|*
+  DXE_DEPEX|Usb20HostDxe.depex|*
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  BaseLib
+  BaseMemoryLib
+  DebugLib
+  IoLib
+  MemoryAllocationLib
+  NonDiscoverableDeviceRegistrationLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UsbLib
+
+[FixedPcd]
+
+[Guids]
+  gEfiEndOfDxeEventGroupGuid
+  gEfiEventExitBootServicesGuid
+
+[Protocols]
+  gCixClockProtocolGuid
+  gCixResetProtocolGuid
+  gCixConfigParamsManageProtocolGuid
+  gCixPlatformConfigParamsManageProtocolGuid
+
+[Depex]
+  TRUE

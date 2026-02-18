@@ -1,0 +1,219 @@
+/** @file
+
+  Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+
+  SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+
+#include <Guid/RootComplexConfigHii.h>
+#include <Guid/PlatformManagerHii.h>
+#include "RootComplexConfigNVDataStruct.h"
+
+formset
+  guid    = ROOT_COMPLEX_CONFIG_FORMSET_GUID,
+  title   = STRING_TOKEN(STR_PCIE_FORM),
+  help    = STRING_TOKEN(STR_PCIE_FORM_HELP),
+  classguid = gPlatformManagerFormsetGuid,
+
+  //
+  // Define a variable Storage
+  //
+  varstore ROOT_COMPLEX_CONFIG_VARSTORE_DATA,
+    varid = VARSTORE_ID,
+    name  = PcieIfrNVData,
+    guid  = ROOT_COMPLEX_CONFIG_FORMSET_GUID;
+
+  varstore NVPARAM_ROOT_COMPLEX_CONFIG_VARSTORE_DATA,
+    varid = NVPARAM_VARSTORE_ID,
+    name  = PcieIfrNVParamData,
+    guid  = ROOT_COMPLEX_CONFIG_FORMSET_GUID;
+
+  form
+    formid = FORM_ID,
+    title = STRING_TOKEN(STR_PCIE_FORM);
+
+    subtitle text = STRING_TOKEN(STR_PCIE_FORM);
+
+    label LABEL_UPDATE;
+    // dynamic content here
+    label LABEL_END;
+  endform;
+
+  form
+    formid = RC0_FORM_ID,
+    title = STRING_TOKEN(STR_PCIE_RC0_FORM);
+
+    subtitle text = STRING_TOKEN(STR_PCIE_RC0_FORM);
+
+    label LABEL_RC0_UPDATE;
+    // dynamic content here
+    label LABEL_RC0_END;
+  endform;
+
+  form
+    formid = RC1_FORM_ID,
+    title = STRING_TOKEN(STR_PCIE_RC1_FORM);
+
+    subtitle text = STRING_TOKEN(STR_PCIE_RC1_FORM);
+
+    label LABEL_RC1_UPDATE;
+    // dynamic content here
+    label LABEL_RC1_END;
+  endform;
+
+  form
+    formid = RC2_FORM_ID,
+    title = STRING_TOKEN(STR_PCIE_RC2_FORM);
+
+    subtitle text = STRING_TOKEN(STR_PCIE_RC2_FORM);
+
+    label LABEL_RC2_UPDATE;
+    // dynamic content here
+    label LABEL_RC2_END;
+  endform;
+
+  form
+    formid = RC3_FORM_ID,
+    title = STRING_TOKEN(STR_PCIE_RC3_FORM);
+
+    subtitle text = STRING_TOKEN(STR_PCIE_RC3_FORM);
+
+    label LABEL_RC3_UPDATE;
+    // dynamic content here
+    label LABEL_RC3_END;
+  endform;
+
+  form
+    formid = RC4_FORM_ID,
+    title = STRING_TOKEN(STR_PCIE_RC4_FORM);
+
+    subtitle text = STRING_TOKEN(STR_PCIE_RC4_FORM);
+
+    label LABEL_RC4_UPDATE;
+    // dynamic content here
+    label LABEL_RC4_END;
+  endform;
+
+  form
+    formid = RC5_FORM_ID,
+    title = STRING_TOKEN(STR_PCIE_RC5_FORM);
+
+    subtitle text = STRING_TOKEN(STR_PCIE_RC5_FORM);
+
+    label LABEL_RC5_UPDATE;
+    // dynamic content here
+    label LABEL_RC5_END;
+  endform;
+
+  form
+    formid = RC6_FORM_ID,
+    title = STRING_TOKEN(STR_PCIE_RC6_FORM);
+
+    subtitle text = STRING_TOKEN(STR_PCIE_RC6_FORM);
+
+    label LABEL_RC6_UPDATE;
+    // dynamic content here
+    label LABEL_RC6_END;
+  endform;
+
+  form
+    formid = RC7_FORM_ID,
+    title = STRING_TOKEN(STR_PCIE_RC7_FORM);
+
+    subtitle text = STRING_TOKEN(STR_PCIE_RC7_FORM);
+
+    label LABEL_RC7_UPDATE;
+    // dynamic content here
+    label LABEL_RC7_END;
+  endform;
+
+  form
+    formid = RC8_FORM_ID,
+    title = STRING_TOKEN(STR_PCIE_RC8_FORM);
+
+    subtitle text = STRING_TOKEN(STR_PCIE_RC8_FORM);
+
+    label LABEL_RC8_UPDATE;
+    // dynamic content here
+    label LABEL_RC8_END;
+  endform;
+
+  form
+    formid = RC9_FORM_ID,
+    title = STRING_TOKEN(STR_PCIE_RC9_FORM);
+
+    subtitle text = STRING_TOKEN(STR_PCIE_RC9_FORM);
+
+    label LABEL_RC9_UPDATE;
+    // dynamic content here
+    label LABEL_RC9_END;
+  endform;
+
+  form
+    formid = RC10_FORM_ID,
+    title = STRING_TOKEN(STR_PCIE_RC10_FORM);
+
+    subtitle text = STRING_TOKEN(STR_PCIE_RC10_FORM);
+
+    label LABEL_RC10_UPDATE;
+    // dynamic content here
+    label LABEL_RC10_END;
+  endform;
+
+  form
+    formid = RC11_FORM_ID,
+    title = STRING_TOKEN(STR_PCIE_RC11_FORM);
+
+    subtitle text = STRING_TOKEN(STR_PCIE_RC11_FORM);
+
+    label LABEL_RC11_UPDATE;
+    // dynamic content here
+    label LABEL_RC11_END;
+  endform;
+
+  form
+    formid = RC12_FORM_ID,
+    title = STRING_TOKEN(STR_PCIE_RC12_FORM);
+
+    subtitle text = STRING_TOKEN(STR_PCIE_RC12_FORM);
+
+    label LABEL_RC12_UPDATE;
+    // dynamic content here
+    label LABEL_RC12_END;
+  endform;
+
+  form
+    formid = RC13_FORM_ID,
+    title = STRING_TOKEN(STR_PCIE_RC13_FORM);
+
+    subtitle text = STRING_TOKEN(STR_PCIE_RC13_FORM);
+
+    label LABEL_RC13_UPDATE;
+    // dynamic content here
+    label LABEL_RC13_END;
+  endform;
+
+  form
+    formid = RC14_FORM_ID,
+    title = STRING_TOKEN(STR_PCIE_RC14_FORM);
+
+    subtitle text = STRING_TOKEN(STR_PCIE_RC14_FORM);
+
+    label LABEL_RC14_UPDATE;
+    // dynamic content here
+    label LABEL_RC14_END;
+  endform;
+
+  form
+    formid = RC15_FORM_ID,
+    title = STRING_TOKEN(STR_PCIE_RC15_FORM);
+
+    subtitle text = STRING_TOKEN(STR_PCIE_RC15_FORM);
+
+    label LABEL_RC15_UPDATE;
+    // dynamic content here
+    label LABEL_RC15_END;
+  endform;
+
+endformset;

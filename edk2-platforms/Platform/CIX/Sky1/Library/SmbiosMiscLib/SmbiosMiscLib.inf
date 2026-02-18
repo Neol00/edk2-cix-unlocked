@@ -1,0 +1,56 @@
+#/** @file
+#    OemMiscLib.inf
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved
+#
+#    Copyright (c) 2024, Cix Technology Group Co., Ltd. All Rights Reserved.
+#    Copyright (c) 2022, Ampere Computing LLC. All rights reserved.
+#    Copyright (c) 2021, NUVIA Inc. All rights reserved.
+#    Copyright (c) 2018, Hisilicon Limited. All rights reserved.
+#    Copyright (c) 2018, Linaro Limited. All rights reserved.
+#
+#    SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 1.29
+  BASE_NAME                      = SmbiosMiscLib
+  FILE_GUID                      = f19c999f-9040-4a9a-8dc9-8acff917af79
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = OemMiscLib
+
+[Sources.common]
+  SmbiosMiscLib.c
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+
+[LibraryClasses]
+  BaseMemoryLib
+  DebugLib
+  PcdLib
+  UefiRuntimeServicesTableLib
+  UefiBootServicesTableLib
+  MemoryAllocationLib
+  PrintLib
+  CpuInfoLib
+
+[Guids]
+  gZeroGuid
+  gPlatformSetupVariableGuid
+
+[Protocols]
+  gCixSocInfoProtocolGuid
+
+[Pcd]
+  gArmTokenSpaceGuid.PcdEmbeddedControllerFirmwareRelease
+  gArmTokenSpaceGuid.PcdSystemBiosRelease
+
+[Depex]
+  gCixSetupVarInitCompleteProtocolGuid AND gCixSocInfoProtocolGuid

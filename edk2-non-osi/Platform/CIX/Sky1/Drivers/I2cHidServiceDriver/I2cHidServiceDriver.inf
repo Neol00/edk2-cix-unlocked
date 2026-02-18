@@ -1,0 +1,47 @@
+#/** @file I2cHidServiceDriver.inf
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#**/
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = I2cHidServiceDriver
+  FILE_GUID                      = 4E5CA006-34F4-42d9-BD47-0F1E26A64D5E
+  MODULE_TYPE                    = UEFI_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = I2cHidServiceDriverEntry
+
+[Binaries.AARCH64]
+  PE32|I2cHidServiceDriver.efi|*
+  DXE_DEPEX|I2cHidServiceDriver.depex|*
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  UefiDriverEntryPoint
+  UefiBootServicesTableLib
+  UefiLib
+  DebugLib
+  BaseHidParseReportLib
+  MemoryAllocationLib
+  BaseLib
+  GpioLib
+  DevicePathLib
+
+[Pcd]
+  gCixPlatformTokenSpaceGuid.PcdHidI2cSlaveAddress
+
+[Guids]
+  gCixI2cHidDevicePathGuid
+
+[Protocols]
+  gCixHidServiceProtocolGuid                     
+  gCixHidDeviceProtocolGuid                      
+  gEfiI2cMasterProtocolGuid
+
+[Depex]
+  TRUE

@@ -1,0 +1,71 @@
+#/** @file
+#
+#  Copyright 2022 Cix Technology (Shanghai) Co., Ltd. All Rights Reserved.
+#
+#**/
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = AcpiPlatformDxe
+  FILE_GUID                      = 496EE240-DB1F-4A14-BD76-347FE9873624
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = AcpiPlatformDxeEntryPoint
+
+#
+# The following information is for reference only and not required by the build tools.
+#
+#  VALID_ARCHITECTURES           = IA32 X64 EBC
+#
+
+[Sources]
+  AcpiPlatformDxe.c
+  AcpiPlatformDxe.h
+  UpdateDsdt.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+  ArmPkg/ArmPkg.dec
+  ArmPlatformPkg/ArmPlatformPkg.dec
+
+[LibraryClasses]
+  UefiLib
+  DxeServicesLib
+  PcdLib
+  IoLib
+  BaseMemoryLib
+  DebugLib
+  UefiRuntimeServicesTableLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  DevicePathLib
+  PciHostBridgeLib
+  AcpiLib
+  ConfigParamsDataBlockLib
+  SocInitLib
+  PL011UartClockLib
+  PL011UartLib
+
+[Protocols]
+  gEfiAcpiTableProtocolGuid
+  gEfiAcpiSdtProtocolGuid
+  gCixConfigParamsManageProtocolGuid
+  gCixPlatformConfigParamsManageProtocolGuid
+  gArmScmiPerformanceProtocolGuid
+
+[Guids]
+  gEfiAcpiTableGuid
+  gEfiEventReadyToBootGuid
+  gEfiAcpiTableStorageGuid
+  gPlatformSetupVariableGuid
+  gPlatformAcpiConfigProtocolGuid
+
+[FixedPcd]
+  gArmPlatformTokenSpaceGuid.PcdSerialDbgRegisterBase
+  gArmPlatformTokenSpaceGuid.PcdSerialDbgInterrupt
+  gArmPlatformTokenSpaceGuid.PcdSerialDbgUartBaudRate
+[Depex]
+  gEfiAcpiTableProtocolGuid

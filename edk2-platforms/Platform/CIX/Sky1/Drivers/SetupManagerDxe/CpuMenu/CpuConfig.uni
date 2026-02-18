@@ -1,0 +1,32 @@
+/**
+Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+
+SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+
+#langdef en-US  "English"
+/*
+* I2C settings.
+*/
+#string STR_CPU_FORM_SET_TITLE                #language en-US "CPU Configuration"
+#string STR_CPU_FORM_SET_TITLE_HELP           #language en-US "CPU Configuration."
+
+#string STR_CPU_CORE0_PROMPT                  #language en-US "CPU Boot Core"
+#string STR_CPU_CORE1_PROMPT                  #language en-US "CPU Core 1"
+#string STR_CPU_CORE2_PROMPT                  #language en-US "CPU Core 2"
+#string STR_CPU_CORE3_PROMPT                  #language en-US "CPU Core 3"
+#string STR_CPU_CORE4_PROMPT                  #language en-US "CPU Core 4"
+#string STR_CPU_CORE5_PROMPT                  #language en-US "CPU Core 5"
+#string STR_CPU_CORE6_PROMPT                  #language en-US "CPU Core 6"
+#string STR_CPU_CORE7_PROMPT                  #language en-US "CPU Core 7"
+#string STR_CPU_CORE8_PROMPT                  #language en-US "CPU Core 8"
+#string STR_CPU_CORE9_PROMPT                  #language en-US "CPU Core 9"
+#string STR_CPU_CORE10_PROMPT                 #language en-US "CPU Core 10"
+#string STR_CPU_CORE11_PROMPT                 #language en-US "CPU Core 11"
+
+#string STR_CPU_LPI_STATE_PROMPT              #language en-US "LPI Max State"
+#string STR_CPU_LPI_STATE_HELP                #language en-US "Cpu LPI(Low Power Idle) Max State"
+#string STR_CPU_LPI_STATE_0                   #language en-US "LPI0"
+#string STR_CPU_LPI_STATE_1                   #language en-US "LPI1"
+#string STR_CPU_LPI_STATE_2                   #language en-US "LPI2"

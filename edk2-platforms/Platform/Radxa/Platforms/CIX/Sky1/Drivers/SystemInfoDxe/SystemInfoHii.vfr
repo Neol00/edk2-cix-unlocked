@@ -1,0 +1,89 @@
+/** @file
+*
+*  Copyright 2024 Radxa Computer (Shenzhen) Co., Ltd. All Rights Reserved.
+*  Copyright 2023 Cix Technology (Shanghai) Co., Ltd. All Rights Reserved.
+*  Copyright (c) 2017, Linaro, Ltd. All rights reserved.
+*
+*  SPDX-License-Identifier: BSD-2-Clause-Patent
+*
+**/
+
+#include <Uefi/UefiMultiPhase.h>
+#include "SystemInfoHii.h"
+
+formset
+  guid      = SYSTEM_INFO_FORMSET_GUID,
+  title     = STRING_TOKEN(STR_FORM_SET_TITLE),
+  help      = STRING_TOKEN(STR_FORM_SET_TITLE_HELP),
+  classguid = EFI_HII_PLATFORM_SETUP_FORMSET_GUID,
+
+  form formid = SYSTEM_INFO_FORM_ID,
+    title  = STRING_TOKEN(STR_MAIN_FORM_TITLE);
+    subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+
+    subtitle text = STRING_TOKEN(STR_FIRMWARE_INFO);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),
+      text   = STRING_TOKEN(STR_SE_VER_NAME),
+      text   = STRING_TOKEN(STR_SE_VER_VALUE);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),
+      text   = STRING_TOKEN(STR_PBL_VER_NAME),
+      text   = STRING_TOKEN(STR_PBL_VER_VALUE);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),
+      text   = STRING_TOKEN(STR_ATF_VER_NAME),
+      text   = STRING_TOKEN(STR_ATF_VER_VALUE);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),
+      text   = STRING_TOKEN(STR_PM_VER_NAME),
+      text   = STRING_TOKEN(STR_PM_VER_VALUE);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),
+      text   = STRING_TOKEN(STR_TEE_VER_NAME),
+      text   = STRING_TOKEN(STR_TEE_VER_VALUE);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),
+      text   = STRING_TOKEN(STR_UEFI_VER_NAME),
+      text   = STRING_TOKEN(STR_UEFI_VER_VALUE);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),
+      text   = STRING_TOKEN(STR_EC_VER_NAME),
+      text   = STRING_TOKEN(STR_EC_VER_VALUE);
+
+    subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+    subtitle text = STRING_TOKEN(STR_SOURCE_CODE);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),
+      text   = STRING_TOKEN(STR_SOURCE_CODE_EDK2_CIX_NAME),
+      text   = STRING_TOKEN(STR_SOURCE_CODE_EDK2_CIX_VALUE);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),
+      text   = STRING_TOKEN(STR_SOURCE_CODE_EDK2_NAME),
+      text   = STRING_TOKEN(STR_SOURCE_CODE_EDK2_VALUE);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),
+      text   = STRING_TOKEN(STR_SOURCE_CODE_EDK2_NON_OSI_NAME),
+      text   = STRING_TOKEN(STR_SOURCE_CODE_EDK2_NON_OSI_VALUE);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),
+      text   = STRING_TOKEN(STR_SOURCE_CODE_EDK2_PLATFORMS_NAME),
+      text   = STRING_TOKEN(STR_SOURCE_CODE_EDK2_PLATFORMS_VALUE);
+
+    subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+    subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+    subtitle text = STRING_TOKEN(STR_EXIT_STRING);
+  endform;
+
+endformset;

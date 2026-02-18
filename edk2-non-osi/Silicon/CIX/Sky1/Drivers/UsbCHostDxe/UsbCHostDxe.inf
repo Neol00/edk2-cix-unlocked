@@ -1,0 +1,54 @@
+#  @file
+#
+#  Component description file for USB-C Host driver
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#
+[Defines]
+  INF_VERSION                     = 0x0001001A
+  BASE_NAME                       = UsbCHostDxe
+  FILE_GUID                       = 0D44EEBC-AB62-4B2A-935C-7C3A5CACFEBF
+  MODULE_TYPE                     = DXE_DRIVER
+  VERSION_STRING                  = 1.0
+  ENTRY_POINT                     = InitializeUsbCHost
+
+[Binaries.AARCH64]
+  PE32|UsbCHostDxe.efi|*
+  DXE_DEPEX|UsbCHostDxe.depex|*
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  BaseLib
+  BaseMemoryLib
+  DebugLib
+  IoLib
+  MemoryAllocationLib
+  NonDiscoverableDeviceRegistrationLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UsbLib
+
+[FixedPcd]
+
+[Guids]
+  gEfiEndOfDxeEventGroupGuid
+  gEfiEventExitBootServicesGuid
+
+[Protocols]
+  gCixClockProtocolGuid
+  gCixResetProtocolGuid
+  gCixConfigParamsManageProtocolGuid
+  gCixPlatformConfigParamsManageProtocolGuid
+  gCixTypecPhyProtocolGuid
+  gCixPdProtocolGuid
+
+[Depex]
+  TRUE

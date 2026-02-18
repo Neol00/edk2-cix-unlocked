@@ -1,0 +1,64 @@
+## @file
+#
+#  Copyright 2024 Radxa Computer (Shenzhen) Co., Ltd. All Rights Reserved.
+#  Copyright 2023 Cix Technology (Shanghai) Co., Ltd. All Rights Reserved.
+#  Copyright (c) 2017, Linaro, Ltd. All rights reserved.<BR>
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION               = 0x00010019
+  BASE_NAME                 = SystemInfoDxe
+  FILE_GUID                 = edb82499-30d4-4481-b4f9-0f1685480096
+  MODULE_TYPE               = DXE_DRIVER
+  VERSION_STRING            = 1.0
+  ENTRY_POINT               = SystemInfoDxeEntryPoint
+
+#
+# The following information is for reference only and not required by the build tools.
+#
+#  VALID_ARCHITECTURES      = IA32 X64 ARM AARCH64
+#
+
+[Sources]
+  SystemInfoDxe.c
+  SystemInfoHii.vfr
+  SystemInfoHii.uni
+
+[Packages]
+  EmbeddedPkg/EmbeddedPkg.dec
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  Platform/Radxa/Radxa.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+
+[LibraryClasses]
+  BaseLib
+  DebugLib
+  HiiLib
+  MemoryAllocationLib
+  PrintLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiRuntimeServicesTableLib
+
+[Guids]
+  gSystemInfoFormSetGuid
+
+[Protocols]
+  gEfiDevicePathProtocolGuid
+  gCixFwVersionProtocolGuid
+
+[Pcd]
+
+[FixedPcd]
+  gRadxaTokenSpaceGuid.PcdEdk2CixCommitHash
+  gRadxaTokenSpaceGuid.PcdEdk2CommitHash
+  gRadxaTokenSpaceGuid.PcdEdk2NonOSICommitHash
+  gRadxaTokenSpaceGuid.PcdEdk2PlatformsCommitHash
+
+[Depex]
+  TRUE

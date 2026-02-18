@@ -1,0 +1,45 @@
+## @file
+#
+# Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001B
+  BASE_NAME                      = AmpereCpuLib
+  FILE_GUID                      = 4ACE898C-4DDC-4EF7-BB6C-91549BDF5B9C
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = AmpereCpuLib
+
+[Sources]
+  AmpereCpuLibCommon.c
+  AmpereCpuLib.c
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  ArmPlatformPkg/ArmPlatformPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/Ampere/AmpereAltraPkg/AmpereAltraPkg.dec
+  Silicon/Ampere/AmpereSiliconPkg/AmpereSiliconPkg.dec
+
+[LibraryClasses]
+  ArmLib
+  BaseLib
+  HobLib
+  IoLib
+  NVParamLib
+
+[FixedPcd]
+  gArmPlatformTokenSpaceGuid.PcdCoreCount
+  gArmPlatformTokenSpaceGuid.PcdClusterCount
+
+  gAmpereTokenSpaceGuid.PcdSmproEfuseShadow0
+
+  gArmTokenSpaceGuid.PcdSystemMemoryBase
+
+[Guids]
+  gPlatformInfoHobGuid

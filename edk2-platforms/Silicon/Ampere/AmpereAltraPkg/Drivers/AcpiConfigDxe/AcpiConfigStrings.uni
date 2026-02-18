@@ -1,0 +1,27 @@
+//
+// Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+//
+// SPDX-License-Identifier: BSD-2-Clause-Patent
+//
+
+#langdef en-US  "English"
+
+#string STR_ACPI_FORM                                #language en-US "ACPI Configuration"
+#string STR_ACPI_FORM_HELP                           #language en-US "ACPI Configuration"
+
+#string STR_ACPI_FORM_SEPERATE_LINE                  #language en-US ""
+#string STR_ACPI_COMMON_ENABLE                       #language en-US "Enabled"
+#string STR_ACPI_COMMON_DISABLE                      #language en-US "Disabled"
+#string STR_ACPI_UNSUPPORTED                         #language en-US "Unsupported"
+
+#string STR_ACPI_APEI_SUPPORT_PROMPT                 #language en-US "APEI Support"
+#string STR_ACPI_APEI_SUPPORT_HELP                   #language en-US "Enable/Disable ACPI Platform Error Interface support"
+
+#string STR_ACPI_CPPC_PROMPT                         #language en-US "CPPC Support"
+#string STR_ACPI_CPPC_HELP                           #language en-US "Enables or Disables System ability to CPPC (Collaborative Processor Performance Control)"
+
+#string STR_ACPI_LPI_PROMPT                          #language en-US "LPI Support"
+#string STR_ACPI_LPI_HELP                            #language en-US "Enables or Disables System ability to LPI (Lower Power Idle)"
+
+#string STR_ACPI_TURBO_PROMPT                        #language en-US "Max Performance"
+#string STR_ACPI_TURBO_HELP                          #language en-US "Enables or Disables System ability to Max Performance"

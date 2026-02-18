@@ -1,0 +1,89 @@
+## @file
+#  FDF file for pre-memory advanced features.
+#
+#  This file is intended to be included into another package so advanced features
+#  can be conditionally included in the flash image by enabling the respective
+#  feature via its FeaturePCD.
+#
+# Copyright (c) 2019 - 2020, Intel Corporation. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+#
+# Debugging features
+#
+!if gAcpiDebugFeaturePkgTokenSpaceGuid.PcdAcpiDebugFeatureEnable == TRUE
+  !include AcpiDebugFeaturePkg/Include/PreMemory.fdf
+!endif
+
+!if gBeepDebugFeaturePkgTokenSpaceGuid.PcdBeepDebugFeatureEnable == TRUE
+  !include BeepDebugFeaturePkg/Include/PreMemory.fdf
+!endif
+
+!if gPostCodeDebugFeaturePkgTokenSpaceGuid.PcdPostCodeDebugFeatureEnable == TRUE
+  !include PostCodeDebugFeaturePkg/Include/PreMemory.fdf
+!endif
+
+!if gUsb3DebugFeaturePkgTokenSpaceGuid.PcdUsb3DebugFeatureEnable == TRUE
+  !include Usb3DebugFeaturePkg/Include/PreMemory.fdf
+!endif
+
+#
+# Network features
+#
+!if gNetworkFeaturePkgTokenSpaceGuid.PcdNetworkFeatureEnable == TRUE
+  !include NetworkFeaturePkg/Include/PreMemory.fdf
+!endif
+
+#
+# OutOfBandManagement features
+#
+!if gIpmiFeaturePkgTokenSpaceGuid.PcdIpmiFeatureEnable == TRUE
+  !include IpmiFeaturePkg/Include/PreMemory.fdf
+!endif
+
+!if gSpcrFeaturePkgTokenSpaceGuid.PcdSpcrFeatureEnable == TRUE
+  !include SpcrFeaturePkg/Include/PreMemory.fdf
+!endif
+
+!if gAsfFeaturePkgTokenSpaceGuid.PcdAsfFeatureEnable == TRUE
+  !include AsfFeaturePkg/Include/PreMemory.fdf
+!endif
+
+#
+# PowerManagement features
+#
+!if gS3FeaturePkgTokenSpaceGuid.PcdS3FeatureEnable == TRUE
+  !include S3FeaturePkg/Include/PreMemory.fdf
+!endif
+
+#
+# SystemInformation features
+#
+!if gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosFeatureEnable == TRUE
+  !include SmbiosFeaturePkg/Include/PreMemory.fdf
+!endif
+
+#
+# UserInterface features
+#
+!if gLogoFeaturePkgTokenSpaceGuid.PcdLogoFeatureEnable == TRUE
+  !include LogoFeaturePkg/Include/PreMemory.fdf
+!endif
+
+!if gUserAuthFeaturePkgTokenSpaceGuid.PcdUserAuthenticationFeatureEnable == TRUE
+  !include UserAuthFeaturePkg/Include/PreMemory.fdf
+!endif
+
+!if gVirtualKeyboardFeaturePkgTokenSpaceGuid.PcdVirtualKeyboardFeatureEnable == TRUE
+  !include VirtualKeyboardFeaturePkg/Include/PreMemory.fdf
+!endif
+
+#
+# Individual features
+#
+!if gPlatformPayloadFeaturePkgTokenSpaceGuid.PcdPlatformPayloadFeatureEnable == TRUE
+  !include PlatformPayloadFeaturePkg/Include/PreMemory.fdf
+!endif

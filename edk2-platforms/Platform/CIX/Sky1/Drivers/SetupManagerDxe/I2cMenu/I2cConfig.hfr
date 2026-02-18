@@ -1,0 +1,235 @@
+/**
+  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+
+  SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+//I2C Form
+    form formid = I2C_CONFIG_FORM_ID,
+        title  = STRING_TOKEN(STR_I2C_FORM_SET_TITLE);
+        subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+
+        goto I2C0_CONFIG_FORM_ID,
+           prompt = STRING_TOKEN(STR_I2C0_OPTIONS_FORM_TITLE),
+           help = STRING_TOKEN(STR_EMPTY_STRING);
+
+        goto I2C1_CONFIG_FORM_ID,
+            prompt = STRING_TOKEN(STR_I2C1_OPTIONS_FORM_TITLE),
+            help = STRING_TOKEN(STR_EMPTY_STRING);
+
+        goto I2C2_CONFIG_FORM_ID,
+            prompt = STRING_TOKEN(STR_I2C2_OPTIONS_FORM_TITLE),
+            help = STRING_TOKEN(STR_EMPTY_STRING);
+
+        goto I2C3_CONFIG_FORM_ID,
+            prompt = STRING_TOKEN(STR_I2C3_OPTIONS_FORM_TITLE),
+            help = STRING_TOKEN(STR_EMPTY_STRING);
+
+        goto I2C4_CONFIG_FORM_ID,
+            prompt = STRING_TOKEN(STR_I2C4_OPTIONS_FORM_TITLE),
+            help = STRING_TOKEN(STR_EMPTY_STRING);
+
+        goto I2C5_CONFIG_FORM_ID,
+            prompt = STRING_TOKEN(STR_I2C5_OPTIONS_FORM_TITLE),
+            help = STRING_TOKEN(STR_EMPTY_STRING);
+
+        goto I2C6_CONFIG_FORM_ID,
+            prompt = STRING_TOKEN(STR_I2C6_OPTIONS_FORM_TITLE),
+            help = STRING_TOKEN(STR_EMPTY_STRING);
+
+        goto I2C7_CONFIG_FORM_ID,
+            prompt = STRING_TOKEN(STR_I2C7_OPTIONS_FORM_TITLE),
+            help = STRING_TOKEN(STR_EMPTY_STRING);
+    endform;
+
+    form formid = I2C0_CONFIG_FORM_ID,
+      title  = STRING_TOKEN(STR_I2C0_OPTIONS_FORM_TITLE);
+      subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+suppressif (FixedPcdGet8 (PcdI2cCtrlEn) & 0x01) == 0x0;
+      oneof varid   = PlatformSetupVar.I2cEnable[0],
+        prompt      = STRING_TOKEN(STR_I2C0_PROMPT),
+        help        = STRING_TOKEN(STR_I2C_HELP),
+        default     = FixedPcdGetBool (PcdI2c0En),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+endif;
+suppressif ideqval PlatformSetupVar.I2cEnable[0] == 0x0;
+      oneof varid =   PlatformSetupVar.I2cBusFreq[0],
+          prompt      =   STRING_TOKEN(STR_I2C0_BUS_FREQ_PROMPT),
+          help        =   STRING_TOKEN(STR_I2C_BUS_FREQ_HELP),
+          default     =   FixedPcdGet32 (PcdI2c0BusFreq),
+          option text =   STRING_TOKEN(STR_I2C_BUS_FREQ_100K),  value = 100000,  flags = RESET_REQUIRED;
+          option text =   STRING_TOKEN(STR_I2C_BUS_FREQ_400K),  value = 400000,  flags = RESET_REQUIRED;
+          option text =   STRING_TOKEN(STR_I2C_BUS_FREQ_1M),    value = 1000000,  flags = RESET_REQUIRED;
+      endoneof;
+endif;
+    endform;
+
+    form formid = I2C1_CONFIG_FORM_ID,
+      title  = STRING_TOKEN(STR_I2C1_OPTIONS_FORM_TITLE);
+      subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+suppressif ((FixedPcdGet8 (PcdI2cCtrlEn) >> 1) & 0x01) == 0x0;
+      oneof varid   = PlatformSetupVar.I2cEnable[1],
+        prompt      = STRING_TOKEN(STR_I2C1_PROMPT),
+        help        = STRING_TOKEN(STR_I2C_HELP),
+        default     = FixedPcdGetBool (PcdI2c1En),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+endif;
+suppressif ideqval PlatformSetupVar.I2cEnable[1] == 0x0;
+      oneof varid =   PlatformSetupVar.I2cBusFreq[1],
+          prompt      =   STRING_TOKEN(STR_I2C1_BUS_FREQ_PROMPT),
+          help        =   STRING_TOKEN(STR_I2C_BUS_FREQ_HELP),
+          default     =   FixedPcdGet32 (PcdI2c1BusFreq),
+          option text =   STRING_TOKEN(STR_I2C_BUS_FREQ_100K),  value = 100000,  flags = RESET_REQUIRED;
+          option text =   STRING_TOKEN(STR_I2C_BUS_FREQ_400K),  value = 400000,  flags = RESET_REQUIRED;
+          option text =   STRING_TOKEN(STR_I2C_BUS_FREQ_1M),    value = 1000000,  flags = RESET_REQUIRED;
+      endoneof;
+endif;
+    endform;
+
+    form formid = I2C2_CONFIG_FORM_ID,
+      title  = STRING_TOKEN(STR_I2C2_OPTIONS_FORM_TITLE);
+      subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+suppressif ((FixedPcdGet8 (PcdI2cCtrlEn) >> 2) & 0x01) == 0x0;
+      oneof varid   = PlatformSetupVar.I2cEnable[2],
+        prompt      = STRING_TOKEN(STR_I2C2_PROMPT),
+        help        = STRING_TOKEN(STR_I2C_HELP),
+        default     = FixedPcdGetBool (PcdI2c2En),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+endif;
+suppressif ideqval PlatformSetupVar.I2cEnable[2] == 0x0;
+      oneof varid =   PlatformSetupVar.I2cBusFreq[2],
+          prompt      =   STRING_TOKEN(STR_I2C2_BUS_FREQ_PROMPT),
+          help        =   STRING_TOKEN(STR_I2C_BUS_FREQ_HELP),
+          default     =   FixedPcdGet32 (PcdI2c2BusFreq),
+          option text =   STRING_TOKEN(STR_I2C_BUS_FREQ_100K),  value = 100000,  flags = RESET_REQUIRED;
+          option text =   STRING_TOKEN(STR_I2C_BUS_FREQ_400K),  value = 400000,  flags = RESET_REQUIRED;
+          option text =   STRING_TOKEN(STR_I2C_BUS_FREQ_1M),    value = 1000000,  flags = RESET_REQUIRED;
+      endoneof;
+endif;
+    endform;
+
+    form formid = I2C3_CONFIG_FORM_ID,
+      title  = STRING_TOKEN(STR_I2C3_OPTIONS_FORM_TITLE);
+      subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+suppressif ((FixedPcdGet8 (PcdI2cCtrlEn) >> 3) & 0x01) == 0x0;
+      oneof varid   = PlatformSetupVar.I2cEnable[3],
+        prompt      = STRING_TOKEN(STR_I2C3_PROMPT),
+        help        = STRING_TOKEN(STR_I2C_HELP),
+        default     = FixedPcdGetBool (PcdI2c3En),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+endif;
+suppressif ideqval PlatformSetupVar.I2cEnable[3] == 0x0;
+      oneof varid =   PlatformSetupVar.I2cBusFreq[3],
+          prompt      =   STRING_TOKEN(STR_I2C3_BUS_FREQ_PROMPT),
+          help        =   STRING_TOKEN(STR_I2C_BUS_FREQ_HELP),
+          default     =   FixedPcdGet32 (PcdI2c3BusFreq),
+          option text =   STRING_TOKEN(STR_I2C_BUS_FREQ_100K),  value = 100000,  flags = RESET_REQUIRED;
+          option text =   STRING_TOKEN(STR_I2C_BUS_FREQ_400K),  value = 400000,  flags = RESET_REQUIRED;
+          option text =   STRING_TOKEN(STR_I2C_BUS_FREQ_1M),    value = 1000000,  flags = RESET_REQUIRED;
+      endoneof;
+endif;
+    endform;
+
+    form formid = I2C4_CONFIG_FORM_ID,
+      title  = STRING_TOKEN(STR_I2C4_OPTIONS_FORM_TITLE);
+      subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+suppressif ((FixedPcdGet8 (PcdI2cCtrlEn) >> 4) & 0x01) == 0x0;
+      oneof varid   = PlatformSetupVar.I2cEnable[4],
+        prompt      = STRING_TOKEN(STR_I2C4_PROMPT),
+        help        = STRING_TOKEN(STR_I2C_HELP),
+        default     = FixedPcdGetBool (PcdI2c4En),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+endif;
+suppressif ideqval PlatformSetupVar.I2cEnable[4] == 0x0;
+      oneof varid =   PlatformSetupVar.I2cBusFreq[4],
+          prompt      =   STRING_TOKEN(STR_I2C4_BUS_FREQ_PROMPT),
+          help        =   STRING_TOKEN(STR_I2C_BUS_FREQ_HELP),
+          default     =   FixedPcdGet32 (PcdI2c4BusFreq),
+          option text =   STRING_TOKEN(STR_I2C_BUS_FREQ_100K),  value = 100000,  flags = RESET_REQUIRED;
+          option text =   STRING_TOKEN(STR_I2C_BUS_FREQ_400K),  value = 400000,  flags = RESET_REQUIRED;
+          option text =   STRING_TOKEN(STR_I2C_BUS_FREQ_1M),    value = 1000000,  flags = RESET_REQUIRED;
+      endoneof;
+endif;
+    endform;
+
+    form formid = I2C5_CONFIG_FORM_ID,
+      title  = STRING_TOKEN(STR_I2C5_OPTIONS_FORM_TITLE);
+      subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+suppressif ((FixedPcdGet8 (PcdI2cCtrlEn) >> 5) & 0x01) == 0x0;
+      oneof varid   = PlatformSetupVar.I2cEnable[5],
+        prompt      = STRING_TOKEN(STR_I2C5_PROMPT),
+        help        = STRING_TOKEN(STR_I2C_HELP),
+        default     = FixedPcdGetBool (PcdI2c5En),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+endif;
+suppressif ideqval PlatformSetupVar.I2cEnable[5] == 0x0;
+      oneof varid =   PlatformSetupVar.I2cBusFreq[5],
+          prompt      =   STRING_TOKEN(STR_I2C5_BUS_FREQ_PROMPT),
+          help        =   STRING_TOKEN(STR_I2C_BUS_FREQ_HELP),
+          default     =   FixedPcdGet32 (PcdI2c5BusFreq),
+          option text =   STRING_TOKEN(STR_I2C_BUS_FREQ_100K),  value = 100000,  flags = RESET_REQUIRED;
+          option text =   STRING_TOKEN(STR_I2C_BUS_FREQ_400K),  value = 400000,  flags = RESET_REQUIRED;
+          option text =   STRING_TOKEN(STR_I2C_BUS_FREQ_1M),    value = 1000000,  flags = RESET_REQUIRED;
+      endoneof;
+endif;
+    endform;
+
+    form formid = I2C6_CONFIG_FORM_ID,
+      title  = STRING_TOKEN(STR_I2C6_OPTIONS_FORM_TITLE);
+      subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+suppressif ((FixedPcdGet8 (PcdI2cCtrlEn) >> 6) & 0x01) == 0x0;
+      oneof varid   = PlatformSetupVar.I2cEnable[6],
+        prompt      = STRING_TOKEN(STR_I2C6_PROMPT),
+        help        = STRING_TOKEN(STR_I2C_HELP),
+        default     = FixedPcdGetBool (PcdI2c6En),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+endif;
+suppressif ideqval PlatformSetupVar.I2cEnable[6] == 0x0;
+      oneof varid =   PlatformSetupVar.I2cBusFreq[6],
+          prompt      =   STRING_TOKEN(STR_I2C6_BUS_FREQ_PROMPT),
+          help        =   STRING_TOKEN(STR_I2C_BUS_FREQ_HELP),
+          default     =   FixedPcdGet32 (PcdI2c6BusFreq),
+          option text =   STRING_TOKEN(STR_I2C_BUS_FREQ_100K),  value = 100000,  flags = RESET_REQUIRED;
+          option text =   STRING_TOKEN(STR_I2C_BUS_FREQ_400K),  value = 400000,  flags = RESET_REQUIRED;
+          option text =   STRING_TOKEN(STR_I2C_BUS_FREQ_1M),    value = 1000000,  flags = RESET_REQUIRED;
+      endoneof;
+endif;
+    endform;
+
+    form formid = I2C7_CONFIG_FORM_ID,
+      title  = STRING_TOKEN(STR_I2C7_OPTIONS_FORM_TITLE);
+      subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+suppressif ((FixedPcdGet8 (PcdI2cCtrlEn) >> 7) & 0x01) == 0x0;
+      oneof varid   = PlatformSetupVar.I2cEnable[7],
+        prompt      = STRING_TOKEN(STR_I2C7_PROMPT),
+        help        = STRING_TOKEN(STR_I2C_HELP),
+        default     = FixedPcdGetBool (PcdI2c7En),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+endif;
+suppressif ideqval PlatformSetupVar.I2cEnable[7] == 0x0;
+      oneof varid =   PlatformSetupVar.I2cBusFreq[7],
+          prompt      =   STRING_TOKEN(STR_I2C7_BUS_FREQ_PROMPT),
+          help        =   STRING_TOKEN(STR_I2C_BUS_FREQ_HELP),
+          default     =   FixedPcdGet32 (PcdI2c7BusFreq),
+          option text =   STRING_TOKEN(STR_I2C_BUS_FREQ_100K),  value = 100000,  flags = RESET_REQUIRED;
+          option text =   STRING_TOKEN(STR_I2C_BUS_FREQ_400K),  value = 400000,  flags = RESET_REQUIRED;
+          option text =   STRING_TOKEN(STR_I2C_BUS_FREQ_1M),    value = 1000000,  flags = RESET_REQUIRED;
+      endoneof;
+endif;
+    endform;

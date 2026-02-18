@@ -1,0 +1,38 @@
+#/** @file
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#**/
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = Fastboot
+  FILE_GUID                      = b68cf5da-4610-4aea-88fe-217a08441786
+  MODULE_TYPE                    = UEFI_APPLICATION
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = FastbootEntryPoint
+
+[Binaries.AARCH64]
+  PE32|Fastboot.efi|*
+
+[Packages]
+  EmbeddedPkg/EmbeddedPkg.dec
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+
+[LibraryClasses]
+  UefiApplicationEntryPoint
+  UefiLib
+  PcdLib
+  DebugLib
+  BootLib
+  LibUfdt
+  MiniFastbootLib
+
+[Guids]
+
+[Protocols]
+  gEfiUsbDeviceControlGuid
+
+  gEfiBlockIoProtocolGuid
+

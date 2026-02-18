@@ -1,0 +1,47 @@
+## @file
+# This package defines Asf specific interfaces and library classes.
+#
+# Copyright (c) 1985 - 2022, AMI. All rights reserved.<BR>
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+##
+
+[Defines]
+  DEC_SPECIFICATION                   = 0x00010005
+  PACKAGE_NAME                        = AsfFeaturePkg
+  PACKAGE_GUID                        = 025BE9BD-50B3-4139-9A70-4336E277339A
+  PACKAGE_VERSION                     = 1.0
+
+[Includes]
+  Include
+
+[Guids]
+  gAsfFeaturePkgTokenSpaceGuid    = { 0xa12d9aa4, 0xe69b, 0x425c, { 0x96, 0xc5, 0x41, 0x8d, 0xb1, 0xd0, 0xb9, 0x4f }}
+
+[Ppis]
+
+[Protocols]
+  ## Asf protocol GUID
+  # Include/Protocol/AmiAsfProtocol.h
+  gAsfProtocolGuid                  =  { 0xdec89827, 0x8a7e, 0x45e0, { 0xbc, 0xb5, 0xd5, 0x3b, 0x46, 0x14, 0xad, 0xb8 } }
+
+[PcdsFeatureFlag]
+  gAsfFeaturePkgTokenSpaceGuid.PcdAsfFeatureEnable|FALSE|BOOLEAN|0x00000001
+
+[PcdsFixedAtBuild, PcdsPatchableInModule, PcdsDynamic, PcdsDynamicEx]
+  ## Specifies the Dash lan SmBus slave address.
+  # @Prompt Slave address of Dash lan
+  gAsfFeaturePkgTokenSpaceGuid.PcdSmbusSlaveAddressForDashLan|0x0|UINT8|0x90000001
+
+  ## This flag is used to control which message would be send.
+  #  If enabled, Asf driver will send message to device.<BR><BR>
+  #   BIT0  - Progress message is enabled.<BR>
+  #   BIT1  - Error message is enabled.<BR>
+  #   BIT2  - System menagement message is enabled.<BR>
+  #   Other - reserved
+  # @Prompt Message level
+  gAsfFeaturePkgTokenSpaceGuid.PcdAsfMessageErrorLevel|0x7|UINT32|0x90000002
+
+  ## Specifies the four arrays of control datas in the ASF_RCTL Acpi table.
+  # @Prompt the four arrays of control datas that used in ASF_RCTL.
+  gAsfFeaturePkgTokenSpaceGuid.PcdControlDataArrays|{0x00, 0x88, 0x00, 0x03, 0x01, 0x88, 0x00, 0x02, 0x02, 0x88, 0x00, 0x01, 0x03, 0x88, 0x00, 0x04}|VOID*|0x90000003
+

@@ -1,0 +1,45 @@
+## @file
+#
+# Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001B
+  BASE_NAME                      = PcieInitPei
+  FILE_GUID                      = CD3F92A7-9AE4-42F9-B2CC-B47A8615B85B
+  MODULE_TYPE                    = PEIM
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = PcieInitEntry
+
+[Sources]
+  PcieInitPei.c
+  RootComplexNVParam.c
+  RootComplexNVParam.h
+
+[Packages]
+  MdePkg/MdePkg.dec
+  Silicon/Ampere/AmpereAltraPkg/AmpereAltraPkg.dec
+
+[LibraryClasses]
+  Ac01PcieLib
+  AmpereCpuLib
+  BaseMemoryLib
+  BoardPcieLib
+  DebugLib
+  HobLib
+  PeimEntryPoint
+  PeiServicesLib
+
+[Ppis]
+  gEfiPeiReadOnlyVariable2PpiGuid
+
+[Guids]
+  gRootComplexInfoHobGuid
+  gRootComplexConfigFormSetGuid
+  gPlatformInfoHobGuid
+
+[Depex]
+  TRUE

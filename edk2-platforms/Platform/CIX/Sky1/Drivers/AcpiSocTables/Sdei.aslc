@@ -1,0 +1,38 @@
+/** @file
+
+  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+
+  SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+
+#include <IndustryStandard/Acpi.h>
+#include <Library/AcpiLib.h>
+#include <Include/AcpiPlatform.h>
+#include <Include/MemoryMap.h>
+
+#define SDEI_TABLE_SIGNATURE  SIGNATURE_32('S', 'D', 'E', 'I')
+#define SDEI_TABLE_VERSION    1
+
+#pragma pack(1)
+
+typedef struct {
+  EFI_ACPI_DESCRIPTION_HEADER    Header;
+} SDEI_TABLE;
+
+#pragma pack()
+
+
+STATIC SDEI_TABLE Sdei = {
+  ARM_ACPI_HEADER (
+    SDEI_TABLE_SIGNATURE,
+    SDEI_TABLE,
+    SDEI_TABLE_VERSION
+  )
+};
+
+//
+// Reference the table being generated to prevent the optimizer from removing
+// the data structure from the executable
+//
+VOID* CONST ReferenceAcpiTable = &Sdei;

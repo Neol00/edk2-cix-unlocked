@@ -1,0 +1,104 @@
+﻿/**
+Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+
+SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+
+/=#
+
+#langdef   en-US "English"
+
+
+#string STR_SETUP_MENU_TITLE                         #language en-US "CIX System Manager"
+#string STR_SETUP_MENU_HELP                          #language en-US "This selection will take you to the CIX System Manager"
+
+#string STR_HARDWARE_INFO_FORM_SET_TITLE             #language en-US "Hardware Information"
+#string STR_HARDWARE_INFO_FORM_SET_TITLE_HELP        #language en-US "Press <Enter> to see Hardware Information."
+
+#string STR_SOC_FORM_SET_TITLE                       #language en-US "Soc Configuration"
+#string STR_SOC_FORM_SET_TITLE_HELP                  #language en-US "Press <Enter> to select Soc options."
+
+#string STR_MISSING_STRING                           #language en-US "Missing String"
+#string STR_EMPTY_STRING                             #language en-US ""
+#string STR_EXIT_STRING                              #language en-US "Press ESC to exit."
+
+#string STR_BIOS                                     #language en-US "BIOS Information"
+#string STR_BIOS_VERSION_NAME                        #language en-US "BIOS Version"
+#string STR_BIOS_VERSION_VALUE                       #language en-US " "
+#string STR_BIOS_RELEASE_DATE_NAME                   #language en-US "Build Date"
+#string STR_BIOS_RELEASE_DATE_VALUE                  #language en-US " "
+
+#string STR_SYSTEM_TABLE_PROMPT                      #language en-US "System Table Selection"
+#string STR_SYSTEM_TABLE_HELP                        #language en-US "ACPI/DT choice for specific OS"
+#string STR_SYSTEM_TABLE_ACPI                        #language en-US "ACPI"
+#string STR_SYSTEM_TABLE_DT                          #language en-US "Device Tree"
+
+#string STR_CPU                                      #language en-US "Processor Information"
+#string STR_CPU_SPEED_NAME                           #language en-US "CPU Speed"
+#string STR_CPU_SPEED_VALUE                          #language en-US " "
+
+#string STR_MEMORY                                   #language en-US "Memory Information"
+#string STR_MEMORY_SIZE_NAME                         #language en-US "Total Memory"
+#string STR_MEMORY_SIZE_VALUE                        #language en-US " "
+#string STR_MEMORY_FREQ_NAME                         #language en-US "Memory Frequency"
+#string STR_MEMORY_FREQ_VALUE                        #language en-US " "
+
+#string STR_DATE_PROMPT                              #language en-US "System Date"
+#string STR_DATE_HELP                                #language en-US "This is the help for the Date (month/day/year). (Error checking will be done against month/day/year combinations that are not supported.)"
+#string STR_TIME_PROMPT                              #language en-US "System Time"
+#string STR_TIME_HELP                                #language en-US "This is the help for the Time (hour/minute/second)."
+#string STR_ERROR_POPUP                              #language en-US "Try Again"
+
+#string STR_HW_INFO                                  #language en-US "Hardware Information"
+#string STR_PCB_SKU_NAME                             #language en-US "PCB SKU"
+#string STR_PCB_SKU_VALUE                            #language en-US " "
+
+#string STR_MEMORY_TYPE_NAME                         #language en-US "Memory Chip"
+#string STR_MEMORY_TYPE_VALUE                        #language en-US " "
+
+#string STR_BOARD_REV_NAME                           #language en-US "Board Revision"
+#string STR_BOARD_REV_VALUE                          #language en-US ""
+
+#string STR_PMIC_VER_NAME                            #language en-US "PMIC Version"
+#string STR_PMIC_VER_VALUE                           #language en-US " "
+
+#string STR_PD_VER_NAME                              #language en-US "PD Version"
+#string STR_PD_VER_VALUE                             #language en-US " "
+
+#string STR_FIRMWARE_INFO                            #language en-US "Firmware Information"
+#string STR_SE_VER_NAME                              #language en-US "SE Version"
+#string STR_SE_VER_VALUE                             #language en-US " "
+#string STR_PBL_VER_NAME                             #language en-US "PBL Version"
+#string STR_PBL_VER_VALUE                            #language en-US " "
+#string STR_ATF_VER_NAME                             #language en-US "ATF Version"
+#string STR_ATF_VER_VALUE                            #language en-US " "
+#string STR_PM_VER_NAME                              #language en-US "PM Version"
+#string STR_PM_VER_VALUE                             #language en-US " "
+#string STR_TEE_VER_NAME                             #language en-US "TEE Version"
+#string STR_TEE_VER_VALUE                            #language en-US " "
+#string STR_UEFI_VER_NAME                            #language en-US "UEFI Version"
+#string STR_UEFI_VER_VALUE                           #language en-US " "
+#string STR_EC_VER_NAME                              #language en-US "EC Version"
+#string STR_EC_VER_VALUE                             #language en-US " "
+
+#string STR_DEVICES_LIST                             #language en-US "Devices List"
+#string STR_DISK_DEVICE                              #language en-US "Disk Devices"
+#string STR_VIDEO_DEVICE                             #language en-US "Video Devices"
+#string STR_NETWORK_DEVICE                           #language en-US "Network Devices"
+#string STR_INPUT_DEVICE                             #language en-US "Input Devices"
+#string STR_ON_BOARD_DEVICE                          #language en-US "Motherboard Devices"
+#string STR_OTHER_DEVICE                             #language en-US "Other Devices"
+#string STR_FORM_NETWORK_DEVICE_TITLE_HEAD           #language en-US "Network Device"
+#string STR_FORM_NETWORK_DEVICE_TITLE                #language en-US "Network Device"
+#string STR_FORM_NETWORK_DEVICE_HELP                 #language en-US "Network Device Help..."
+#string STR_NETWORK_DEVICE_STRING                    #language en-US "Network Device"
+#string STR_FORM_NETWORK_DEVICE_LIST_HELP            #language en-US "Select the network device according the MAC address"
+#string STR_FORM_NETWORK_DEVICE_LIST_TITLE           #language en-US "Network Device List"
+#string STR_NETWORK_DEVICE_LIST_STRING               #language en-US "Network Device List"
+#string STR_NETWORK_DEVICE_HELP                      #language en-US "Network Device"
+
+#string STR_RESET_ALL_DEFAULTS                       #language en-US "Reset All Settings to Defaults"
+#string STR_RESET_ALL_DEFAULTS_HELP                  #language en-US "Reset all BIOS settings (PCIe, USB, I2C, PM, etc.) back to factory defaults and reboot."
+#string STR_CLEAR_NVRAM                              #language en-US "Clear NVRAM"
+#string STR_CLEAR_NVRAM_HELP                         #language en-US "Delete all stored UEFI variables (settings, boot entries, etc.) from SPI flash and reboot. This is equivalent to a fresh BIOS flash."

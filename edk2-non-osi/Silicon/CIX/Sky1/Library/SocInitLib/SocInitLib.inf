@@ -1,0 +1,33 @@
+#  @file
+#  Component description file for SocInitLib module
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = SocInitLib
+  FILE_GUID                      = 10970B6D-47C5-4ac2-A114-FE675B07D93D
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = SocInitLib
+
+[Binaries.AARCH64]
+  LIB|SocInitLib.lib|*
+
+[LibraryClasses]
+  IoLib
+  PcdLib
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec  
+  Platform/CIX/Sky1/Sky1.dec
+  Silicon/CIX/Sky1/CixPkg.dec  
+
+[Pcd]
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase
+  

@@ -1,0 +1,61 @@
+#  @file
+#
+#  Component description file for I2c driver
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = I2cDxe
+  FILE_GUID                      = 6D5E4989-3AEE-4B1F-9844-4F0A76D45B4D
+  MODULE_TYPE                    = DXE_RUNTIME_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = I2cDxeEntryPoint
+
+[Sources.common]
+  I2cDxe.c
+
+[LibraryClasses]
+  BaseMemoryLib
+  DevicePathLib
+  I2cLib
+  IoLib
+  MemoryAllocationLib
+  PcdLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiLib
+  PostCodeLib
+  UefiRuntimeLib
+  DxeServicesTableLib
+
+[Guids]
+  gCixI2cDevicePathGuid
+  gEfiEventVirtualAddressChangeGuid
+
+[Packages]
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[Pcd]
+  gCixTokenSpaceGuid.PcdI2c0Runtime
+  gCixTokenSpaceGuid.PcdI2c1Runtime
+  gCixTokenSpaceGuid.PcdI2c2Runtime
+  gCixTokenSpaceGuid.PcdI2c3Runtime
+  gCixTokenSpaceGuid.PcdI2c4Runtime
+  gCixTokenSpaceGuid.PcdI2c5Runtime
+  gCixTokenSpaceGuid.PcdI2c6Runtime
+  gCixTokenSpaceGuid.PcdI2c7Runtime
+
+[Protocols]
+  gEfiI2cMasterProtocolGuid                      ## BY_START
+  gCixConfigParamsManageProtocolGuid
+  gEfiCpuArchProtocolGuid
+
+[Depex]
+  TRUE

@@ -1,0 +1,34 @@
+## @file
+# Ssdt Cpu Topology Table Generator
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#  Copyright (c) 2021, Arm Limited. All rights reserved.<BR>
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+##
+
+[Defines]
+  INF_VERSION    = 0x0001001B
+  BASE_NAME      = SsdtCpuTopologyLibCIX
+  FILE_GUID      = fca2cb1c-7715-4c7c-af9e-b157dcbc7a45
+  VERSION_STRING = 1.0
+  MODULE_TYPE    = DXE_DRIVER
+  LIBRARY_CLASS  = NULL|DXE_DRIVER
+  CONSTRUCTOR    = AcpiSsdtCpuTopologyLibConstructor
+  DESTRUCTOR     = AcpiSsdtCpuTopologyLibDestructor
+
+[Sources]
+  SsdtCpuTopologyGenerator.c
+  SsdtCpuTopologyGenerator.h
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  DynamicTablesPkg/DynamicTablesPkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+  
+[LibraryClasses]
+  AcpiHelperLib
+  AmlLib
+  BaseLib

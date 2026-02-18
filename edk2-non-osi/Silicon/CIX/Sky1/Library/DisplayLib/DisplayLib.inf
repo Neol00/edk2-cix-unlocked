@@ -1,0 +1,34 @@
+## @file
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved
+#  Copyright (c) 2022 Rockchip Electronics Co. Ltd.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = DisplayLib
+  FILE_GUID                      = 12e44f23-d8af-380c-a6ea-31f4d94e81ae
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = DisplayLib
+
+[Binaries.AARCH64]
+  LIB|DisplayLib.lib|*
+
+[LibraryClasses]
+  IoLib
+  DebugLib
+  UefiBootServicesTableLib
+  MemoryAllocationLib
+  BaseLib
+
+[Packages]
+  ArmPlatformPkg/ArmPlatformPkg.dec
+  ArmPkg/ArmPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec

@@ -1,0 +1,48 @@
+#/** @file
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#**/
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = MemConfigUpdateDxe
+  FILE_GUID                      = 76B0148E-7211-43b6-8E8A-810589BE410A
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = MemConfigUpdateDxeEntryPoint
+#
+# The following information is for reference only and not required by the build tools.
+#
+#  VALID_ARCHITECTURES           = IA32 X64 EBC
+#
+
+[Binaries.AARCH64]
+  PE32|MemConfigUpdateDxe.efi|*
+  DXE_DEPEX|MemConfigUpdateDxe.depex|*
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+
+[LibraryClasses]
+  UefiLib
+  DxeServicesLib
+  PcdLib
+  IoLib
+  BaseMemoryLib
+  DebugLib
+  UefiRuntimeServicesTableLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+
+[Protocols]
+  gCixFirmwareUpdateProtocolGuid
+
+[Guids]
+  gPlatformSetupVariableGuid
+  gSetupSaveVariableCallBackGuid
+
+[Depex]
+  TRUE

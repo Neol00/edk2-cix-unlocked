@@ -1,0 +1,33 @@
+/**
+Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+
+SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+
+#langdef en-US  "English"
+/*
+* USB settings.
+*/
+#string STR_USB_FORM_SET_TITLE                #language en-US "USB Configuration"
+#string STR_USB_FORM_SET_TITLE_HELP           #language en-US "USB Configuration."
+
+#string STR_USB2_CONTROL_PROMPT0         #language en-US "USB2 Controller 0"
+#string STR_USB2_CONTROL_PROMPT1         #language en-US "USB2 Controller 1"
+#string STR_USB2_CONTROL_PROMPT2         #language en-US "USB2 Controller 2"
+#string STR_USB2_CONTROL_PROMPT3         #language en-US "USB2 Controller 3"
+#string STR_USB3_CONTROL_PROMPT0         #language en-US "USB3 Controller 0"
+#string STR_USB3_CONTROL_PROMPT1         #language en-US "USB3 Controller 1"
+#string STR_USBC_DRD_CONTROL_PROMPT      #language en-US "USBC DRD Controller"
+#string STR_USBC_CONTROL_PROMPT0         #language en-US "USBC Controller 0"
+#string STR_USBC_CONTROL_PROMPT1         #language en-US "USBC Controller 1"
+#string STR_USBC_CONTROL_PROMPT2         #language en-US "USBC Controller 2"
+#string STR_USBC_DRD_DATA_ROLE_PROMPT    #language en-US "USBC DRD Controller Role"
+
+#string STR_USB2_CONTROL_HELP            #language en-US "USB 2.0 Controller Enable/Disable"
+#string STR_USB3_CONTROL_HELP            #language en-US "USB 3.2 Controller Enable/Disable"
+#string STR_USBC_CONTROL_HELP            #language en-US "USB Type-C Controller Enable/Disable"
+#string STR_USBC_DRD_CONTROL_HELP        #language en-US "USB Type-C DRD Controller Enable/Disable"
+#string STR_USB_DATA_ROLE_HELP           #language en-US "USB Type-C DRD Controller Role Host/Device"
+#string STR_USB_DATA_ROLE_HOST           #language en-US "Host"
+#string STR_USB_DATA_ROLE_DEVICE         #language en-US "Device"

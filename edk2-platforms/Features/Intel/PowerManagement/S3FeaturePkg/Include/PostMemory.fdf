@@ -1,0 +1,20 @@
+## @file
+#  FDF file for post-memory S3 advanced feature modules.
+#
+# Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2022, Baruch Binyamin Doron.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+## Dependencies
+  INF UefiCpuPkg/PiSmmCommunication/PiSmmCommunicationSmm.inf
+
+## Save-state module stack
+  INF S3FeaturePkg/S3Dxe/S3Dxe.inf
+  INF MdeModulePkg/Universal/Acpi/S3SaveStateDxe/S3SaveStateDxe.inf
+  INF UefiCpuPkg/CpuS3DataDxe/CpuS3DataDxe.inf
+
+## Restore-state module stack
+  INF MdeModulePkg/Universal/Acpi/BootScriptExecutorDxe/BootScriptExecutorDxe.inf

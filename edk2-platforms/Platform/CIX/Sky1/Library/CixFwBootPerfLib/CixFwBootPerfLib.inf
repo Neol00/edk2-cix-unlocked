@@ -1,0 +1,42 @@
+## @file
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#  Copyright (c) 2007 - 2018, Intel Corporation. All rights reserved.<BR>
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = CixFwBootPerfLib
+  FILE_GUID                      = AABDABED-9D0B-95E1-5205-C1D29E1D7008
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = CixFwBootPerfLib
+
+
+#
+#  VALID_ARCHITECTURES           = IA32 X64 EBC
+#
+
+[Sources]
+  CixFwBootPerfLib.c
+
+
+[Packages]
+  MdePkg/MdePkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+
+[LibraryClasses]
+  IoLib
+  BaseLib
+  BaseMemoryLib
+  TimerLib
+  DebugLib
+  ShMemLib
+
+[Pcd]
+

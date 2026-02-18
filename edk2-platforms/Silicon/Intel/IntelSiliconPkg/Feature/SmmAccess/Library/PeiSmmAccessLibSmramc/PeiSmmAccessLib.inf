@@ -1,0 +1,36 @@
+## @file
+# Library description file for the SmmAccess PPI
+#
+# Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010017
+  BASE_NAME                      = PeiSmmAccessLibSmramc
+  FILE_GUID                      = 3D28FD4B-F46F-4E24-88AA-9DA09C51BE87
+  VERSION_STRING                 = 1.0
+  MODULE_TYPE                    = PEIM
+  LIBRARY_CLASS                  = SmmAccessLib
+
+[LibraryClasses]
+  BaseMemoryLib
+  MemoryAllocationLib
+  DebugLib
+  HobLib
+  PciSegmentLib
+  PeiServicesLib
+
+[Packages]
+  MdePkg/MdePkg.dec
+  IntelSiliconPkg/IntelSiliconPkg.dec
+
+[Sources]
+  PeiSmmAccessLib.c
+
+[Ppis]
+  gEfiPeiMmAccessPpiGuid  ## PRODUCES
+
+[Guids]
+  gEfiSmmSmramMemoryGuid

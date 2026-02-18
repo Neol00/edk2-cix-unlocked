@@ -1,0 +1,42 @@
+## @file
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = PinMuxRuntimeLib
+  FILE_GUID                      = 6FC2DD4A-0921-440B-A56E-06682AA5A897
+  MODULE_TYPE                    = DXE_RUNTIME_DRIVER
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = PinMuxLib|DXE_RUNTIME_DRIVER
+  CONSTRUCTOR                    = PinMuxLibConstructor
+
+[Binaries.AARCH64]
+  LIB|PinMuxRuntimeLib.lib|*
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  BaseLib
+  BaseMemoryLib
+  DebugLib
+  MemoryAllocationLib
+  IoLib
+  PcdLib
+  UefiRuntimeLib
+  DxeServicesTableLib
+
+[Guids]
+  gEfiEventVirtualAddressChangeGuid
+
+[Protocols]
+  gEfiCpuArchProtocolGuid
+

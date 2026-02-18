@@ -1,0 +1,15 @@
+## @file
+# Copyright (c) 2014 - 2019 Intel Corporation. All rights reserved. <BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  DEC_SPECIFICATION              = 0x00010005
+  PACKAGE_NAME                   = Ich10Pkg
+  PACKAGE_GUID                   = 4E97AC4B-F64C-4008-BBDE-01CC3B0BAA6B
+  PACKAGE_VERSION                = 0.91
+
+[Includes]
+  Include

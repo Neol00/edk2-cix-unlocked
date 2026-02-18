@@ -1,0 +1,49 @@
+### @file
+# Component information file for the S3 DXE module.
+#
+# Copyright (c) 2022, Baruch Binyamin Doron.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+###
+
+[Defines]
+  INF_VERSION       = 0x00010017
+  BASE_NAME         = S3Dxe
+  FILE_GUID         = 30926F92-CC83-4381-9F70-AC96EDB5BEE0
+  VERSION_STRING    = 1.0
+  MODULE_TYPE       = DXE_DRIVER
+  ENTRY_POINT       = S3DxeEntryPoint
+
+[LibraryClasses]
+  UefiDriverEntryPoint
+  UefiBootServicesTableLib
+  UefiRuntimeServicesTableLib
+  BaseMemoryLib
+  DebugLib
+  PcdLib
+  UefiLib
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MinPlatformPkg/MinPlatformPkg.dec
+  IntelFsp2WrapperPkg/IntelFsp2WrapperPkg.dec
+  S3FeaturePkg/S3FeaturePkg.dec
+
+[Sources]
+  S3Dxe.c
+
+[Pcd]
+  gIntelFsp2WrapperTokenSpaceGuid.PcdPeiMinMemSize
+
+[FeaturePcd]
+  gS3FeaturePkgTokenSpaceGuid.PcdS3FeatureEnable
+
+[Guids]
+  gEfiMemoryTypeInformationGuid  ## CONSUMES
+  gEfiAcpiVariableGuid           ## CONSUMES
+
+[Depex]
+  gEfiVariableArchProtocolGuid      AND
+  gEfiVariableWriteArchProtocolGuid

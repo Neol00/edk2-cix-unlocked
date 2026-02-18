@@ -1,0 +1,33 @@
+## @file
+#
+# Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                   = 0x0001001B
+  BASE_NAME                     = NVParamLib
+  FILE_GUID                     = 8512FF56-11DF-4A16-A0CF-81B27DBD23FB
+  MODULE_TYPE                   = BASE
+  VERSION_STRING                = 0.1
+  LIBRARY_CLASS                 = NVParamLib
+
+[Sources.common]
+  NVParamLib.c
+  NVParamLibCommon.c
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  ArmPlatformPkg/ArmPlatformPkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/Ampere/AmpereAltraPkg/AmpereAltraPkg.dec
+
+[LibraryClasses]
+  BaseMemoryLib
+  DebugLib
+  MmCommunicationLib
+
+[Guids]
+  gNVParamMmGuid

@@ -1,0 +1,40 @@
+#/**
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = CpuInfoLib
+  FILE_GUID                      = 4ace0075-e216-45c6-88f9-39570d6cc097
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = CpuInfoLib
+
+[Binaries.AARCH64]
+  LIB|CpuInfoLib.lib|*
+
+[Packages]
+  MdePkg/MdePkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+  ArmPkg/ArmPkg.dec
+
+[LibraryClasses]
+  BaseMemoryLib
+  BaseLib
+  UefiLib
+  UefiBootServicesTableLib
+
+[Guids]
+
+[Protocols]
+  gArmScmiPerformanceProtocolGuid
+
+[FixedPcd]
+
+[Depex]
+  gArmScmiPerformanceProtocolGuid

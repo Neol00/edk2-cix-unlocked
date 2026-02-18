@@ -1,0 +1,56 @@
+## @file
+#
+# Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = RasConfigDxe
+  FILE_GUID                      = 5b5ee6e3-3135-45f7-ad21-46a3f36813cc
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = RasConfigEntryPoint
+
+[Sources.common]
+  RasConfigNVDataStruct.h
+  RasConfigDxe.c
+  RasConfigDxe.h
+  RasConfigVfr.vfr
+  RasConfigStrings.uni
+
+[Packages]
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/Ampere/AmpereAltraPkg/AmpereAltraPkg.dec
+  Silicon/Ampere/AmpereSiliconPkg/AmpereSiliconPkg.dec
+
+[LibraryClasses]
+  AmpereCpuLib
+  BaseLib
+  BaseMemoryLib
+  DebugLib
+  DevicePathLib
+  DevicePathLib
+  HiiLib
+  MemoryAllocationLib
+  NVParamLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiLib
+  UefiRuntimeServicesTableLib
+
+[Guids]
+  gEfiIfrTianoGuid
+  gPlatformManagerFormsetGuid
+  gAcpiConfigFormSetGuid
+
+[Protocols]
+  gEfiDevicePathProtocolGuid                    ## CONSUMES
+  gEfiHiiConfigRoutingProtocolGuid              ## CONSUMES
+  gEfiHiiConfigAccessProtocolGuid               ## PRODUCES
+
+[Depex]
+  TRUE

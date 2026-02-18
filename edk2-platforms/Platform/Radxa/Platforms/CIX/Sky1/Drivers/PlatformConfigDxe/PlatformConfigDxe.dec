@@ -1,0 +1,17 @@
+## @file
+#
+#  Copyright 2025 Radxa Computer (Shenzhen) Co., Ltd. All Rights Reserved.
+#  Copyright (c) 2018, Linaro Ltd. All rights reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  DEC_SPECIFICATION              = 0x0001001A
+  PACKAGE_NAME                   = PlatformConfigDxe
+  PACKAGE_GUID                   = b20262bd-92af-4a81-808c-3c6042333e5b
+  PACKAGE_VERSION                = 0.1
+
+[Includes]
+  EmbeddedPkg/Drivers/DtPlatformDxe/

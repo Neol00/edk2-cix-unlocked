@@ -1,0 +1,49 @@
+## @file
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = ResetDxe
+  FILE_GUID                      = 1a9b022b-7686-798a-30a4-947aca7d42d6
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = ResetDxeEntryPoint
+
+[Binaries.AARCH64]
+  PE32|ResetDxe.efi|*
+  DXE_DEPEX|ResetDxe.depex|*
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  BaseLib
+  BaseMemoryLib
+  DebugLib
+  MemoryAllocationLib
+  IoLib
+  PcdLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiLib
+  ArmSmcLib
+
+[Guids]
+
+
+[Protocols]
+  gCixResetProtocolGuid
+
+[Pcd]
+
+[Depex]
+  TRUE

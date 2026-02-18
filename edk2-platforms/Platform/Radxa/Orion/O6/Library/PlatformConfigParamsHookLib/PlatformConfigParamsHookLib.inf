@@ -1,0 +1,57 @@
+#/**
+#
+#  Copyright 2024 Radxa Computer (Shenzhen) Co., Ltd. All Rights Reserved.
+#  Copyright 2023 Cix Technology (Shanghai) Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = PlatformConfigParamsHookLib
+  FILE_GUID                      = e2bf1c40-6c89-4043-8a4c-2ac11c99c6fd
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = PlatformConfigParamsHookLib|DXE_DRIVER DXE_RUNTIME_DRIVER UEFI_APPLICATION UEFI_DRIVER
+  CONSTRUCTOR                    = PlatformConfigParamsHookLibConstructor
+
+[Sources.common]
+  PlatformConfigParamsHookLib.c
+
+[Packages]
+  EmbeddedPkg/EmbeddedPkg.dec
+  MdePkg/MdePkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+  Platform/Radxa/Radxa.dec
+  Silicon/NXP/Library/Pcf8563RealTimeClockLib/Pcf8563RealTimeClockLib.dec
+
+[LibraryClasses]
+  BaseMemoryLib
+  MemoryAllocationLib
+  DebugLib
+  BaseLib
+  I2cLib
+  UefiBootServicesTableLib
+  UefiLib
+  EcLib
+  TimerLib
+
+[Guids]
+
+[Protocols]
+
+[FixedPcd]
+  gRadxaTokenSpaceGuid.PcdRtc8563I2cBus
+  gPcf8563RealTimeClockLibTokenSpaceGuid.PcdI2cSlaveAddress
+  gCixTokenSpaceGuid.PcdI2c0BusFreq
+  gCixTokenSpaceGuid.PcdI2c1BusFreq
+  gCixTokenSpaceGuid.PcdI2c2BusFreq
+  gCixTokenSpaceGuid.PcdI2c3BusFreq
+  gCixTokenSpaceGuid.PcdI2c4BusFreq
+  gCixTokenSpaceGuid.PcdI2c5BusFreq
+  gCixTokenSpaceGuid.PcdI2c6BusFreq
+  gCixTokenSpaceGuid.PcdI2c7BusFreq
+

@@ -1,0 +1,38 @@
+#/**
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = CixS3IoLib
+  FILE_GUID                      = de6860b7-8be8-4f8d-8fa1-fc2f7d440653
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = CixS3IoLib
+
+[Sources.common]
+  CixS3IoLib.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+
+[LibraryClasses]
+  IoLib
+  BaseLib
+  UefiLib
+  UefiBootServicesTableLib
+  DebugLib
+
+[Guids]
+
+[Protocols]
+  gCixS3SaveStateProtocolGuid
+
+[Depex]
+  gCixS3SaveStateProtocolGuid

@@ -1,0 +1,35 @@
+## @file
+#
+# Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001B
+  BASE_NAME                      = MmCommunicationLib
+  FILE_GUID                      = 106099B8-0051-4B35-9578-EFB1045D2FA8
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = MmCommunicationLib
+  CONSTRUCTOR                    = MmCommunicationLibConstructor
+
+[Sources]
+  MmCommunicationLib.c
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/Ampere/AmpereAltraPkg/AmpereAltraPkg.dec
+
+[LibraryClasses]
+  ArmLib
+  ArmSmcLib
+  BaseMemoryLib
+  DebugLib
+  PcdLib
+
+[Pcd]
+  gArmTokenSpaceGuid.PcdMmBufferBase
+  gArmTokenSpaceGuid.PcdMmBufferSize

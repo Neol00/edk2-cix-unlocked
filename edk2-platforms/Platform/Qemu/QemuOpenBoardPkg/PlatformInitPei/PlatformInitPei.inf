@@ -1,0 +1,59 @@
+## @file
+#  PlatformInitPei
+#
+#  Simple PEIM for QEMU PIIX4/Q35 Memory, SMP and PCI/PCI Express initialization
+#
+#  Copyright (c) 2022 Theo Jehl
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = PlatformInitPei
+  FILE_GUID                      = 82d851fe-3106-4175-8b6c-87fda1f2d0ac
+  MODULE_TYPE                    = PEIM
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = PlatformInit
+
+[Packages]
+  OvmfPkg/OvmfPkg.dec
+  MdePkg/MdePkg.dec
+  QemuOpenBoardPkg/QemuOpenBoardPkg.dec
+  UefiCpuPkg/UefiCpuPkg.dec
+
+[Sources]
+  PlatformInit.h
+  PlatformInit.c
+  Memory.c
+  Pcie.c
+  Pci.c
+  Cpu.c
+
+[LibraryClasses]
+  PeimEntryPoint
+  QemuOpenFwCfgLib
+  HobLib
+  PcdLib
+  PciLib
+
+[Guids]
+  gUefiOvmfPkgPlatformInfoGuid
+
+[Pcd]
+  gUefiOvmfPkgTokenSpaceGuid.PcdOvmfHostBridgePciDevId
+  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress
+  gUefiCpuPkgTokenSpaceGuid.PcdCpuMaxLogicalProcessorNumber
+  gUefiCpuPkgTokenSpaceGuid.PcdCpuBootLogicalProcessorNumber
+  gUefiOvmfPkgTokenSpaceGuid.PcdPciIoBase
+  gUefiOvmfPkgTokenSpaceGuid.PcdPciIoSize
+  gUefiOvmfPkgTokenSpaceGuid.PcdPciMmio32Base
+  gUefiOvmfPkgTokenSpaceGuid.PcdPciMmio32Size
+  gUefiOvmfPkgTokenSpaceGuid.PcdPciMmio64Base
+  gUefiOvmfPkgTokenSpaceGuid.PcdPciMmio64Size
+  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress
+  gUefiOvmfPkgTokenSpaceGuid.PcdQ35TsegMbytes
+
+[FeaturePcd]
+  gUefiOvmfPkgTokenSpaceGuid.PcdSmmSmramRequire
+
+[Depex]
+  TRUE

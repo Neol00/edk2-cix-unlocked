@@ -1,0 +1,35 @@
+## @file
+#
+# Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                   = 0x0001001B
+  BASE_NAME                     = RuntimeNVParamLib
+  FILE_GUID                     = D17AD70D-7C0F-4F36-9ED5-7EA43A700C45
+  MODULE_TYPE                   = DXE_RUNTIME_DRIVER
+  VERSION_STRING                = 0.1
+  LIBRARY_CLASS                 = NVParamLib
+
+[Sources.common]
+  NVParamLibCommon.c
+  RuntimeNVParamLib.c
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  ArmPlatformPkg/ArmPlatformPkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/Ampere/AmpereAltraPkg/AmpereAltraPkg.dec
+
+[LibraryClasses]
+  BaseMemoryLib
+  DebugLib
+
+[Guids]
+  gNVParamMmGuid
+
+[Protocols]
+  gEfiMmCommunication2ProtocolGuid

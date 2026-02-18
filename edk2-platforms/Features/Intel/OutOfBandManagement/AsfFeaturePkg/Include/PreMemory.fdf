@@ -1,0 +1,8 @@
+## @file
+#  FDF file for pre-memory modules that enable Intelligent Platform Management Interface.
+#
+# Copyright (c) 1985 - 2022, AMI. All rights reserved.<BR>
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+##
+
+INF AsfFeaturePkg/AsfPei/AsfPei.inf

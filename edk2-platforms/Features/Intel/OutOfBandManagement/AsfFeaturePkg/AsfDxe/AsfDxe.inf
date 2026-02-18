@@ -1,0 +1,51 @@
+## @file
+#  Asf Dxe driver which is used for sending event record log to NIC or receiving
+#  boot option command from NIC and provide in Asf Dxe protocol.
+#
+#  Copyright (c) 1985 - 2022, AMI. All rights reserved.<BR>
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+##
+
+[Defines]
+  INF_VERSION           = 0x00010005
+  BASE_NAME             = AsfDxe
+  MODULE_UNI_FILE       = AsfDxe.uni
+  FILE_GUID             = ED7AD1A2-1427-41EC-A71E-32EC9A1549E8
+  MODULE_TYPE           = DXE_DRIVER
+  VERSION_STRING        = 1.0
+  ENTRY_POINT           = AsfDxeEntry
+
+[Sources]
+  AsfDxe.c
+  AsfDxe.h
+  AsfDxeEvent.c
+  AsfAcpiTable.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  AsfFeaturePkg/AsfFeaturePkg.dec
+
+[LibraryClasses]
+  UefiDriverEntryPoint
+  UefiRuntimeServicesTableLib
+  DebugLib
+  BaseMemoryLib
+  PrintLib
+  UefiLib
+
+[Protocols]
+  gEfiRscHandlerProtocolGuid    ## CONSUMES
+  gAsfProtocolGuid              ## PRODUCES
+  gEfiAcpiTableProtocolGuid     ## CONSUMES
+  gEfiSmbusHcProtocolGuid       ## CONSUMES
+
+[Pcd]
+  gAsfFeaturePkgTokenSpaceGuid.PcdSmbusSlaveAddressForDashLan
+  gAsfFeaturePkgTokenSpaceGuid.PcdAsfMessageErrorLevel
+  gAsfFeaturePkgTokenSpaceGuid.PcdControlDataArrays
+
+[Depex]
+  TRUE
+
+[UserExtensions.TianoCore."ExtraFiles"]
+  AsfDxeExtra.uni

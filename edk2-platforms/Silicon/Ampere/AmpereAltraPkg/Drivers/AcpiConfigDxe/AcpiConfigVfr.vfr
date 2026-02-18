@@ -1,0 +1,69 @@
+/** @file
+
+  Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+
+  SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+
+
+#include <Guid/AcpiConfigHii.h>
+#include <AcpiConfigNVDataStruct.h>
+
+#define ACPI_CONFIG_FORM_ID  1
+
+formset
+  guid      = ACPI_CONFIGURATION_FORMSET_GUID,
+  title     = STRING_TOKEN(STR_ACPI_FORM),
+  help      = STRING_TOKEN(STR_ACPI_FORM_HELP),
+  classguid = gPlatformManagerFormsetGuid,
+
+  varstore ACPI_CONFIG_VARSTORE_DATA,
+    name  = AcpiConfigNVData,
+    guid  = ACPI_CONFIGURATION_FORMSET_GUID;
+
+  form
+    formid = ACPI_CONFIG_FORM_ID,
+    title  = STRING_TOKEN(STR_ACPI_FORM);
+    subtitle text = STRING_TOKEN(STR_ACPI_FORM_HELP);
+
+    oneof
+      varid   = AcpiConfigNVData.EnableApeiSupport,
+      prompt  = STRING_TOKEN(STR_ACPI_APEI_SUPPORT_PROMPT),
+      help    = STRING_TOKEN(STR_ACPI_APEI_SUPPORT_HELP),
+      option text = STRING_TOKEN(STR_ACPI_COMMON_DISABLE), value = 0, flags = 0;
+      option text = STRING_TOKEN(STR_ACPI_COMMON_ENABLE), value = 1, flags = DEFAULT;
+    endoneof;
+
+    oneof
+      varid   = AcpiConfigNVData.AcpiCppcEnable,
+      prompt  = STRING_TOKEN(STR_ACPI_CPPC_PROMPT),
+      help    = STRING_TOKEN(STR_ACPI_CPPC_HELP),
+      option text = STRING_TOKEN(STR_ACPI_COMMON_DISABLE), value = 0, flags = 0;
+      option text = STRING_TOKEN(STR_ACPI_COMMON_ENABLE), value = 1, flags = DEFAULT;
+    endoneof;
+
+    oneof
+      varid   = AcpiConfigNVData.AcpiLpiEnable,
+      prompt  = STRING_TOKEN(STR_ACPI_LPI_PROMPT),
+      help    = STRING_TOKEN(STR_ACPI_LPI_HELP),
+      option text = STRING_TOKEN(STR_ACPI_COMMON_DISABLE), value = 0, flags = 0;
+      option text = STRING_TOKEN(STR_ACPI_COMMON_ENABLE), value = 1, flags = DEFAULT;
+    endoneof;
+
+    grayoutif ideqval AcpiConfigNVData.AcpiTurboSupport == 0;
+      oneof
+        varid   = AcpiConfigNVData.AcpiTurboMode,
+        prompt  = STRING_TOKEN(STR_ACPI_TURBO_PROMPT),
+        help    = STRING_TOKEN(STR_ACPI_TURBO_HELP),
+        option text = STRING_TOKEN(STR_ACPI_COMMON_ENABLE), value = 1, flags = DEFAULT;
+        option text = STRING_TOKEN(STR_ACPI_COMMON_DISABLE), value = 0, flags = 0;
+        suppressif ideqval AcpiConfigNVData.AcpiTurboSupport > 0;
+        option text = STRING_TOKEN(STR_ACPI_UNSUPPORTED), value = 2, flags = 0;
+        endif;
+      endoneof;
+    endif;
+
+  endform;
+
+endformset;

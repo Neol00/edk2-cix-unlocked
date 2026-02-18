@@ -1,0 +1,29 @@
+## @file
+#  Instance of RNG (Random Number Generator) Library.
+#
+#  Copyright (c) 2021, Ampere Computing LLC. All rights reserved.<BR>
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001B
+  BASE_NAME                      = RngLib
+  MODULE_UNI_FILE                = RngLib.uni
+  FILE_GUID                      = 9CC35499-5CC8-49A2-8C27-AE7B3B83D149
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = RngLib
+
+[Sources]
+  RngLib.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  Silicon/Ampere/AmpereAltraPkg/AmpereAltraPkg.dec
+
+[LibraryClasses]
+  BaseLib
+  DebugLib
+  TrngLib

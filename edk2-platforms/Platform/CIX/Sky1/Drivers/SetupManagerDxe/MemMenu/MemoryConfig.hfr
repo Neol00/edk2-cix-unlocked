@@ -1,0 +1,294 @@
+/**
+  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+
+  SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+//Memory Form
+    form formid = MEMORY_CONFIG_FORM_ID,
+        title  = STRING_TOKEN(STR_MEMORY_FORM_SET_TITLE);
+        subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+
+        oneof varid = PlatformSetupVar.MemFreq,
+            prompt  = STRING_TOKEN(STR_MEM_FREQUENCY_PROMPT),
+            help    = STRING_TOKEN(STR_MEM_FREQUENCY_PROMPT_HELP),
+            default     = FixedPcdGet16 (PcdMemFreq),
+            option text = STRING_TOKEN(STR_DDR_1600), value = 800,    flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_DDR_2133), value = 1067,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_DDR_2750), value = 1375,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_DDR_3200), value = 1600,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_DDR_3733), value = 1867,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_DDR_4266), value = 2133,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_DDR_4800), value = 2400,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_DDR_5500), value = 2750,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_DDR_6000), value = 3000,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_DDR_6400), value = 3200,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_AUTO),     value = 0xFFFF, flags = RESET_REQUIRED;
+        endoneof;
+
+        oneof varid = PlatformSetupVar.MemHarvesting,
+            prompt  = STRING_TOKEN(STR_MEM_HARVESTING_PROMPT),
+            help    = STRING_TOKEN(STR_MEM_HARVESTING_PROMPT_HELP),
+            default     = FixedPcdGet8 (PcdMemHarvesting),
+            option text = STRING_TOKEN(STR_MEM_CH23),   value = 0xC,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_MEM_CH0123), value = 0xF,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_AUTO),       value = 0xFF,  flags = RESET_REQUIRED;
+        endoneof;
+
+        oneof varid = PlatformSetupVar.MemWrLEcc,
+            prompt  = STRING_TOKEN(STR_MEM_WRLECC_PROMPT),
+            help    = STRING_TOKEN(STR_MEM_WRLECC_PROMPT_HELP),
+            default     = FixedPcdGet8 (PcdMemWrLEcc),
+            option text = STRING_TOKEN(STR_DISABLE),    value = 0x0,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_ENABLE),     value = 0x1,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_AUTO),       value = 0xFF,  flags = RESET_REQUIRED;
+        endoneof;
+
+        oneof varid = PlatformSetupVar.MemRdLEcc,
+            prompt  = STRING_TOKEN(STR_MEM_RDLECC_PROMPT),
+            help    = STRING_TOKEN(STR_MEM_RDLECC_PROMPT_HELP),
+            default     = FixedPcdGet8 (PcdMemRdLEcc),
+            option text = STRING_TOKEN(STR_DISABLE),    value = 0x0,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_ENABLE),     value = 0x1,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_AUTO),       value = 0xFF,  flags = RESET_REQUIRED;
+        endoneof;
+
+        oneof varid = PlatformSetupVar.MemIEcc,
+            prompt  = STRING_TOKEN(STR_MEM_INLINE_ECC_PROMPT),
+            help    = STRING_TOKEN(STR_MEM_INLINE_ECC_PROMPT_HELP),
+            default     = FixedPcdGet8 (PcdMemIEcc),
+            option text = STRING_TOKEN(STR_DISABLE),    value = 0x0,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_ENABLE),     value = 0x1,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_AUTO),       value = 0xFF,  flags = RESET_REQUIRED;
+        endoneof;
+
+        oneof varid = PlatformSetupVar.WckAlwaysOn,
+            prompt  = STRING_TOKEN(STR_MEM_WCKALWAYSON_PROMPT),
+            help    = STRING_TOKEN(STR_MEM_WCKALWAYSON_PROMPT_HELP),
+            default     = FixedPcdGet8 (PcdMemWckAlwaysOn),
+            option text = STRING_TOKEN(STR_DISABLE),    value = 0x0,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_ENABLE),     value = 0x1,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_AUTO),       value = 0xFF,  flags = RESET_REQUIRED;
+        endoneof;
+
+        oneof varid = PlatformSetupVar.DataMask,
+            prompt  = STRING_TOKEN(STR_MEM_DATAMASK_PROMPT),
+            help    = STRING_TOKEN(STR_MEM_DATAMASK_PROMPT_HELP),
+            default     = FixedPcdGet8 (PcdMemDataMask),
+            option text = STRING_TOKEN(STR_DISABLE),    value = 0x0,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_ENABLE),     value = 0x1,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_AUTO),       value = 0xFF,  flags = RESET_REQUIRED;
+        endoneof;
+
+        oneof varid = PlatformSetupVar.RfmEn,
+            prompt  = STRING_TOKEN(STR_MEM_RFMEN_PROMPT),
+            help    = STRING_TOKEN(STR_MEM_RFMEN_PROMPT_HELP),
+            default     = FixedPcdGet8 (PcdMemRfmEn),
+            option text = STRING_TOKEN(STR_DISABLE),    value = 0x0,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_ENABLE),     value = 0x1,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_AUTO),       value = 0xFF,  flags = RESET_REQUIRED;
+        endoneof;
+
+        oneof varid = PlatformSetupVar.AutoPrechargeEn,
+            prompt  = STRING_TOKEN(STR_MEM_AP_PROMPT),
+            help    = STRING_TOKEN(STR_MEM_AP_PROMPT_HELP),
+            default     = FixedPcdGet8 (PcdMemAutoPrechargeEn),
+            option text = STRING_TOKEN(STR_DISABLE),    value = 0x0,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_ENABLE),     value = 0x1,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_AUTO),       value = 0xFF,  flags = RESET_REQUIRED;
+        endoneof;
+
+        oneof varid = PlatformSetupVar.PbrEn,
+            prompt  = STRING_TOKEN(STR_MEM_PBR_PROMPT),
+            help    = STRING_TOKEN(STR_MEM_PBR_PROMPT_HELP),
+            default     = FixedPcdGet8 (PcdMemPbrEn),
+            option text = STRING_TOKEN(STR_DISABLE),    value = 0x0,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_ENABLE),     value = 0x1,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_AUTO),       value = 0xFF,  flags = RESET_REQUIRED;
+        endoneof;
+
+        oneof varid = PlatformSetupVar.MbistEn,
+            prompt  = STRING_TOKEN(STR_MEM_MBISTEN_PROMPT),
+            help    = STRING_TOKEN(STR_MEM_MBISTEN_PROMPT_HELP),
+            default     = FixedPcdGet8 (PcdMemMbistEn),
+            option text = STRING_TOKEN(STR_DISABLE),    value = 0x0,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_DDRC_BIST),  value = 0x1,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_DDRPI_BIST), value = 0x2,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_AUTO),       value = 0xFF,  flags = RESET_REQUIRED;
+        endoneof;
+
+        oneof varid = PlatformSetupVar.MbistMode,
+            prompt  = STRING_TOKEN(STR_MEM_MBISTMODE_PROMPT),
+            help    = STRING_TOKEN(STR_MEM_MBISTMODE_PROMPT_HELP),
+            default     = FixedPcdGet8 (PcdMemMbistMode),
+            option text = STRING_TOKEN(STR_AUTO),                 value = 0xFF,  flags = RESET_REQUIRED;
+            suppressif NOT ideqval PlatformSetupVar.MbistEn == 0x1;
+                option text = STRING_TOKEN(STR_MEM_BIST_MOVI1_3N),    value = 0x0,   flags = RESET_REQUIRED;
+                option text = STRING_TOKEN(STR_MEM_BIST_LIMIT_MOVI),  value = 0x1,   flags = RESET_REQUIRED;
+            endif;
+            suppressif NOT ideqval PlatformSetupVar.MbistEn == 0x2;
+                option text = STRING_TOKEN(STR_MEM_BIST_MOVI1_3N),    value = 0x0,   flags = RESET_REQUIRED;
+                option text = STRING_TOKEN(STR_MEM_BIST_MARCH_C),     value = 0x1,   flags = RESET_REQUIRED;
+                option text = STRING_TOKEN(STR_MEM_BIST_GALPAT),      value = 0x2,   flags = RESET_REQUIRED;
+                option text = STRING_TOKEN(STR_MEM_BIST_PRBS),        value = 0x3,   flags = RESET_REQUIRED;
+            endif;
+        endoneof;
+
+        oneof varid = PlatformSetupVar.PortPriority,
+            prompt  = STRING_TOKEN(STR_MEM_PORTPRIORITY_PROMPT),
+            help    = STRING_TOKEN(STR_MEM_PORTPRIORITY_PROMPT_HELP),
+            default     = FixedPcdGet8 (PcdMemPortPriority),
+            option text = STRING_TOKEN(STR_MEM_PORT_PRIORITY_FIXED_STRING),   value = 0x0,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_MEM_PORT_PRIORITY_QOS_STRING),     value = 0x1,   flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_AUTO),                             value = 0xFF,  flags = RESET_REQUIRED;
+        endoneof;
+
+        suppressif NOT ideqval PlatformSetupVar.PortPriority == 0x1;
+            oneof varid = PlatformSetupVar.BdwP0Override,
+                prompt  = STRING_TOKEN(STR_MEM_BDWP0_PROMPT),
+                help    = STRING_TOKEN(STR_MEM_BDWP0_PROMPT_HELP),
+                default     = 0x0,
+                option text = STRING_TOKEN(STR_AUTO),       value = 0x0,  flags = RESET_REQUIRED;
+                option text = STRING_TOKEN(STR_MANUAL),     value = 0x1,   flags = RESET_REQUIRED;
+            endoneof;
+
+            suppressif ideqval PlatformSetupVar.BdwP0Override == 0x0;
+                numeric varid = PlatformSetupVar.BdwP0,
+                    prompt  = STRING_TOKEN(STR_VALUE),
+                    help    = STRING_TOKEN(STR_MEM_BDW_VALID_RANGE),
+                    minimum = 0,
+                    maximum = 100,
+                    default = FixedPcdGet8 (PcdMemBdwP0),
+                endnumeric;
+            endif;
+
+            oneof varid = PlatformSetupVar.MemBdwOvflowP0,
+                prompt  = STRING_TOKEN(STR_MEM_BDWOVFLOWP0_PROMPT),
+                help    = STRING_TOKEN(STR_MEM_BDWOVFLOWP0_PROMPT_HELP),
+                default     = FixedPcdGet8 (PcdMemBdwOvflowP0),
+                option text = STRING_TOKEN(STR_DISABLE),    value = 0x0,   flags = RESET_REQUIRED;
+                option text = STRING_TOKEN(STR_ENABLE),     value = 0x1,   flags = RESET_REQUIRED;
+                option text = STRING_TOKEN(STR_AUTO),       value = 0xFF,  flags = RESET_REQUIRED;
+            endoneof;
+
+            oneof varid = PlatformSetupVar.BdwP1Override,
+                prompt  = STRING_TOKEN(STR_MEM_BDWP1_PROMPT),
+                help    = STRING_TOKEN(STR_MEM_BDWP1_PROMPT_HELP),
+                default     = 0x0,
+                option text = STRING_TOKEN(STR_AUTO),       value = 0x0,  flags = RESET_REQUIRED;
+                option text = STRING_TOKEN(STR_MANUAL),     value = 0x1,   flags = RESET_REQUIRED;
+            endoneof;
+
+            suppressif ideqval PlatformSetupVar.BdwP1Override == 0x0;
+                numeric varid = PlatformSetupVar.BdwP1,
+                    prompt  = STRING_TOKEN(STR_VALUE),
+                    help    = STRING_TOKEN(STR_MEM_BDW_VALID_RANGE),
+                    minimum = 0,
+                    maximum = 100,
+                    default = FixedPcdGet8 (PcdMemBdwP1),
+                endnumeric;
+            endif;
+
+            oneof varid = PlatformSetupVar.MemBdwOvflowP1,
+                prompt  = STRING_TOKEN(STR_MEM_BDWOVFLOWP1_PROMPT),
+                help    = STRING_TOKEN(STR_MEM_BDWOVFLOWP1_PROMPT_HELP),
+                default     = FixedPcdGet8 (PcdMemBdwOvflowP1),
+                option text = STRING_TOKEN(STR_DISABLE),    value = 0x0,   flags = RESET_REQUIRED;
+                option text = STRING_TOKEN(STR_ENABLE),     value = 0x1,   flags = RESET_REQUIRED;
+                option text = STRING_TOKEN(STR_AUTO),       value = 0xFF,  flags = RESET_REQUIRED;
+            endoneof;
+        endif;
+
+        suppressif NOT ideqval PlatformSetupVar.PortPriority == 0x0;
+            oneof varid = PlatformSetupVar.MemRPriorityP0Override,
+                prompt  = STRING_TOKEN(STR_MEM_RPRIORITYP0_PROMPT),
+                help    = STRING_TOKEN(STR_MEM_RPRIORITYP0_PROMPT_HELP),
+                default     = 0x0,
+                option text = STRING_TOKEN(STR_AUTO),       value = 0x0,  flags = RESET_REQUIRED;
+                option text = STRING_TOKEN(STR_MANUAL),     value = 0x1,   flags = RESET_REQUIRED;
+            endoneof;
+
+            suppressif ideqval PlatformSetupVar.MemRPriorityP0Override == 0x0;
+                numeric varid = PlatformSetupVar.MemRPriorityP0,
+                    prompt  = STRING_TOKEN(STR_VALUE),
+                    help    = STRING_TOKEN(STR_MEM_RWPRIORITY_VALID_RANGE),
+                    minimum = 0,
+                    maximum = 7,
+                    default = FixedPcdGet8 (PcdMemRPriorityP0),
+                endnumeric;
+            endif;
+
+            oneof varid = PlatformSetupVar.MemWPriorityP0Override,
+                prompt  = STRING_TOKEN(STR_MEM_WPRIORITYP0_PROMPT),
+                help    = STRING_TOKEN(STR_MEM_WPRIORITYP0_PROMPT_HELP),
+                default     = 0x0,
+                option text = STRING_TOKEN(STR_AUTO),       value = 0x0,  flags = RESET_REQUIRED;
+                option text = STRING_TOKEN(STR_MANUAL),     value = 0x1,   flags = RESET_REQUIRED;
+            endoneof;
+
+            suppressif ideqval PlatformSetupVar.MemWPriorityP0Override == 0x0;
+                numeric varid = PlatformSetupVar.MemWPriorityP0,
+                    prompt  = STRING_TOKEN(STR_VALUE),
+                    help    = STRING_TOKEN(STR_MEM_RWPRIORITY_VALID_RANGE),
+                    minimum = 0,
+                    maximum = 7,
+                    default = FixedPcdGet8 (PcdMemWPriorityP0),
+                endnumeric;
+            endif;
+
+            oneof varid = PlatformSetupVar.MemRPriorityP1Override,
+                prompt  = STRING_TOKEN(STR_MEM_RPRIORITYP1_PROMPT),
+                help    = STRING_TOKEN(STR_MEM_RPRIORITYP1_PROMPT_HELP),
+                default     = 0x0,
+                option text = STRING_TOKEN(STR_AUTO),       value = 0x0,  flags = RESET_REQUIRED;
+                option text = STRING_TOKEN(STR_MANUAL),     value = 0x1,   flags = RESET_REQUIRED;
+            endoneof;
+
+            suppressif ideqval PlatformSetupVar.MemRPriorityP1Override == 0x0;
+                numeric varid = PlatformSetupVar.MemRPriorityP1,
+                    prompt  = STRING_TOKEN(STR_VALUE),
+                    help    = STRING_TOKEN(STR_MEM_RWPRIORITY_VALID_RANGE),
+                    minimum = 0,
+                    maximum = 7,
+                    default = FixedPcdGet8 (PcdMemRPriorityP1),
+                endnumeric;
+            endif;
+
+            oneof varid = PlatformSetupVar.MemWPriorityP1Override,
+                prompt  = STRING_TOKEN(STR_MEM_WPRIORITYP1_PROMPT),
+                help    = STRING_TOKEN(STR_MEM_WPRIORITYP1_PROMPT_HELP),
+                default     = 0x0,
+                option text = STRING_TOKEN(STR_AUTO),       value = 0x0,  flags = RESET_REQUIRED;
+                option text = STRING_TOKEN(STR_MANUAL),     value = 0x1,   flags = RESET_REQUIRED;
+            endoneof;
+
+            suppressif ideqval PlatformSetupVar.MemWPriorityP1Override == 0x0;
+                numeric varid = PlatformSetupVar.MemWPriorityP1,
+                    prompt  = STRING_TOKEN(STR_VALUE),
+                    help    = STRING_TOKEN(STR_MEM_RWPRIORITY_VALID_RANGE),
+                    minimum = 0,
+                    maximum = 7,
+                    default = FixedPcdGet8 (PcdMemWPriorityP1),
+                endnumeric;
+            endif;
+        endif;
+
+        oneof varid = PlatformSetupVar.MemBreakPoint,
+            prompt  = STRING_TOKEN(STR_MEM_BREAK_POINT_PROMPT),
+            help    = STRING_TOKEN(STR_MEM_BREAK_POINT_PROMPT_HELP),
+            default     = FixedPcdGet16 (PcdMemBreakPoint),
+            option text = STRING_TOKEN(STR_DISABLED), value = 0x00, flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_ENABLED),  value = 0x01, flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_AUTO),     value = 0xFF, flags = RESET_REQUIRED;
+        endoneof;
+
+        oneof varid  = PlatformSetupVar.MemEyeScan,
+            prompt   = STRING_TOKEN (STR_MEM_EYE_SCAN_PROMPT),
+            help     = STRING_TOKEN (STR_MEM_EYE_SCAN_PROMPT_HELP),
+            default     = FixedPcdGet16 (PcdMemEyeScan),
+            option text = STRING_TOKEN(STR_DISABLED), value = 0x00, flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_ENABLED),  value = 0x01, flags = RESET_REQUIRED;
+            option text = STRING_TOKEN(STR_AUTO),     value = 0xFF, flags = RESET_REQUIRED;
+        endoneof;
+
+endform;

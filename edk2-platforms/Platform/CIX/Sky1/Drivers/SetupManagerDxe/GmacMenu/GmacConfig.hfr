@@ -1,0 +1,46 @@
+/**
+  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+
+  SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+//GMAC Form
+  form formid = GMAC_CONFIG_FORM_ID,
+      title  = STRING_TOKEN(STR_GMAC_FORM_SET_TITLE);
+      subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+
+      oneof varid   = PlatformSetupVar.GmacEnable[0],
+        prompt      = STRING_TOKEN(STR_GMAC0_PROMPT),
+        help        = STRING_TOKEN(STR_GMAC1_PROMPT_HELP),
+        default     = FixedPcdGetBool (PcdGmac0Enable),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      numeric varid   = PlatformSetupVar.GmacMacAddr[0],
+              prompt  = STRING_TOKEN(STR_GMAC0_MAC_PROMPT),
+              help    = STRING_TOKEN(STR_GMAC0_MAC_PROMPT_HELP),
+              flags   = DISPLAY_UINT_HEX | NUMERIC_SIZE_8 ,
+              minimum = 0,
+              maximum = 0xFFFFFFFFFFFF,
+              default = FixedPcdGetBool (PcdGmac0MacAddress),
+      endnumeric;
+
+      oneof varid   = PlatformSetupVar.GmacEnable[1],
+        prompt      = STRING_TOKEN(STR_GMAC1_PROMPT),
+        help        = STRING_TOKEN(STR_GMAC1_PROMPT_HELP),
+        default     = FixedPcdGetBool (PcdGmac1Enable),
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
+      numeric varid   = PlatformSetupVar.GmacMacAddr[1],
+              prompt  = STRING_TOKEN(STR_GMAC1_MAC_PROMPT),
+              help    = STRING_TOKEN(STR_GMAC1_MAC_PROMPT_HELP),
+              flags   = DISPLAY_UINT_HEX | NUMERIC_SIZE_8 ,
+              minimum = 0,
+              maximum = 0xFFFFFFFFFFFF,
+              default = FixedPcdGetBool (PcdGmac1MacAddress),
+      endnumeric;
+
+  endform;

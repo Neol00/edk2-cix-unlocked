@@ -1,0 +1,188 @@
+## @file
+# IntelSilicon Package
+#
+# This package provides common open source Intel silicon modules.
+#
+# Copyright (c) 2016 - 2021, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) Microsoft Corporation.<BR>
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  DEC_SPECIFICATION              = 0x00010005
+  PACKAGE_NAME                   = IntelSiliconPkg
+  PACKAGE_GUID                   = F7A58914-FA0E-4F71-BD6A-220FDF824A49
+  PACKAGE_VERSION                = 0.1
+
+[Includes]
+  Include
+
+[LibraryClasses.IA32, LibraryClasses.X64]
+  ## @libraryclass Provides services to access Microcode region on flash device.
+  #
+  MicrocodeFlashAccessLib|Include/Library/MicrocodeFlashAccessLib.h
+
+  ## @libraryclass Provides services to identify the firmware boot media device.
+  #
+  FirmwareBootMediaLib|Include/Library/FirmwareBootMediaLib.h
+
+  ## @libraryclass Provides services to access VTd PMR information
+  #
+  PeiGetVtdPmrAlignmentLib|Include/Library/PeiGetVtdPmrAlignmentLib.h
+
+  ## @libraryclass Provides services to access SMM information
+  #
+  SmmAccessLib|Include/Library/SmmAccessLib.h
+
+  ## @libraryclass Provides services to trigger SMI
+  #
+  SmmControlLib|Include/Library/SmmControlLib.h
+
+  ## @libraryclass Provides services to access config block
+  #
+  ConfigBlockLib|Include/Library/ConfigBlockLib.h
+
+  ## @libraryclass Provides services to update AML in DXE
+  #
+  AslUpdateLib|Include/Library/AslUpdateLib.h
+
+  ## @libraryclass Provides services to report CPU hob
+  #
+  ReportCpuHobLib|Include/Library/ReportCpuHobLib.h
+
+  ## @libraryclass Provides services to perform SPI flash actions
+  #
+  SpiFlashCommonLib|Include/Library/SpiFlashCommonLib.h
+
+[Guids]
+  ## GUID for Package token space
+  # {A9F8D54E-1107-4F0A-ADD0-4587E7A4A735}
+  gIntelSiliconPkgTokenSpaceGuid  = { 0xa9f8d54e, 0x1107, 0x4f0a, { 0xad, 0xd0, 0x45, 0x87, 0xe7, 0xa4, 0xa7, 0x35 } }
+
+  ## HOB GUID to publish SMBIOS data records from PEI phase
+  # HOB data format is same as SMBIOS records defined in SMBIOS spec or OEM defined types
+  # Generic DXE Library / Driver can locate HOB(s) and add SMBIOS records into SMBIOS table
+  gIntelSmbiosDataHobGuid         = { 0x798e722e, 0x15b2, 0x4e13, { 0x8a, 0xe9, 0x6b, 0xa3, 0x0f, 0xf7, 0xf1, 0x67 }}
+
+  ## Include/Guid/MicrocodeFmp.h
+  gMicrocodeFmpImageTypeIdGuid      = { 0x96d4fdcd, 0x1502, 0x424d, { 0x9d, 0x4c, 0x9b, 0x12, 0xd2, 0xdc, 0xae, 0x5c } }
+
+  gFirmwareBootMediaHobGuid = { 0x8c7340ea, 0xde8b, 0x4e06, {0xa4, 0x78, 0xec, 0x8b, 0x62, 0xd7, 0xa, 0x8b } }
+
+  ## HOB GUID to get memory information after MRC is done. The hob data will be used to set the PMR ranges
+  gVtdPmrInfoDataHobGuid = {0x6fb61645, 0xf168, 0x46be, { 0x80, 0xec, 0xb5, 0x02, 0x38, 0x5e, 0xe7, 0xe7 } }
+
+  ## Include/Guid/MicrocodeShadowInfoHob.h
+  gEdkiiMicrocodeShadowInfoHobGuid = { 0x658903f9, 0xda66, 0x460d, { 0x8b, 0xb0, 0x9d, 0x2d, 0xdf, 0x65, 0x44, 0x59 } }
+
+  ## Include/Guid/MicrocodeShadowInfoHob.h
+  gEdkiiMicrocodeStorageTypeFlashGuid = { 0x2cba01b3, 0xd391, 0x4598, { 0x8d, 0x89, 0xb7, 0xfc, 0x39, 0x22, 0xfd, 0x71 } }
+
+  ## Include/Guid/FlashRegion.h
+  gFlashRegionDescriptorGuid        = { 0xaf90c5d8, 0xb8d1, 0x4cc2, {0xbb, 0xc1, 0xc9, 0xeb, 0x51, 0x2d, 0x2f, 0x82 } }
+  gFlashRegionBiosGuid              = { 0x6fe65e44, 0x00fc, 0x4ae7, {0xb7, 0x61, 0xb4, 0x8f, 0x17, 0x0f, 0x4d, 0x85 } }
+  gFlashRegionMeGuid                = { 0xebbfcd3f, 0xe8de, 0x40c1, {0x9c, 0xfd, 0xd3, 0x4e, 0x36, 0xdc, 0x0d, 0xe4 } }
+  gFlashRegionGbeGuid               = { 0x79d11264, 0xed7a, 0x4556, {0xaf, 0xeb, 0x4b, 0x23, 0x93, 0x9c, 0x88, 0xe7 } }
+  gFlashRegionPlatformDataGuid      = { 0x4330a7d5, 0xad54, 0x456a, {0x8f, 0xe1, 0xea, 0x4f, 0xa1, 0xbe, 0x58, 0xd0 } }
+  gFlashRegionDerGuid               = { 0x83014a66, 0xfd0b, 0x4049, {0xb3, 0xf7, 0x85, 0x6c, 0x26, 0xbb, 0xb4, 0x34 } }
+  gFlashRegionSecondaryBiosGuid     = { 0x993382b4, 0x5a43, 0x4cb0, {0xba, 0x77, 0x06, 0xb9, 0x16, 0xc5, 0x6a, 0x18 } }
+  gFlashRegionMicrocodePatchGuid    = { 0x3e97eeeb, 0xc5f7, 0x4af6, {0xa8, 0x61, 0x22, 0xfd, 0x8d, 0x8c, 0xa1, 0x84 } }
+  gFlashRegionEcGuid                = { 0x55a62589, 0x1b0c, 0x43ad, {0x91, 0xe2, 0x6f, 0xcc, 0x08, 0xc6, 0x9b, 0x75 } }
+  gFlashRegionDeviceExpansionGuid   = { 0x0dc8f30b, 0x472b, 0x48cc, {0xbd, 0x22, 0xe2, 0x7c, 0xfe, 0xc2, 0xc3, 0x7e } }
+  gFlashRegionIeGuid                = { 0xf930a983, 0xb72e, 0x41cc, {0x98, 0x1a, 0x2c, 0x60, 0x6b, 0xf5, 0x7e, 0xdb } }
+  gFlashRegion10GbeAGuid            = { 0xde09e662, 0x831f, 0x4ace, {0x9a, 0x06, 0x31, 0x7c, 0xcd, 0x9c, 0x38, 0x3e } }
+  gFlashRegion10GbeBGuid            = { 0x7776d88b, 0x48cb, 0x42a4, {0xb5, 0x93, 0x9b, 0x50, 0x9c, 0x8e, 0xd2, 0xae } }
+  gFlashRegionAllGuid               = { 0xbabe60dc, 0xf88d, 0x4584, {0x9e, 0x54, 0x57, 0x44, 0x4b, 0xe2, 0x6e, 0xf3 } }
+  gFlashRegionMaxGuid               = { 0x74c2e3c1, 0x8faa, 0x4659, {0xa7, 0xbb, 0x87, 0x1f, 0xbb, 0x61, 0xd3, 0xb4 } }
+
+  ## Include/Protocol/IntelDieInfo.h
+  gIntelDieInfoPchGuid = { 0x62CB6D68, 0x4771, 0x4569, { 0x81, 0xFA, 0x1E, 0x99, 0x6E, 0xA9, 0x91, 0xC5 }}
+  gIntelDieInfoSocGuid = { 0x63287105, 0x578E, 0x4799, { 0xBE, 0x55, 0x5D, 0xDA, 0xCA, 0x03, 0x74, 0xD0 }}
+  gIntelDieInfoIoGuid = { 0x23DA4C74, 0x54A0, 0x4E01, { 0x83, 0xB1, 0x8C, 0xA7, 0x43, 0x43, 0x1F, 0xF0 }}
+  gIntelDieInfoCpuGuid = { 0x6E5AF2E3, 0x5D84, 0x48F2, { 0x84, 0x28, 0x99, 0xE4, 0x93, 0x4F, 0x51, 0xE4 }}
+  gIntelDieInfoGfxGuid = { 0x1D3D2599, 0x7A1C, 0x4B1E, { 0x8C, 0xC5, 0x0F, 0x88, 0x27, 0xA0, 0x2E, 0xEC }}
+
+[Ppis]
+  ## Include/Ppi/Spi2.h
+  gPchSpi2PpiGuid = { 0x63c40580, 0x10c4, 0x4a8e, { 0xb4, 0x16, 0x86, 0x85, 0x25, 0x7e, 0xce, 0x04 } }
+
+  gEdkiiVTdInfoPpiGuid = { 0x8a59fcb3, 0xf191, 0x400c, { 0x97, 0x67, 0x67, 0xaf, 0x2b, 0x25, 0x68, 0x4a } }
+  gEdkiiVTdNullRootEntryTableGuid = { 0x3de0593f, 0x6e3e, 0x4542, { 0xa1, 0xcb, 0xcb, 0xb2, 0xdb, 0xeb, 0xd8, 0xff } }
+  gIntelDieInfoPpiGuid = { 0xF9E45CBF, 0x1E21, 0x434A, { 0x90, 0x88, 0x1D, 0x10, 0x38, 0xF3, 0x68, 0xF2 }}
+
+[Protocols]
+  ## Protocols that provide services for the Intel(R) PCH SPI Host Controller Compatibility Interface
+
+  # Include/Protocol/Spi2.h
+  gPchSpi2ProtocolGuid = { 0x3a99abd1, 0x096c, 0x4399, { 0xb1, 0x68, 0x52, 0xaa, 0x52, 0x64, 0xce, 0x70 } }
+  gPchSmmSpi2ProtocolGuid = { 0x2d1c0c43, 0x20d3, 0x40ae, { 0x99, 0x07, 0x2d, 0xf0, 0xe7, 0x91, 0x21, 0xa5 } }
+
+  gEdkiiPlatformVTdPolicyProtocolGuid = { 0x3d17e448, 0x466, 0x4e20, { 0x99, 0x9f, 0xb2, 0xe1, 0x34, 0x88, 0xee, 0x22 }}
+  gIntelDieInfoProtocolGuid = { 0xAED8A0A1, 0xFDE6, 0x4CF2, { 0xA3, 0x85, 0x08, 0xF1, 0x25, 0xF2, 0x40, 0x37 }}
+
+  ## Protocol for device security policy.
+  # Include/Protocol/PlatformDeviceSecurityPolicy.h
+  gEdkiiDeviceSecurityPolicyProtocolGuid = {0x7ea41a99, 0x5e32, 0x4c97, {0x88, 0xc4, 0xd6, 0xe7, 0x46, 0x84, 0x9, 0xd4}}
+
+[PcdsFeatureFlag]
+  ## Indicates if all microcode update patches shall be shadowed to memory.
+  #   TRUE  - All microcode patches will be shadowed.<BR>
+  #   FALSE - Only the microcode for current present processors will be shadowed.<BR>
+  # @Prompt Shadow all microcode update patches.
+  gIntelSiliconPkgTokenSpaceGuid.PcdShadowAllMicrocode|FALSE|BOOLEAN|0x00000006
+
+[PcdsFixedAtBuild]
+  gIntelSiliconPkgTokenSpaceGuid.PcdBiosAreaBaseAddress|0xFF800000|UINT32|0x00000007
+  gIntelSiliconPkgTokenSpaceGuid.PcdBiosSize|0x00800000|UINT32|0x00000008
+  gIntelSiliconPkgTokenSpaceGuid.PcdFlashMicrocodeFvBase|0xFFE60000|UINT32|0x00000009
+  gIntelSiliconPkgTokenSpaceGuid.PcdFlashMicrocodeFvSize|0x000A0000|UINT32|0x0000000A
+  gIntelSiliconPkgTokenSpaceGuid.PcdFlashMicrocodeFvOffset|0x00660000|UINT32|0x0000000B
+
+[PcdsFixedAtBuild, PcdsPatchableInModule]
+  ## Error code for VTd error.<BR><BR>
+  #  EDKII_ERROR_CODE_VTD_ERROR = (EFI_IO_BUS_UNSPECIFIED | (EFI_OEM_SPECIFIC | 0x00000000)) = 0x02008000<BR>
+  # @Prompt Error code for VTd error.
+  gIntelSiliconPkgTokenSpaceGuid.PcdErrorCodeVTdError|0x02008000|UINT32|0x00000005
+
+  ## ABase I/O address.<BR><BR>
+  # @Prompt ABase I/O address.
+  gIntelSiliconPkgTokenSpaceGuid.PcdAcpiBaseAddress|0x0|UINT16|0x0000000D
+
+[PcdsFixedAtBuild, PcdsPatchableInModule, PcdsDynamic, PcdsDynamicEx]
+  ## This is the GUID of the FFS which contains the Graphics Video BIOS Table (VBT)
+  # The VBT content is stored as a RAW section which is consumed by GOP PEI/UEFI driver.
+  # The default GUID can be updated by patching or runtime if platform support multiple VBT configurations.
+  # @Prompt GUID of the FFS which contains the Graphics Video BIOS Table (VBT)
+  # { 0x56752da9, 0xde6b, 0x4895, 0x88, 0x19, 0x19, 0x45, 0xb6, 0xb7, 0x6c, 0x22 }
+  gIntelSiliconPkgTokenSpaceGuid.PcdIntelGraphicsVbtFileGuid|{ 0xa9, 0x2d, 0x75, 0x56, 0x6b, 0xde, 0x95, 0x48, 0x88, 0x19, 0x19, 0x45, 0xb6, 0xb7, 0x6c, 0x22 }|VOID*|0x00000001
+
+  ## The mask is used to control VTd behavior.<BR><BR>
+  #  BIT0: Enable IOMMU during boot (If DMAR table is installed in DXE. If VTD_INFO_PPI is installed in PEI.)
+  #  BIT1: Enable IOMMU when transfer control to OS (ExitBootService in normal boot. EndOfPEI in S3)
+  #  BIT2: Force no IOMMU access attribute request recording before DMAR table is installed.
+  # @Prompt The policy for VTd driver behavior.
+  gIntelSiliconPkgTokenSpaceGuid.PcdVTdPolicyPropertyMask|1|UINT8|0x00000002
+
+  ## Declares VTd PEI DMA buffer size.<BR><BR>
+  #  When this PCD value is referred by platform to calculate the required
+  #  memory size for PEI (InstallPeiMemory), the PMR alignment requirement
+  #  needs be considered to be added with this PCD value for alignment
+  #  adjustment need by AllocateAlignedPages.
+  # @Prompt The VTd PEI DMA buffer size.
+  gIntelSiliconPkgTokenSpaceGuid.PcdVTdPeiDmaBufferSize|0x00400000|UINT32|0x00000003
+
+  ## Declares VTd PEI DMA buffer size for S3.<BR><BR>
+  #  When this PCD value is referred by platform to calculate the required
+  #  memory size for PEI S3 (InstallPeiMemory), the PMR alignment requirement
+  #  needs be considered to be added with this PCD value for alignment
+  #  adjustment need by AllocateAlignedPages.
+  # @Prompt The VTd PEI DMA buffer size for S3.
+  gIntelSiliconPkgTokenSpaceGuid.PcdVTdPeiDmaBufferSizeS3|0x00200000|UINT32|0x00000004
+
+  ## Indicates if VTd Abort DMA Mode is supported.<BR><BR>
+  #   TRUE  - Support VTd abort DMA mode.
+  #   FALSE - Not support VTd abort DMA mode.
+  # @Prompt VTd abort DMA mode support.
+  gIntelSiliconPkgTokenSpaceGuid.PcdVTdSupportAbortDmaMode|FALSE|BOOLEAN|0x0000000C
+

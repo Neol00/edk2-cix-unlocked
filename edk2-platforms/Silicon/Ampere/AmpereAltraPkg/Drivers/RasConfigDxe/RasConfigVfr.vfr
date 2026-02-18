@@ -1,0 +1,95 @@
+/** @file
+
+  Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+
+  SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+
+#include "RasConfigNVDataStruct.h"
+
+formset
+  guid      = RAS_CONFIG_FORMSET_GUID,
+  title     = STRING_TOKEN(STR_RAS_FORM),
+  help      = STRING_TOKEN(STR_RAS_FORM_HELP),
+  classguid = gPlatformManagerFormsetGuid,
+
+  //
+  // Define a variable Storage
+  //
+  varstore RAS_CONFIG_VARSTORE_DATA,
+    varid = RAS_CONFIG_VARSTORE_ID,
+    name  = RasConfigNVData,
+    guid  = RAS_CONFIG_FORMSET_GUID;
+
+  form formid = RAS_CONFIG_FORM_ID,
+    title = STRING_TOKEN(STR_RAS_FORM);
+
+    subtitle text = STRING_TOKEN(STR_RAS_FORM);
+
+    oneof varid  = RasConfigNVData.RasHardwareEinj,
+      prompt      = STRING_TOKEN(STR_RAS_HARDWARE_EINJ_PROMPT),
+      help        = STRING_TOKEN(STR_RAS_HARDWARE_EINJ_HELP),
+      flags       = NUMERIC_SIZE_4 | RESET_REQUIRED,
+      option text = STRING_TOKEN(STR_RAS_COMMON_ENABLE), value = 1, flags = DEFAULT;
+      option text = STRING_TOKEN(STR_RAS_COMMON_DISABLE), value = 0, flags = 0;
+
+    endoneof;
+
+    oneof varid  = RasConfigNVData.RasPcieAerFwFirstEnabled,
+      prompt      = STRING_TOKEN(STR_RAS_PCIE_AER_FW_FIRST_PROMPT),
+      help        = STRING_TOKEN(STR_RAS_PCIE_AER_FW_FIRST_HELP),
+      flags       = NUMERIC_SIZE_4 | RESET_REQUIRED,
+      option text = STRING_TOKEN(STR_RAS_COMMON_ENABLE), value = 1, flags = 0;
+      option text = STRING_TOKEN(STR_RAS_COMMON_DISABLE), value = 0, flags = DEFAULT;
+
+    endoneof;
+
+    oneof varid  = RasConfigNVData.RasBertEnabled,
+      prompt      = STRING_TOKEN(STR_RAS_BERT_ENABLED_PROMPT),
+      help        = STRING_TOKEN(STR_RAS_BERT_ENABLED_HELP),
+      flags       = NUMERIC_SIZE_4 | RESET_REQUIRED,
+      option text = STRING_TOKEN(STR_RAS_COMMON_ENABLE), value = 1, flags = DEFAULT;
+      option text = STRING_TOKEN(STR_RAS_COMMON_DISABLE), value = 0, flags = 0;
+
+    endoneof;
+
+    oneof varid  = RasConfigNVData.RasSdeiEnabled,
+      prompt      = STRING_TOKEN(STR_RAS_SDEI_ENABLED_PROMPT),
+      help        = STRING_TOKEN(STR_RAS_SDEI_ENABLED_HELP),
+      flags       = NUMERIC_SIZE_4 | RESET_REQUIRED,
+      option text = STRING_TOKEN(STR_RAS_COMMON_ENABLE), value = 1, flags = 0;
+      option text = STRING_TOKEN(STR_RAS_COMMON_DISABLE), value = 0, flags = DEFAULT;
+
+    endoneof;
+
+    label LABEL_UPDATE;
+    //
+    // This is where we will dynamically add other Action type op-code
+    //
+    label LABEL_END;
+
+    numeric varid   = RasConfigNVData.RasCpmCeThreshold,
+      prompt  = STRING_TOKEN(STR_RAS_CPM_CE_THRESHOLD_PROMPT),
+      help    = STRING_TOKEN(STR_RAS_CPM_CE_THRESHOLD_HELP),
+      flags   = NUMERIC_SIZE_4 | RESET_REQUIRED,
+      minimum = 1,
+      maximum = 8192,
+      default = 1,
+
+    endnumeric;
+
+    numeric varid   = RasConfigNVData.RasLinkErrThreshold,
+      prompt  = STRING_TOKEN(STR_RAS_LINK_ERR_THRESHOLD_PROMPT),
+      help    = STRING_TOKEN(STR_RAS_LINK_ERR_THRESHOLD_HELP),
+      flags   = NUMERIC_SIZE_4 | RESET_REQUIRED,
+      minimum = 1,
+      maximum = 8192,
+      default = 1,
+
+    endnumeric;
+
+
+  endform;
+
+endformset;

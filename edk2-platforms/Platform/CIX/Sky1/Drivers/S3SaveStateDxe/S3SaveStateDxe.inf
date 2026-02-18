@@ -1,0 +1,52 @@
+#/**
+#  S3 Boot Script Save State driver.
+#
+#  It will install S3 Save State protocol to store or record various IO operations to be replayed during an S3 resume.
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = S3SaveStateDxe
+  FILE_GUID                      = 2e3fc9cc-9606-4279-bf3d-84183f298c0f
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+
+  ENTRY_POINT                    = InitializeS3SaveState
+
+[Sources]
+  S3SaveState.c
+  BootScriptSave.c
+  InternalS3SaveState.h
+  InternalBootScript.h
+  BootScriptInternalFormat.h
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+
+[LibraryClasses]
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  BaseMemoryLib
+  MemoryAllocationLib
+  BaseLib
+  UefiLib
+  DebugLib
+  CsuPmIpcLib
+
+[Guids]
+  gEfiEventExitBootServicesGuid
+
+[Protocols]
+  gCixS3SaveStateProtocolGuid
+
+[Depex]
+  TRUE
+

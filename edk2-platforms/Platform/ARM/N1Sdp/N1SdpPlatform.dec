@@ -1,0 +1,91 @@
+## @file
+#  Describes the N1Sdp configuration.
+#
+#  Copyright (c) 2021, ARM Limited. All rights reserved.<BR>
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+##
+
+[Defines]
+  DEC_SPECIFICATION              = 0x0001001A
+  PACKAGE_NAME                   = N1SdpPlatform
+  PACKAGE_GUID                   = 29aacb23-61e8-4fe2-8a06-793537cd26e9
+  PACKAGE_VERSION                = 0.1
+
+################################################################################
+#
+# Include Section - list of Include Paths that are provided by this package.
+#                   Comments are used for Keywords and Module Types.
+#
+# Supported Module Types:
+#  BASE SEC PEI_CORE PEIM DXE_CORE DXE_DRIVER DXE_RUNTIME_DRIVER DXE_SMM_DRIVER DXE_SAL_DRIVER UEFI_DRIVER UEFI_APPLICATION
+#
+################################################################################
+[Includes.common]
+  Include           # Root include for the pakage
+
+[LibraryClasses]
+  ArmPlatformLib|Silicon/ARM/NeoverseN1Soc/Library/PlatformLib/PlatformLib.inf
+
+[Guids.common]
+  gArmN1SdpTokenSpaceGuid =  { 0xd8f1624a, 0x98c1, 0x4f64, { 0xa6, 0x41, 0x19, 0x5e, 0xb5, 0x3b, 0x26, 0x0f } }
+
+[PcdsFixedAtBuild]
+  gArmN1SdpTokenSpaceGuid.PcdRamDiskBase|0x88000000|UINT32|0x00000001
+  gArmN1SdpTokenSpaceGuid.PcdRamDiskSize|0x18000000|UINT32|0x00000002
+
+  # External memory
+  gArmNeoverseN1SocTokenSpaceGuid.PcdExtMemorySpace|0|UINT64|0x00000029
+
+[PcdsFeatureFlag.common]
+  gArmN1SdpTokenSpaceGuid.PcdRamDiskSupported|FALSE|BOOLEAN|0x00000003
+
+[PcdsFixedAtBuild.common]
+  # CoreSight Debug and Trace components
+  # CoreSight ETMs
+  gArmN1SdpTokenSpaceGuid.PcdCsEtm0Base|0x402040000|UINT64|0x0000002D
+  gArmN1SdpTokenSpaceGuid.PcdCsEtm0MaxBase|0x402040FFF|UINT64|0x0000002E
+  gArmN1SdpTokenSpaceGuid.PcdCsEtm1Base|0x402140000|UINT64|0x0000002F
+  gArmN1SdpTokenSpaceGuid.PcdCsEtm1MaxBase|0x402140FFF|UINT64|0x00000030
+  gArmN1SdpTokenSpaceGuid.PcdCsEtm2Base|0x403040000|UINT64|0x00000031
+  gArmN1SdpTokenSpaceGuid.PcdCsEtm2MaxBase|0x403040FFF|UINT64|0x00000032
+  gArmN1SdpTokenSpaceGuid.PcdCsEtm3Base|0x403140000|UINT64|0x00000033
+  gArmN1SdpTokenSpaceGuid.PcdCsEtm3MaxBase|0x403140FFF|UINT64|0x00000034
+
+  # CoreSight TMC (ETRs/ETFs/ETBs)
+  gArmN1SdpTokenSpaceGuid.PcdCsEtf0Base|0x400410000|UINT64|0x00000035
+  gArmN1SdpTokenSpaceGuid.PcdCsEtf0MaxBase|0x400410FFF|UINT64|0x00000036
+  gArmN1SdpTokenSpaceGuid.PcdCsEtf1Base|0x400420000|UINT64|0x00000037
+  gArmN1SdpTokenSpaceGuid.PcdCsEtf1MaxBase|0x400420FFF|UINT64|0x00000038
+  gArmN1SdpTokenSpaceGuid.PcdCsEtf2Base|0x400010000|UINT64|0x00000039
+  gArmN1SdpTokenSpaceGuid.PcdCsEtf2MaxBase|0x400010FFF|UINT64|0x0000003A
+  gArmN1SdpTokenSpaceGuid.PcdCsEtrBase|0x400120000|UINT64|0x00000043
+  gArmN1SdpTokenSpaceGuid.PcdCsEtrMaxBase|0x400120FFF|UINT64|0x00000044
+
+  # CoreSight Dynamic Funnel(s)
+  gArmN1SdpTokenSpaceGuid.PcdCsFunnel0Base|0x4000B0000|UINT64|0x0000003B
+  gArmN1SdpTokenSpaceGuid.PcdCsFunnel0MaxBase|0x4000B0FFF|UINT64|0x0000003C
+  gArmN1SdpTokenSpaceGuid.PcdCsFunnel1Base|0x4000A0000|UINT64|0x0000003D
+  gArmN1SdpTokenSpaceGuid.PcdCsFunnel1MaxBase|0x4000A0FFF|UINT64|0x0000003E
+
+  # CoreSight Dynamic Replicator(s)
+  gArmN1SdpTokenSpaceGuid.PcdCsReplicatorBase|0x400110000|UINT64|0x0000003F
+  gArmN1SdpTokenSpaceGuid.PcdCsReplicatorMaxBase|0x400110FFF|UINT64|0x00000040
+
+  # CoreSight TPIU
+  gArmN1SdpTokenSpaceGuid.PcdCsTpiuBase|0x400130000|UINT64|0x00000041
+  gArmN1SdpTokenSpaceGuid.PcdCsTpiuMaxBase|0x400130FFF|UINT64|0x00000042
+
+  # CoreSight STM and STM Stimulus
+  gArmN1SdpTokenSpaceGuid.PcdCsStmBase|0x400800000|UINT64|0x00000045
+  gArmN1SdpTokenSpaceGuid.PcdCsStmMaxBase|0x400800FFF|UINT64|0x00000046
+  gArmN1SdpTokenSpaceGuid.PcdCsStmStimulusBase|0x4D000000|UINT32|0x00000047
+  gArmN1SdpTokenSpaceGuid.PcdCsStmStimulusSize|0x1000000|UINT32|0x00000048
+
+  # CoreSight Components' Size
+  #
+  # N1SDP TRM specifies the size for the coresight components as 64K.
+  # The actual size is just 4K though 64K is reserved. Access to the
+  # unmapped reserved region results in a DECERR response.
+  #
+  gArmN1SdpTokenSpaceGuid.PcdCsComponentSize|0x1000|UINT32|0x00000049

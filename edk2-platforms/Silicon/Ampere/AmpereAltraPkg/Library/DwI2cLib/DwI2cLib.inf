@@ -1,0 +1,38 @@
+## @file
+# Component description for DwI2cLib library for the Designware I2C controller.
+#
+# Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001B
+  BASE_NAME                      = DwI2cLib
+  FILE_GUID                      = 222609E2-C181-11E6-A4A6-CEC0C932CE01
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = I2cLib
+  CONSTRUCTOR                    = I2cLibConstructor
+
+[Sources]
+  DwI2cLib.c
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  ArmPlatformPkg/ArmPlatformPkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/Ampere/AmpereAltraPkg/AmpereAltraPkg.dec
+
+[LibraryClasses]
+  BaseLib
+  BaseMemoryLib
+  DebugLib
+  HobLib
+  IoLib
+  TimerLib
+
+[Guids]
+  gEfiEventVirtualAddressChangeGuid
+  gPlatformInfoHobGuid

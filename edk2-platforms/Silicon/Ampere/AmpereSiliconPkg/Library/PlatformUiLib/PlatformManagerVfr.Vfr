@@ -1,0 +1,29 @@
+/** @file
+
+  Copyright (c) 2020 - 2021, Ampere Computing LLC. All rights reserved.<BR>
+
+  SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+
+#include <Guid/HiiPlatformSetupFormset.h>
+#include "PlatformManagerVfr.h"
+
+formset
+  guid      = FORMSET_GUID,
+  title     = STRING_TOKEN(STR_EDKII_MENU_TITLE),
+  help      = STRING_TOKEN(STR_EDKII_MENU_HELP),
+  classguid = EFI_HII_PLATFORM_SETUP_FORMSET_GUID,
+
+  form formid = PLATFORM_MANAGER_FORM_ID,
+    title  = STRING_TOKEN(STR_EDKII_MENU_TITLE);
+    subtitle text = STRING_TOKEN(STR_PLATFORM_LIST);
+
+    label LABEL_ENTRY_LIST;
+    label LABEL_END;
+
+    subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+    subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+    subtitle text = STRING_TOKEN(STR_EXIT_STRING);
+  endform;
+endformset;
