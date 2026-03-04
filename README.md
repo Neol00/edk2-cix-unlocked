@@ -123,10 +123,10 @@ The Power Management menu in BIOS settings lets you tune frequency and voltage f
 | GPU Core | 7 | 250–1100 | 800 mV | Configurable |
 | GPU Top | 6 | 250–1000 | 800 mV | Configurable |
 | CPU Little | 2 | 800–1800 | 790 mV | Configurable |
-| CPU Big G0 | 7 | 800–2600 | 790–920 mV | Configurable |
-| CPU Big G1 | 7 | 800–2600 | 790–920 mV | Configurable |
-| CPU Mid G0 | 7 | 800–2400 | 790–920 mV | Configurable |
-| CPU Mid G1 | 7 | 800–2400 | 790–920 mV | Configurable |
+| CPU Big G0 | 7 | 800–2600 | 790–930 mV | Configurable |
+| CPU Big G1 | 7 | 800–2600 | 790–930 mV | Configurable |
+| CPU Mid G0 | 7 | 800–2400 | 790–930 mV | Configurable |
+| CPU Mid G1 | 7 | 800–2400 | 790–930 mV | Configurable |
 | DSU | 2 | 400–1300 | 790 mV | Configurable |
 | NPU | 4 | 400–1200 | Fixed (SOC rail) | Frequency only |
 | VPU | 6 | 150–1200 | Fixed (SOC rail) | Frequency only |
