@@ -250,8 +250,8 @@ InitializeCmArmCpcInfo (
     CpuCpcInfo[i].NominalPerformanceInteger         = NominalPerf;
     CpuCpcInfo[i].LowestNonlinearPerformanceInteger = LowestNonlinearPerf;
     CpuCpcInfo[i].LowestPerformanceInteger          = LowestPerf;
-    CpuCpcInfo[i].LowestFrequencyInteger            = ROUND_DIVISION (LowestPerf * CpcGranularity, 1000000);
-    CpuCpcInfo[i].NominalFrequencyInteger           = ROUND_DIVISION (NominalPerf * CpcGranularity, 1000000);
+    CpuCpcInfo[i].LowestFrequencyInteger            = ROUND_TO_10_MHZ (ROUND_DIVISION (LowestPerf * CpcGranularity, 1000000));
+    CpuCpcInfo[i].NominalFrequencyInteger           = ROUND_TO_10_MHZ ((NominalPerf * CpcGranularity) / 1000000);
     DEBUG ((DEBUG_INFO, "LowestFrequencyInteger = %d\n", CpuCpcInfo[i].LowestFrequencyInteger));
     DEBUG ((DEBUG_INFO, "NominalFrequencyInteger = %d\n", CpuCpcInfo[i].NominalFrequencyInteger));
   }

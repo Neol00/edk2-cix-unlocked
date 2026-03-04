@@ -44,6 +44,7 @@
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
   EmbeddedPkg/EmbeddedPkg.dec
+  ArmPkg/ArmPkg.dec
   Silicon/CIX/Sky1/CixPkg.dec
   Platform/CIX/Sky1/Sky1.dec
   NetworkPkg/NetworkPkg.dec
@@ -81,6 +82,7 @@
   gCixFwVersionProtocolGuid
   gCixEcPlatformProtocolGuid
   gCixSocInfoProtocolGuid
+  gArmScmiPerformanceProtocolGuid
 
 [FixedPcd]
   gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString

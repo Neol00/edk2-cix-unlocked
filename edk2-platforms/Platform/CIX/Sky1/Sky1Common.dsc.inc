@@ -564,6 +564,7 @@
 
 !if $(COMPILE_ACPI_ENABLE) == 1
   gCixTokenSpaceGuid.PcdSystemTableSelect|0x00
+  gEmbeddedTokenSpaceGuid.PcdDefaultDtPref|FALSE
 !endif
 
 [PcdsPatchableInModule]

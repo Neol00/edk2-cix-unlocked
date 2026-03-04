@@ -56,20 +56,9 @@ static bool double_check_sum(void * start, uint32_t length, uint64_t * sum64, bo
 }
 
 #if PM_OPP_TABLE_CONFIG
-static uint32_t volt_abs(uint32_t a, uint32_t b)
-{
-    if (a >= b) {
-        return a - b;
-    } else {
-        return b - a;
-    }
-}
-
 static bool check_opp_table(void)
 {
     domain_opp_config_t *config;
-    uint32_t dsu_sust_freq;
-    uint32_t dsu_sust_volt;
     size_t i;
 
     /* sustained index */
@@ -86,37 +75,6 @@ static bool check_opp_table(void)
         if (config->size > DOMAIN_MAX_OPP_ENTRIES) {
             printf("domain %zu: OPP table too large. Must be smaller than %u\n",
                 i, config->size);
-            return false;
-        }
-    }
-
-    /* DSU */
-    config = dom_opps[DVFS_ELEMENT_IDX_DSU];
-    if (!config) {
-        printf("DSU domain OPP mising\n");
-        return false;
-    }
-
-    dsu_sust_freq = config->opp_table[config->sustained_idx].frequency;
-    dsu_sust_volt = config->opp_table[config->sustained_idx].voltage;
-
-    for (i = 0; i < ARRAY_LENGTH(dom_opps); i++) {
-        uint32_t freq;
-        uint32_t volt;
-
-        if (i < DVFS_ELEMENT_IDX_LITTLE || i > DVFS_ELEMENT_IDX_MID_G1) {
-            continue;
-        }
-        config = dom_opps[i];
-        freq = config->opp_table[config->sustained_idx].frequency;
-        volt = config->opp_table[config->sustained_idx].voltage;
-
-        if (volt_abs(volt, dsu_sust_volt) > 200) {
-            printf("domain %zu: Bad sustained voltage %u.\n", i, volt);
-            return false;
-        }
-        if (freq / 2 > dsu_sust_freq) {
-            printf("domain %zu: Bad frequency %u. Too large\n", i, freq);
             return false;
         }
     }

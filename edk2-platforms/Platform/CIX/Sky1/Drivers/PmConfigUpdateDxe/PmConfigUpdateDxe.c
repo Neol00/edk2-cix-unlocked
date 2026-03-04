@@ -136,9 +136,13 @@ VerifyCheckSum (
   unnecessary cold resets).
   Frequency is stored in MHz in the setup var but kHz in the OPP table.
 
+  Entry 1 of CPU/DSU domains (2-7) is the safe sustained entry and is
+  never patched from NVRAM — it always keeps its stock safe value.
+
   @param[in,out]  DomainOpp    Pointer to domain OPP config in pm_config
   @param[in]      SetupFreq    Array of 13 frequency values (MHz), 0=stock
   @param[in]      SetupVolt    Array of 13 voltage values (mV), 0=stock
+  @param[in]      DomainIdx    Domain index (DVFS_ELEMENT_IDX_*)
 
   @retval TRUE   At least one entry was modified
   @retval FALSE  No modifications made
@@ -148,49 +152,94 @@ BOOLEAN
 PatchOppEntries (
   IN OUT DOMAIN_OPP_CONFIG_T  *DomainOpp,
   IN     UINT16               *SetupFreq,
-  IN     UINT16               *SetupVolt
+  IN     UINT16               *SetupVolt,
+  IN     UINT8                 DomainIdx
   )
 {
-  UINT16   I;
-  UINT16   Size;
+  UINT16   NvSlot;
+  UINT16   OppIdx;
+  UINT16   NumVisible;
   BOOLEAN  Modified;
   UINT32   NewFreq;
   UINT32   NewVolt;
   UINT32   NewLevel;
+  BOOLEAN  HasHidden;
 
   Modified = FALSE;
-  Size = DomainOpp->Size;
-  if (Size > DOMAIN_MAX_OPP_ENTRIES) {
-    Size = DOMAIN_MAX_OPP_ENTRIES;
+
+  //
+  // All domains except CI700 (10) have a hidden safe sustained entry at OPP[0].
+  // NVRAM uses contiguous slots: slot 0 → OPP[1], slot 1 → OPP[2], ...
+  // CI700 has only a single fixed entry and is not user-configurable.
+  //
+  HasHidden = (DomainIdx != 10);
+  NumVisible = DomainOpp->Size;
+  if (HasHidden && NumVisible > 0) {
+    NumVisible--;   // one entry is hidden
+  }
+  if (NumVisible > DOMAIN_MAX_OPP_ENTRIES) {
+    NumVisible = DOMAIN_MAX_OPP_ENTRIES;
   }
 
-  for (I = 0; I < Size; I++) {
-    if (SetupFreq[I] != 0) {
-      NewFreq = (UINT32)SetupFreq[I] * 1000U;
-      if (DomainOpp->OppTable[I].Frequency != NewFreq) {
-        DomainOpp->OppTable[I].Frequency = NewFreq;
-        Modified = TRUE;
-      }
+  for (NvSlot = 0; NvSlot < NumVisible; NvSlot++) {
+    //
+    // Map NVRAM slot to OPP table index.
+    // For domains with a hidden entry at OPP[0]: slot N → OPP[N+1].
+    //
+    if (HasHidden) {
+      OppIdx = NvSlot + 1;
+    } else {
+      OppIdx = NvSlot;
+    }
+
+    if (OppIdx >= DomainOpp->Size) {
+      break;
+    }
+
+    if (SetupFreq[NvSlot] != 0) {
       //
-      // Also update Level to match frequency for CPU domains where
-      // Level == frequency in MHz. For GPU domains Level represents
-      // shader core count, so we leave it unchanged when it differs
-      // significantly from frequency.
+      // GPU domains (GPU_CORE=0, GPU_TOP=1) store clock rate in the
+      // Frequency field (kHz).  All other domains (CPU, DSU, NPU, VPU,
+      // MMHUB) store it in Level (MHz) and leave Frequency at 0 — the
+      // SCP firmware uses Level for those domains and ignores Frequency.
+      // Writing a non-zero Frequency for non-GPU domains causes the SCP
+      // to compute the wrong clock, so we keep Frequency = 0 and also
+      // repair any value that a previous boot may have written incorrectly.
       //
-      if (DomainOpp->OppTable[I].Level >= 400 &&
-          DomainOpp->OppTable[I].Level <= 5000) {
-        NewLevel = (UINT32)SetupFreq[I];
-        if (DomainOpp->OppTable[I].Level != NewLevel) {
-          DomainOpp->OppTable[I].Level = NewLevel;
+      if (DomainIdx <= DVFS_ELEMENT_IDX_GPU_TOP) {
+        //
+        // GPU: update Frequency (kHz) and keep Level (MHz) in sync.
+        //
+        NewFreq  = (UINT32)SetupFreq[NvSlot] * 1000U;
+        NewLevel = (UINT32)SetupFreq[NvSlot];
+        if (DomainOpp->OppTable[OppIdx].Frequency != NewFreq) {
+          DomainOpp->OppTable[OppIdx].Frequency = NewFreq;
+          Modified = TRUE;
+        }
+        if (DomainOpp->OppTable[OppIdx].Level != NewLevel) {
+          DomainOpp->OppTable[OppIdx].Level = NewLevel;
+          Modified = TRUE;
+        }
+      } else {
+        //
+        // Non-GPU: update Level (MHz), ensure Frequency is 0.
+        //
+        NewLevel = (UINT32)SetupFreq[NvSlot];
+        if (DomainOpp->OppTable[OppIdx].Level != NewLevel) {
+          DomainOpp->OppTable[OppIdx].Level = NewLevel;
+          Modified = TRUE;
+        }
+        if (DomainOpp->OppTable[OppIdx].Frequency != 0) {
+          DomainOpp->OppTable[OppIdx].Frequency = 0;
           Modified = TRUE;
         }
       }
     }
 
-    if (SetupVolt[I] != 0) {
-      NewVolt = (UINT32)SetupVolt[I];
-      if (DomainOpp->OppTable[I].Voltage != NewVolt) {
-        DomainOpp->OppTable[I].Voltage = NewVolt;
+    if (SetupVolt[NvSlot] != 0) {
+      NewVolt = (UINT32)SetupVolt[NvSlot];
+      if (DomainOpp->OppTable[OppIdx].Voltage != NewVolt) {
+        DomainOpp->OppTable[OppIdx].Voltage = NewVolt;
         Modified = TRUE;
       }
     }
@@ -499,7 +548,8 @@ PatchSpiFlashPmConfig (
       if (PatchOppEntries (
             &Cfg->OppConfig.Opps[Domain],
             &SetupVar->PmOppFreq[Domain * 13],
-            &SetupVar->PmOppVolt[Domain * 13]
+            &SetupVar->PmOppVolt[Domain * 13],
+            Domain
             ))
       {
         DEBUG ((DEBUG_INFO, "[PmConfigUpdate] Patched OPP domain %d\n", Domain));
@@ -579,7 +629,7 @@ PatchSpiFlashPmConfig (
 }
 
 /**
-  Entry point.  Performs SPI flash pm_config patching immediately (early DXE)
+  Entry point.Performs SPI flash pm_config patching immediately (early DXE)
   so any needed cold reset happens before the boot menu.  Registers a
   ReadyToBoot callback for ACPI DSDT gpu-microvolt patching.
 

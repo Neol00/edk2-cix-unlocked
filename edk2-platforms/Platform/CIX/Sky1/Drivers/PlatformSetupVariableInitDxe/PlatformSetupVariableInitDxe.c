@@ -468,65 +468,65 @@ ConstructSetupVariable (
   //
   // Stock PM OPP table defaults (from opp_config_custom.h / pmic_config.h)
   //
-  // Domain 0: GPU Core (7 entries)
-  PlatformSetupVar->PmOppFreq[0] = 100;  PlatformSetupVar->PmOppVolt[0] = 800;
-  PlatformSetupVar->PmOppFreq[1] = 200;  PlatformSetupVar->PmOppVolt[1] = 800;
-  PlatformSetupVar->PmOppFreq[2] = 350;  PlatformSetupVar->PmOppVolt[2] = 800;
-  PlatformSetupVar->PmOppFreq[3] = 600;  PlatformSetupVar->PmOppVolt[3] = 800;
-  PlatformSetupVar->PmOppFreq[4] = 800;  PlatformSetupVar->PmOppVolt[4] = 800;
-  PlatformSetupVar->PmOppFreq[5] = 1000; PlatformSetupVar->PmOppVolt[5] = 800;
+  // Domain 0: GPU Core (7 visible entries, +1 hidden safe sustained at OPP[0])
+  PlatformSetupVar->PmOppFreq[0] = 250;  PlatformSetupVar->PmOppVolt[0] = 800;
+  PlatformSetupVar->PmOppFreq[1] = 350;  PlatformSetupVar->PmOppVolt[1] = 800;
+  PlatformSetupVar->PmOppFreq[2] = 600;  PlatformSetupVar->PmOppVolt[2] = 800;
+  PlatformSetupVar->PmOppFreq[3] = 800;  PlatformSetupVar->PmOppVolt[3] = 800;
+  PlatformSetupVar->PmOppFreq[4] = 1000; PlatformSetupVar->PmOppVolt[4] = 800;
+  PlatformSetupVar->PmOppFreq[5] = 1100; PlatformSetupVar->PmOppVolt[5] = 800;
   PlatformSetupVar->PmOppFreq[6] = 1100; PlatformSetupVar->PmOppVolt[6] = 800;
-  // Domain 1: GPU Top (6 entries)
-  PlatformSetupVar->PmOppFreq[13] = 100;  PlatformSetupVar->PmOppVolt[13] = 800;
-  PlatformSetupVar->PmOppFreq[14] = 200;  PlatformSetupVar->PmOppVolt[14] = 800;
-  PlatformSetupVar->PmOppFreq[15] = 350;  PlatformSetupVar->PmOppVolt[15] = 800;
-  PlatformSetupVar->PmOppFreq[16] = 600;  PlatformSetupVar->PmOppVolt[16] = 800;
-  PlatformSetupVar->PmOppFreq[17] = 800;  PlatformSetupVar->PmOppVolt[17] = 800;
+  // Domain 1: GPU Top (6 visible entries, +1 hidden safe sustained at OPP[0])
+  PlatformSetupVar->PmOppFreq[13] = 250;  PlatformSetupVar->PmOppVolt[13] = 800;
+  PlatformSetupVar->PmOppFreq[14] = 350;  PlatformSetupVar->PmOppVolt[14] = 800;
+  PlatformSetupVar->PmOppFreq[15] = 600;  PlatformSetupVar->PmOppVolt[15] = 800;
+  PlatformSetupVar->PmOppFreq[16] = 800;  PlatformSetupVar->PmOppVolt[16] = 800;
+  PlatformSetupVar->PmOppFreq[17] = 1000; PlatformSetupVar->PmOppVolt[17] = 800;
   PlatformSetupVar->PmOppFreq[18] = 1000; PlatformSetupVar->PmOppVolt[18] = 800;
   // Domain 2: CPU Little (2 entries)
   PlatformSetupVar->PmOppFreq[26] = 800;  PlatformSetupVar->PmOppVolt[26] = 790;
   PlatformSetupVar->PmOppFreq[27] = 1800; PlatformSetupVar->PmOppVolt[27] = 790;
   // Domain 3: CPU Big G0 (7 entries)
-  PlatformSetupVar->PmOppFreq[39] = 800;  PlatformSetupVar->PmOppVolt[39] = 750;
-  PlatformSetupVar->PmOppFreq[40] = 1200; PlatformSetupVar->PmOppVolt[40] = 750;
-  PlatformSetupVar->PmOppFreq[41] = 1500; PlatformSetupVar->PmOppVolt[41] = 750;
-  PlatformSetupVar->PmOppFreq[42] = 1800; PlatformSetupVar->PmOppVolt[42] = 790;
-  PlatformSetupVar->PmOppFreq[43] = 2200; PlatformSetupVar->PmOppVolt[43] = 790;
-  PlatformSetupVar->PmOppFreq[44] = 2400; PlatformSetupVar->PmOppVolt[44] = 850;
-  PlatformSetupVar->PmOppFreq[45] = 2600; PlatformSetupVar->PmOppVolt[45] = 920;
+  PlatformSetupVar->PmOppFreq[39] = 800;  PlatformSetupVar->PmOppVolt[39] = 790;
+  PlatformSetupVar->PmOppFreq[40] = 1200; PlatformSetupVar->PmOppVolt[40] = 800;
+  PlatformSetupVar->PmOppFreq[41] = 1500; PlatformSetupVar->PmOppVolt[41] = 810;
+  PlatformSetupVar->PmOppFreq[42] = 1800; PlatformSetupVar->PmOppVolt[42] = 820;
+  PlatformSetupVar->PmOppFreq[43] = 2200; PlatformSetupVar->PmOppVolt[43] = 830;
+  PlatformSetupVar->PmOppFreq[44] = 2400; PlatformSetupVar->PmOppVolt[44] = 860;
+  PlatformSetupVar->PmOppFreq[45] = 2600; PlatformSetupVar->PmOppVolt[45] = 930;
   // Domain 4: CPU Big G1 (7 entries)
-  PlatformSetupVar->PmOppFreq[52] = 800;  PlatformSetupVar->PmOppVolt[52] = 750;
-  PlatformSetupVar->PmOppFreq[53] = 1200; PlatformSetupVar->PmOppVolt[53] = 750;
-  PlatformSetupVar->PmOppFreq[54] = 1500; PlatformSetupVar->PmOppVolt[54] = 750;
-  PlatformSetupVar->PmOppFreq[55] = 1800; PlatformSetupVar->PmOppVolt[55] = 790;
-  PlatformSetupVar->PmOppFreq[56] = 2200; PlatformSetupVar->PmOppVolt[56] = 790;
-  PlatformSetupVar->PmOppFreq[57] = 2400; PlatformSetupVar->PmOppVolt[57] = 850;
-  PlatformSetupVar->PmOppFreq[58] = 2600; PlatformSetupVar->PmOppVolt[58] = 920;
+  PlatformSetupVar->PmOppFreq[52] = 800;  PlatformSetupVar->PmOppVolt[52] = 790;
+  PlatformSetupVar->PmOppFreq[53] = 1200; PlatformSetupVar->PmOppVolt[53] = 800;
+  PlatformSetupVar->PmOppFreq[54] = 1500; PlatformSetupVar->PmOppVolt[54] = 810;
+  PlatformSetupVar->PmOppFreq[55] = 1800; PlatformSetupVar->PmOppVolt[55] = 820;
+  PlatformSetupVar->PmOppFreq[56] = 2200; PlatformSetupVar->PmOppVolt[56] = 830;
+  PlatformSetupVar->PmOppFreq[57] = 2400; PlatformSetupVar->PmOppVolt[57] = 860;
+  PlatformSetupVar->PmOppFreq[58] = 2600; PlatformSetupVar->PmOppVolt[58] = 930;
   // Domain 5: CPU Mid G0 (7 entries)
-  PlatformSetupVar->PmOppFreq[65] = 800;  PlatformSetupVar->PmOppVolt[65] = 750;
-  PlatformSetupVar->PmOppFreq[66] = 1200; PlatformSetupVar->PmOppVolt[66] = 750;
-  PlatformSetupVar->PmOppFreq[67] = 1500; PlatformSetupVar->PmOppVolt[67] = 750;
-  PlatformSetupVar->PmOppFreq[68] = 1800; PlatformSetupVar->PmOppVolt[68] = 790;
-  PlatformSetupVar->PmOppFreq[69] = 2000; PlatformSetupVar->PmOppVolt[69] = 790;
-  PlatformSetupVar->PmOppFreq[70] = 2200; PlatformSetupVar->PmOppVolt[70] = 850;
-  PlatformSetupVar->PmOppFreq[71] = 2400; PlatformSetupVar->PmOppVolt[71] = 920;
+  PlatformSetupVar->PmOppFreq[65] = 800;  PlatformSetupVar->PmOppVolt[65] = 790;
+  PlatformSetupVar->PmOppFreq[66] = 1200; PlatformSetupVar->PmOppVolt[66] = 800;
+  PlatformSetupVar->PmOppFreq[67] = 1500; PlatformSetupVar->PmOppVolt[67] = 810;
+  PlatformSetupVar->PmOppFreq[68] = 1800; PlatformSetupVar->PmOppVolt[68] = 820;
+  PlatformSetupVar->PmOppFreq[69] = 2000; PlatformSetupVar->PmOppVolt[69] = 820;
+  PlatformSetupVar->PmOppFreq[70] = 2200; PlatformSetupVar->PmOppVolt[70] = 860;
+  PlatformSetupVar->PmOppFreq[71] = 2400; PlatformSetupVar->PmOppVolt[71] = 930;
   // Domain 6: CPU Mid G1 (7 entries)
-  PlatformSetupVar->PmOppFreq[78] = 800;  PlatformSetupVar->PmOppVolt[78] = 750;
-  PlatformSetupVar->PmOppFreq[79] = 1200; PlatformSetupVar->PmOppVolt[79] = 750;
-  PlatformSetupVar->PmOppFreq[80] = 1500; PlatformSetupVar->PmOppVolt[80] = 750;
-  PlatformSetupVar->PmOppFreq[81] = 1800; PlatformSetupVar->PmOppVolt[81] = 790;
-  PlatformSetupVar->PmOppFreq[82] = 2000; PlatformSetupVar->PmOppVolt[82] = 790;
-  PlatformSetupVar->PmOppFreq[83] = 2200; PlatformSetupVar->PmOppVolt[83] = 850;
-  PlatformSetupVar->PmOppFreq[84] = 2400; PlatformSetupVar->PmOppVolt[84] = 920;
+  PlatformSetupVar->PmOppFreq[78] = 800;  PlatformSetupVar->PmOppVolt[78] = 790;
+  PlatformSetupVar->PmOppFreq[79] = 1200; PlatformSetupVar->PmOppVolt[79] = 800;
+  PlatformSetupVar->PmOppFreq[80] = 1500; PlatformSetupVar->PmOppVolt[80] = 810;
+  PlatformSetupVar->PmOppFreq[81] = 1800; PlatformSetupVar->PmOppVolt[81] = 820;
+  PlatformSetupVar->PmOppFreq[82] = 2000; PlatformSetupVar->PmOppVolt[82] = 820;
+  PlatformSetupVar->PmOppFreq[83] = 2200; PlatformSetupVar->PmOppVolt[83] = 860;
+  PlatformSetupVar->PmOppFreq[84] = 2400; PlatformSetupVar->PmOppVolt[84] = 930;
   // Domain 7: DSU (2 entries)
-  PlatformSetupVar->PmOppFreq[91] = 500;  PlatformSetupVar->PmOppVolt[91] = 790;
+  PlatformSetupVar->PmOppFreq[91] = 400;  PlatformSetupVar->PmOppVolt[91] = 790;
   PlatformSetupVar->PmOppFreq[92] = 1300; PlatformSetupVar->PmOppVolt[92] = 790;
-  // Domain 8: NPU (4 entries, no voltage)
+  // Domain 8: NPU (4 visible entries, +1 hidden safe sustained at OPP[0], no voltage)
   PlatformSetupVar->PmOppFreq[104] = 400;
   PlatformSetupVar->PmOppFreq[105] = 600;
   PlatformSetupVar->PmOppFreq[106] = 800;
   PlatformSetupVar->PmOppFreq[107] = 1200;
-  // Domain 9: VPU (6 entries, no voltage)
+  // Domain 9: VPU (6 visible entries, +1 hidden safe sustained at OPP[0], no voltage)
   PlatformSetupVar->PmOppFreq[117] = 150;
   PlatformSetupVar->PmOppFreq[118] = 300;
   PlatformSetupVar->PmOppFreq[119] = 480;
@@ -535,8 +535,8 @@ ConstructSetupVariable (
   PlatformSetupVar->PmOppFreq[122] = 1200;
   // Domain 10: CI700 (1 entry, no voltage)
   PlatformSetupVar->PmOppFreq[130] = 1500;
-  // Domain 11: MMHUB (3 entries, no voltage)
-  PlatformSetupVar->PmOppFreq[143] = 375;
+  // Domain 11: MMHUB (3 visible entries, +1 hidden safe sustained at OPP[0], no voltage)
+  PlatformSetupVar->PmOppFreq[143] = 350;
   PlatformSetupVar->PmOppFreq[144] = 600;
   PlatformSetupVar->PmOppFreq[145] = 750;
   // TDP defaults (mW)
@@ -594,57 +594,57 @@ PlatformSetupVariableInit (
     //
     if (PlatformSetupVar.PmTdp[0] == 0 && PlatformSetupVar.PmOppFreq[0] == 0) {
       // Domain 0: GPU Core
-      PlatformSetupVar.PmOppFreq[0] = 100;  PlatformSetupVar.PmOppVolt[0] = 800;
-      PlatformSetupVar.PmOppFreq[1] = 200;  PlatformSetupVar.PmOppVolt[1] = 800;
-      PlatformSetupVar.PmOppFreq[2] = 350;  PlatformSetupVar.PmOppVolt[2] = 800;
-      PlatformSetupVar.PmOppFreq[3] = 600;  PlatformSetupVar.PmOppVolt[3] = 800;
-      PlatformSetupVar.PmOppFreq[4] = 800;  PlatformSetupVar.PmOppVolt[4] = 800;
-      PlatformSetupVar.PmOppFreq[5] = 1000; PlatformSetupVar.PmOppVolt[5] = 800;
+      PlatformSetupVar.PmOppFreq[0] = 250;  PlatformSetupVar.PmOppVolt[0] = 800;
+      PlatformSetupVar.PmOppFreq[1] = 350;  PlatformSetupVar.PmOppVolt[1] = 800;
+      PlatformSetupVar.PmOppFreq[2] = 600;  PlatformSetupVar.PmOppVolt[2] = 800;
+      PlatformSetupVar.PmOppFreq[3] = 800;  PlatformSetupVar.PmOppVolt[3] = 800;
+      PlatformSetupVar.PmOppFreq[4] = 1000; PlatformSetupVar.PmOppVolt[4] = 800;
+      PlatformSetupVar.PmOppFreq[5] = 1100; PlatformSetupVar.PmOppVolt[5] = 800;
       PlatformSetupVar.PmOppFreq[6] = 1100; PlatformSetupVar.PmOppVolt[6] = 800;
       // Domain 1: GPU Top
-      PlatformSetupVar.PmOppFreq[13] = 100;  PlatformSetupVar.PmOppVolt[13] = 800;
-      PlatformSetupVar.PmOppFreq[14] = 200;  PlatformSetupVar.PmOppVolt[14] = 800;
-      PlatformSetupVar.PmOppFreq[15] = 350;  PlatformSetupVar.PmOppVolt[15] = 800;
-      PlatformSetupVar.PmOppFreq[16] = 600;  PlatformSetupVar.PmOppVolt[16] = 800;
-      PlatformSetupVar.PmOppFreq[17] = 800;  PlatformSetupVar.PmOppVolt[17] = 800;
+      PlatformSetupVar.PmOppFreq[13] = 250;  PlatformSetupVar.PmOppVolt[13] = 800;
+      PlatformSetupVar.PmOppFreq[14] = 350;  PlatformSetupVar.PmOppVolt[14] = 800;
+      PlatformSetupVar.PmOppFreq[15] = 600;  PlatformSetupVar.PmOppVolt[15] = 800;
+      PlatformSetupVar.PmOppFreq[16] = 800;  PlatformSetupVar.PmOppVolt[16] = 800;
+      PlatformSetupVar.PmOppFreq[17] = 1000; PlatformSetupVar.PmOppVolt[17] = 800;
       PlatformSetupVar.PmOppFreq[18] = 1000; PlatformSetupVar.PmOppVolt[18] = 800;
       // Domain 2: CPU Little
       PlatformSetupVar.PmOppFreq[26] = 800;  PlatformSetupVar.PmOppVolt[26] = 790;
       PlatformSetupVar.PmOppFreq[27] = 1800; PlatformSetupVar.PmOppVolt[27] = 790;
       // Domain 3: CPU Big G0
-      PlatformSetupVar.PmOppFreq[39] = 800;  PlatformSetupVar.PmOppVolt[39] = 750;
-      PlatformSetupVar.PmOppFreq[40] = 1200; PlatformSetupVar.PmOppVolt[40] = 750;
-      PlatformSetupVar.PmOppFreq[41] = 1500; PlatformSetupVar.PmOppVolt[41] = 750;
-      PlatformSetupVar.PmOppFreq[42] = 1800; PlatformSetupVar.PmOppVolt[42] = 790;
-      PlatformSetupVar.PmOppFreq[43] = 2200; PlatformSetupVar.PmOppVolt[43] = 790;
-      PlatformSetupVar.PmOppFreq[44] = 2400; PlatformSetupVar.PmOppVolt[44] = 850;
-      PlatformSetupVar.PmOppFreq[45] = 2600; PlatformSetupVar.PmOppVolt[45] = 920;
+      PlatformSetupVar.PmOppFreq[39] = 800;  PlatformSetupVar.PmOppVolt[39] = 790;
+      PlatformSetupVar.PmOppFreq[40] = 1200; PlatformSetupVar.PmOppVolt[40] = 800;
+      PlatformSetupVar.PmOppFreq[41] = 1500; PlatformSetupVar.PmOppVolt[41] = 810;
+      PlatformSetupVar.PmOppFreq[42] = 1800; PlatformSetupVar.PmOppVolt[42] = 820;
+      PlatformSetupVar.PmOppFreq[43] = 2200; PlatformSetupVar.PmOppVolt[43] = 830;
+      PlatformSetupVar.PmOppFreq[44] = 2400; PlatformSetupVar.PmOppVolt[44] = 860;
+      PlatformSetupVar.PmOppFreq[45] = 2600; PlatformSetupVar.PmOppVolt[45] = 930;
       // Domain 4: CPU Big G1
-      PlatformSetupVar.PmOppFreq[52] = 800;  PlatformSetupVar.PmOppVolt[52] = 750;
-      PlatformSetupVar.PmOppFreq[53] = 1200; PlatformSetupVar.PmOppVolt[53] = 750;
-      PlatformSetupVar.PmOppFreq[54] = 1500; PlatformSetupVar.PmOppVolt[54] = 750;
-      PlatformSetupVar.PmOppFreq[55] = 1800; PlatformSetupVar.PmOppVolt[55] = 790;
-      PlatformSetupVar.PmOppFreq[56] = 2200; PlatformSetupVar.PmOppVolt[56] = 790;
-      PlatformSetupVar.PmOppFreq[57] = 2400; PlatformSetupVar.PmOppVolt[57] = 850;
-      PlatformSetupVar.PmOppFreq[58] = 2600; PlatformSetupVar.PmOppVolt[58] = 920;
+      PlatformSetupVar.PmOppFreq[52] = 800;  PlatformSetupVar.PmOppVolt[52] = 790;
+      PlatformSetupVar.PmOppFreq[53] = 1200; PlatformSetupVar.PmOppVolt[53] = 800;
+      PlatformSetupVar.PmOppFreq[54] = 1500; PlatformSetupVar.PmOppVolt[54] = 810;
+      PlatformSetupVar.PmOppFreq[55] = 1800; PlatformSetupVar.PmOppVolt[55] = 820;
+      PlatformSetupVar.PmOppFreq[56] = 2200; PlatformSetupVar.PmOppVolt[56] = 830;
+      PlatformSetupVar.PmOppFreq[57] = 2400; PlatformSetupVar.PmOppVolt[57] = 860;
+      PlatformSetupVar.PmOppFreq[58] = 2600; PlatformSetupVar.PmOppVolt[58] = 930;
       // Domain 5: CPU Mid G0
-      PlatformSetupVar.PmOppFreq[65] = 800;  PlatformSetupVar.PmOppVolt[65] = 750;
-      PlatformSetupVar.PmOppFreq[66] = 1200; PlatformSetupVar.PmOppVolt[66] = 750;
-      PlatformSetupVar.PmOppFreq[67] = 1500; PlatformSetupVar.PmOppVolt[67] = 750;
-      PlatformSetupVar.PmOppFreq[68] = 1800; PlatformSetupVar.PmOppVolt[68] = 790;
-      PlatformSetupVar.PmOppFreq[69] = 2000; PlatformSetupVar.PmOppVolt[69] = 790;
-      PlatformSetupVar.PmOppFreq[70] = 2200; PlatformSetupVar.PmOppVolt[70] = 850;
-      PlatformSetupVar.PmOppFreq[71] = 2400; PlatformSetupVar.PmOppVolt[71] = 920;
+      PlatformSetupVar.PmOppFreq[65] = 800;  PlatformSetupVar.PmOppVolt[65] = 790;
+      PlatformSetupVar.PmOppFreq[66] = 1200; PlatformSetupVar.PmOppVolt[66] = 800;
+      PlatformSetupVar.PmOppFreq[67] = 1500; PlatformSetupVar.PmOppVolt[67] = 810;
+      PlatformSetupVar.PmOppFreq[68] = 1800; PlatformSetupVar.PmOppVolt[68] = 820;
+      PlatformSetupVar.PmOppFreq[69] = 2000; PlatformSetupVar.PmOppVolt[69] = 820;
+      PlatformSetupVar.PmOppFreq[70] = 2200; PlatformSetupVar.PmOppVolt[70] = 860;
+      PlatformSetupVar.PmOppFreq[71] = 2400; PlatformSetupVar.PmOppVolt[71] = 930;
       // Domain 6: CPU Mid G1
-      PlatformSetupVar.PmOppFreq[78] = 800;  PlatformSetupVar.PmOppVolt[78] = 750;
-      PlatformSetupVar.PmOppFreq[79] = 1200; PlatformSetupVar.PmOppVolt[79] = 750;
-      PlatformSetupVar.PmOppFreq[80] = 1500; PlatformSetupVar.PmOppVolt[80] = 750;
-      PlatformSetupVar.PmOppFreq[81] = 1800; PlatformSetupVar.PmOppVolt[81] = 790;
-      PlatformSetupVar.PmOppFreq[82] = 2000; PlatformSetupVar.PmOppVolt[82] = 790;
-      PlatformSetupVar.PmOppFreq[83] = 2200; PlatformSetupVar.PmOppVolt[83] = 850;
-      PlatformSetupVar.PmOppFreq[84] = 2400; PlatformSetupVar.PmOppVolt[84] = 920;
+      PlatformSetupVar.PmOppFreq[78] = 800;  PlatformSetupVar.PmOppVolt[78] = 790;
+      PlatformSetupVar.PmOppFreq[79] = 1200; PlatformSetupVar.PmOppVolt[79] = 800;
+      PlatformSetupVar.PmOppFreq[80] = 1500; PlatformSetupVar.PmOppVolt[80] = 810;
+      PlatformSetupVar.PmOppFreq[81] = 1800; PlatformSetupVar.PmOppVolt[81] = 820;
+      PlatformSetupVar.PmOppFreq[82] = 2000; PlatformSetupVar.PmOppVolt[82] = 820;
+      PlatformSetupVar.PmOppFreq[83] = 2200; PlatformSetupVar.PmOppVolt[83] = 860;
+      PlatformSetupVar.PmOppFreq[84] = 2400; PlatformSetupVar.PmOppVolt[84] = 930;
       // Domain 7: DSU
-      PlatformSetupVar.PmOppFreq[91] = 500;  PlatformSetupVar.PmOppVolt[91] = 790;
+      PlatformSetupVar.PmOppFreq[91] = 400;  PlatformSetupVar.PmOppVolt[91] = 790;
       PlatformSetupVar.PmOppFreq[92] = 1300; PlatformSetupVar.PmOppVolt[92] = 790;
       // Domain 8: NPU
       PlatformSetupVar.PmOppFreq[104] = 400;
@@ -661,7 +661,7 @@ PlatformSetupVariableInit (
       // Domain 10: CI700
       PlatformSetupVar.PmOppFreq[130] = 1500;
       // Domain 11: MMHUB
-      PlatformSetupVar.PmOppFreq[143] = 375;
+      PlatformSetupVar.PmOppFreq[143] = 350;
       PlatformSetupVar.PmOppFreq[144] = 600;
       PlatformSetupVar.PmOppFreq[145] = 750;
       // TDP defaults (mW)

@@ -12,6 +12,7 @@
 #include <PlatformSetupVar.h>
 #include <Guid/NetworkStackSetup.h>
 #include <Guid/ConsolePrefFormSet.h>
+#include <Protocol/ArmScmiPerformanceProtocol.h>
 
 SETUP_MANAGER_CALLBACK_DATA  gSetupManagerPrivate = {
   SETUP_MANAGER_CALLBACK_DATA_SIGNATURE,
@@ -577,13 +578,34 @@ InitializeHardwareInfo (
   HiiSetString (HiiHandle, STRING_TOKEN (STR_MEMORY_FREQ_VALUE), NewString, NULL);
 
   {
+    PLATFORM_SETUP_DATA  SetupVar;
+    UINTN                SetupVarSize = sizeof (PLATFORM_SETUP_DATA);
+    UINT32               CpuMaxFromNvram = 0;
     UINTN  CpuFreqHz = GetMaxCpuFreq ();
     UINTN  CpuFreqMHz = CpuFreqHz / 1000000;
+
+    // Use the NVRAM-stored intended max OPP instead of GetMaxCpuFreq() which reads the actual
+    // hardware PLL and can overshoot the intended value (e.g. 2900 MHz target → 2901 MHz actual).
+    if (!EFI_ERROR (gRT->GetVariable (PLATFORM_SETUP_VAR, &gPlatformSetupVariableGuid, NULL, &SetupVarSize, &SetupVar))) {
+      // CPU Big G0: domain 3, slot 6 = index 45 (max OPP). CPU Big G1: domain 4, slot 6 = index 58.
+      CpuMaxFromNvram = MAX (SetupVar.PmOppFreq[45], SetupVar.PmOppFreq[58]);
+      if (CpuMaxFromNvram > 0) {
+        CpuFreqMHz = CpuMaxFromNvram;
+      }
+    }
     ZeroMem (DateBuf, sizeof (DateBuf));
     ZeroMem (NewString, sizeof (NewString));
     AsciiSPrint ((CHAR8 *)DateBuf, sizeof (DateBuf), "%d MHz", CpuFreqMHz);
     AsciiToUnicode (DateBuf, NewString);
     HiiSetString (HiiHandle, STRING_TOKEN (STR_CPU_SPEED_VALUE), NewString, NULL);
+
+    CpuFreqHz = GetCurrentCpuFreq ();
+    CpuFreqMHz = ROUND_TO_10_MHZ (ROUND_DIVISION (CpuFreqHz, 1000000));
+    ZeroMem (DateBuf, sizeof (DateBuf));
+    ZeroMem (NewString, sizeof (NewString));
+    AsciiSPrint ((CHAR8 *)DateBuf, sizeof (DateBuf), "%d MHz", CpuFreqMHz);
+    AsciiToUnicode (DateBuf, NewString);
+    HiiSetString (HiiHandle, STRING_TOKEN (STR_CPU_SUSTAINED_VALUE), NewString, NULL);
   }
 
   BoardID.Bits.PcbSku = EcResponse.BoardId.Id.Sku + (EcResponse.BoardId.Id.SkuExt << 3);
@@ -617,16 +639,49 @@ InitializeHardwareInfo (
   BoardID.Bits.MemType = EcResponse.BoardId.Id.Memory + (EcResponse.BoardId.Id.MemExt << 3);
   switch (BoardID.Bits.MemType) {
     case 0:
-      HiiSetString (HiiHandle, STRING_TOKEN (STR_MEMORY_TYPE_VALUE), L"4GB Samsung LP5 315b", NULL);
+      HiiSetString (HiiHandle, STRING_TOKEN (STR_MEMORY_TYPE_VALUE), L"4 GiB Samsung LP5", NULL);
       break;
     case 1:
-      HiiSetString (HiiHandle, STRING_TOKEN (STR_MEMORY_TYPE_VALUE), L"4GB Hynix LP4x 200b", NULL);
+      HiiSetString (HiiHandle, STRING_TOKEN (STR_MEMORY_TYPE_VALUE), L"4 GiB Hynix LP4x", NULL);
+      break;
+    case 2:
+      HiiSetString (HiiHandle, STRING_TOKEN (STR_MEMORY_TYPE_VALUE), L"2 GiB LP5", NULL);
       break;
     case 3:
-      HiiSetString (HiiHandle, STRING_TOKEN (STR_MEMORY_TYPE_VALUE), L"8GB Samsung LP5 315b", NULL);
+      HiiSetString (HiiHandle, STRING_TOKEN (STR_MEMORY_TYPE_VALUE), L"8 GiB Samsung LP5", NULL);
       break;
     case 4:
-      HiiSetString (HiiHandle, STRING_TOKEN (STR_MEMORY_TYPE_VALUE), L"8GB Samsung LP5 441b", NULL);
+      HiiSetString (HiiHandle, STRING_TOKEN (STR_MEMORY_TYPE_VALUE), L"8 GiB Samsung LP5 441b", NULL);
+      break;
+    case 5:
+      HiiSetString (HiiHandle, STRING_TOKEN (STR_MEMORY_TYPE_VALUE), L"3 GiB LP5", NULL);
+      break;
+    case 6:
+      HiiSetString (HiiHandle, STRING_TOKEN (STR_MEMORY_TYPE_VALUE), L"8 GiB Hive Semi LP5", NULL);
+      break;
+    case 7:
+      HiiSetString (HiiHandle, STRING_TOKEN (STR_MEMORY_TYPE_VALUE), L"6 GiB Hive Semi LP5", NULL);
+      break;
+    case 8:
+      HiiSetString (HiiHandle, STRING_TOKEN (STR_MEMORY_TYPE_VALUE), L"8 GiB LP5 V1.1", NULL);
+      break;
+    case 9:
+      HiiSetString (HiiHandle, STRING_TOKEN (STR_MEMORY_TYPE_VALUE), L"12 GiB Hive Semi LP5", NULL);
+      break;
+    case 10:
+      HiiSetString (HiiHandle, STRING_TOKEN (STR_MEMORY_TYPE_VALUE), L"16 GiB Hynix LP5", NULL);
+      break;
+    case 11:
+      HiiSetString (HiiHandle, STRING_TOKEN (STR_MEMORY_TYPE_VALUE), L"8 GiB Samsung LP5 x8", NULL);
+      break;
+    case 12:
+      HiiSetString (HiiHandle, STRING_TOKEN (STR_MEMORY_TYPE_VALUE), L"16 GiB Rayson LP5", NULL);
+      break;
+    case 13:
+      HiiSetString (HiiHandle, STRING_TOKEN (STR_MEMORY_TYPE_VALUE), L"4 GiB Hive Semi LP5", NULL);
+      break;
+    case 14:
+      HiiSetString (HiiHandle, STRING_TOKEN (STR_MEMORY_TYPE_VALUE), L"8 GiB Hynix LP5", NULL);
       break;
     default:
       HiiSetString (HiiHandle, STRING_TOKEN (STR_MEMORY_TYPE_VALUE), L"Undefined", NULL);
@@ -675,6 +730,42 @@ InitializeHardwareInfo (
     AsciiSPrint ((CHAR8 *)DateBuf, sizeof (DateBuf), "%d %d %d", EcResponse.PmicVer.Pmic3Ver, EcResponse.PmicVer.Pmic2Ver, EcResponse.PmicVer.Pmic1Ver);
     AsciiToUnicode (DateBuf, NewString);
     HiiSetString (HiiHandle, STRING_TOKEN (STR_PMIC_VER_VALUE), NewString, NULL);
+  }
+
+  // Query SCMI performance domains for sustained frequencies
+  {
+    SCMI_PERFORMANCE_PROTOCOL           *ScmiPerfProtocol = NULL;
+    SCMI_PERFORMANCE_DOMAIN_ATTRIBUTES  DomainAttr;
+
+    Status = gBS->LocateProtocol (&gArmScmiPerformanceProtocolGuid, NULL, (VOID **)&ScmiPerfProtocol);
+    if (!EFI_ERROR (Status)) {
+      // SCMI domain IDs match DVFS element indices from opp_config.h:
+      // 0=GPU_CORE, 1=GPU_TOP, 7=DSU, 8=NPU, 9=VPU, 11=MMHUB
+      // CI700 (10) removed from UI - single fixed entry, not user-configurable
+      struct {
+        UINT32  DomainId;
+        UINT16  StringToken;
+      } DomainMap[] = {
+        { 0,  STRING_TOKEN (STR_GPU_CORE_FREQ_VALUE) },
+        { 1,  STRING_TOKEN (STR_GPU_TOP_FREQ_VALUE)  },
+        { 7,  STRING_TOKEN (STR_DSU_FREQ_VALUE)      },
+        { 8,  STRING_TOKEN (STR_NPU_FREQ_VALUE)      },
+        { 9,  STRING_TOKEN (STR_VPU_FREQ_VALUE)      },
+        { 11, STRING_TOKEN (STR_MMHUB_FREQ_VALUE)    },
+      };
+      UINTN  Idx;
+
+      for (Idx = 0; Idx < ARRAY_SIZE (DomainMap); Idx++) {
+        Status = ScmiPerfProtocol->GetDomainAttributes (ScmiPerfProtocol, DomainMap[Idx].DomainId, &DomainAttr);
+        if (!EFI_ERROR (Status)) {
+          ZeroMem (DateBuf, sizeof (DateBuf));
+          ZeroMem (NewString, sizeof (NewString));
+          AsciiSPrint ((CHAR8 *)DateBuf, sizeof (DateBuf), "%d MHz", ROUND_TO_10_MHZ (DomainAttr.SustainedFreq / 1000));
+          AsciiToUnicode (DateBuf, NewString);
+          HiiSetString (HiiHandle, DomainMap[Idx].StringToken, NewString, NULL);
+        }
+      }
+    }
   }
 }
 

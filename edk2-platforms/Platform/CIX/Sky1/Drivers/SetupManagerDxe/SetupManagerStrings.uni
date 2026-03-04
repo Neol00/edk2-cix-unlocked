@@ -35,8 +35,10 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #string STR_SYSTEM_TABLE_DT                          #language en-US "Device Tree"
 
 #string STR_CPU                                      #language en-US "Processor Information"
-#string STR_CPU_SPEED_NAME                           #language en-US "CPU Speed"
+#string STR_CPU_SPEED_NAME                           #language en-US "CPU Max Frequency"
 #string STR_CPU_SPEED_VALUE                          #language en-US " "
+#string STR_CPU_SUSTAINED_NAME                       #language en-US "CPU Sustained Frequency"
+#string STR_CPU_SUSTAINED_VALUE                      #language en-US " "
 
 #string STR_MEMORY                                   #language en-US "Memory Information"
 #string STR_MEMORY_SIZE_NAME                         #language en-US "Total Memory"
@@ -65,6 +67,22 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 
 #string STR_PD_VER_NAME                              #language en-US "PD Version"
 #string STR_PD_VER_VALUE                             #language en-US " "
+
+#string STR_DOMAIN_FREQ_INFO                         #language en-US "Domain Frequencies"
+#string STR_GPU_CORE_FREQ_NAME                       #language en-US "GPU Core"
+#string STR_GPU_CORE_FREQ_VALUE                      #language en-US " "
+#string STR_GPU_TOP_FREQ_NAME                        #language en-US "GPU Top"
+#string STR_GPU_TOP_FREQ_VALUE                       #language en-US " "
+#string STR_DSU_FREQ_NAME                            #language en-US "DSU"
+#string STR_DSU_FREQ_VALUE                           #language en-US " "
+#string STR_NPU_FREQ_NAME                            #language en-US "NPU"
+#string STR_NPU_FREQ_VALUE                           #language en-US " "
+#string STR_VPU_FREQ_NAME                            #language en-US "VPU"
+#string STR_VPU_FREQ_VALUE                           #language en-US " "
+#string STR_CI700_FREQ_NAME                          #language en-US "CI700 Interconnect"
+#string STR_CI700_FREQ_VALUE                         #language en-US " "
+#string STR_MMHUB_FREQ_NAME                          #language en-US "MMHUB"
+#string STR_MMHUB_FREQ_VALUE                         #language en-US " "
 
 #string STR_FIRMWARE_INFO                            #language en-US "Firmware Information"
 #string STR_SE_VER_NAME                              #language en-US "SE Version"

@@ -7,113 +7,124 @@
 #include "pm_export_config.h"
 #include "opp_config.h"
 
-#define PM_OPP_TABLE_CONFIG   0
+#define PM_OPP_TABLE_CONFIG   1
 
 #if PM_OPP_TABLE_CONFIG
 /* V1.1, DFS */
 static domain_opp_config_t dxs_gc = {
-    .size = 6,
-    .sustained_idx = 5,
+    .size = 8,
+    .sustained_idx = 0,
     .opp_table = {
-        { .level = 72UL,  .frequency = 350000, .voltage = 800 }, // 350MHz, 2 core
-        { .level = 216UL, .frequency = 350000, .voltage = 800 }, // 350MHz, 6 core
-        { .level = 350UL, .frequency = 350000, .voltage = 800 }, // 350MHz, 10 core
-        { .level = 600UL,                      .voltage = 800 }, // 600MHz, 10 core
-        { .level = 800UL,                      .voltage = 800 }, // 800MHz, 10 core
+        { .level = 250UL, .frequency = 250000, .voltage = 800 }, /* safe sustained (hidden) */
+        { .level = 250UL, .frequency = 250000, .voltage = 800 },
+        { .level = 350UL, .frequency = 350000, .voltage = 800 },
+        { .level = 600UL, .frequency = 600000, .voltage = 800 },
+        { .level = 800UL, .frequency = 800000, .voltage = 800 },
+        { .level = 1000UL,                     .voltage = 800 },
+        { .level = 1100UL,                     .voltage = 800 },
         { .level = 1100UL,                     .voltage = 800 },
     },
 };
 
 static domain_opp_config_t dxs_gt = {
-    .size = 6,
-    .sustained_idx = 5,
+    .size = 7,
+    .sustained_idx = 0,
     .opp_table = {
-        { .level = 72UL,  .frequency = 350000, .voltage = 800 }, // 350MHz, 2 core
-        { .level = 216UL, .frequency = 350000, .voltage = 800 }, // 350MHz, 6 core
-        { .level = 350UL, .frequency = 350000, .voltage = 800 }, // 350MHz, 10 core
-        { .level = 600UL,                      .voltage = 800 }, // 600MHz, 10 core
-        { .level = 800UL,                      .voltage = 800 }, // 800MHz, 10 core
+        { .level = 250UL, .frequency = 250000, .voltage = 800 }, /* safe sustained (hidden) */
+        { .level = 250UL, .frequency = 250000, .voltage = 800 },
+        { .level = 350UL, .frequency = 350000, .voltage = 800 },
+        { .level = 600UL, .frequency = 600000, .voltage = 800 },
+        { .level = 800UL, .frequency = 800000, .voltage = 800 },
+        { .level = 1000UL,                     .voltage = 800 },
         { .level = 1000UL,                     .voltage = 800 },
     },
 };
 
 static domain_opp_config_t dxs_lit = {
-    .size = 2,
-    .sustained_idx = 1,
+    .size = 3,
+    .sustained_idx = 0,
     .opp_table = {
-        { .level =  800UL, .voltage = 790, .power = 138 },
-        { .level = 1800UL, .voltage = 790, .power = 790 },
+        { .level =  800UL, .voltage = 790 },   /* safe sustained (hidden) */
+        { .level =  800UL, .voltage = 790 },
+        { .level = 1800UL, .voltage = 800 },
     },
 };
 
 static domain_opp_config_t dxs_gb0 = {
-    .size = 7,
-    .sustained_idx = 3,
+    .size = 8,
+    .sustained_idx = 0,
     .opp_table = {
-        { .level =  800UL, .voltage = 750, .power =  156 },
-        { .level = 1200UL, .voltage = 750, .power =  372 },
-        { .level = 1500UL, .voltage = 750, .power =  614 },
-        { .level = 1800UL, .voltage = 790, .power =  841 },   /* sustained */
-        { .level = 2200UL, .voltage = 790, .power = 1360 },
-        { .level = 2400UL, .voltage = 850, .power = 1663 },
-        { .level = 2500UL, .voltage = 920, .power = 2292 },
+        { .level =  800UL, .voltage = 790 },   /* safe sustained (hidden) */
+        { .level =  800UL, .voltage = 790 },
+        { .level = 1200UL, .voltage = 800 },
+        { .level = 1500UL, .voltage = 810 },
+        { .level = 1800UL, .voltage = 820 },
+        { .level = 2200UL, .voltage = 830 },
+        { .level = 2400UL, .voltage = 860 },
+        { .level = 2600UL, .voltage = 930 },
     },
 };
 
 static domain_opp_config_t dxs_gb1 = {
-    .size = 7,
-    .sustained_idx = 3,
+    .size = 8,
+    .sustained_idx = 0,
     .opp_table = {
-        { .level =  800UL, .voltage = 750, .power =  156 },
-        { .level = 1200UL, .voltage = 750, .power =  372 },
-        { .level = 1500UL, .voltage = 750, .power =  614 },
-        { .level = 1800UL, .voltage = 790, .power =  841 },   /* sustained */
-        { .level = 2200UL, .voltage = 790, .power = 1360 },
-        { .level = 2500UL, .voltage = 850, .power = 1663 },
-        { .level = 2600UL, .voltage = 920, .power = 2292 },
+        { .level =  800UL, .voltage = 790 },   /* safe sustained (hidden) */
+        { .level =  800UL, .voltage = 790 },
+        { .level = 1200UL, .voltage = 800 },
+        { .level = 1500UL, .voltage = 810 },
+        { .level = 1800UL, .voltage = 820 },
+        { .level = 2200UL, .voltage = 830 },
+        { .level = 2400UL, .voltage = 860 },
+        { .level = 2600UL, .voltage = 930 },
     },
 };
 
 static domain_opp_config_t dxs_gm0 = {
-    .size = 7,
-    .sustained_idx = 3,
+    .size = 8,
+    .sustained_idx = 0,
     .opp_table = {
-        { .level =  800UL, .voltage = 750, .power =  149 },
-        { .level = 1200UL, .voltage = 750, .power =  355 },
-        { .level = 1500UL, .voltage = 750, .power =  584 },
-        { .level = 1800UL, .voltage = 790, .power =  799 },   /* sustained */
-        { .level = 2100UL, .voltage = 790, .power = 1114 },
-        { .level = 2200UL, .voltage = 850, .power = 1292 },
-        { .level = 2300UL, .voltage = 890, .power = 1396 },
+        { .level =  800UL, .voltage = 790 },   /* safe sustained (hidden) */
+        { .level =  800UL, .voltage = 790 },
+        { .level = 1200UL, .voltage = 800 },
+        { .level = 1500UL, .voltage = 810 },
+        { .level = 1800UL, .voltage = 820 },
+        { .level = 2000UL, .voltage = 820 },
+        { .level = 2200UL, .voltage = 860 },
+        { .level = 2400UL, .voltage = 930 },
     },
 };
 
 static domain_opp_config_t dxs_gm1 = {
-    .size = 6,
-    .sustained_idx = 3,
+    .size = 8,
+    .sustained_idx = 0,
     .opp_table = {
-        { .level =  800UL, .voltage = 750, .power =  149 },
-        { .level = 1200UL, .voltage = 750, .power =  355 },
-        { .level = 1500UL, .voltage = 750, .power =  584 },
-        { .level = 1800UL, .voltage = 790, .power =  799 },   /* sustained */
-        { .level = 2100UL, .voltage = 850, .power = 1114 },
-        { .level = 2200UL, .voltage = 890, .power = 1292 },
+        { .level =  800UL, .voltage = 790 },   /* safe sustained (hidden) */
+        { .level =  800UL, .voltage = 790 },
+        { .level = 1200UL, .voltage = 800 },
+        { .level = 1500UL, .voltage = 810 },
+        { .level = 1800UL, .voltage = 820 },
+        { .level = 2000UL, .voltage = 820 },
+        { .level = 2200UL, .voltage = 860 },
+        { .level = 2400UL, .voltage = 930 },
     },
 };
 
 static domain_opp_config_t dxs_dsu = {
-    .size = 2,
-    .sustained_idx = 1,
+    .size = 3,
+    .sustained_idx = 0,
     .opp_table = {
+        { .level =  500UL, .voltage = 790 },   /* safe sustained (hidden) */
         { .level =  500UL, .voltage = 790 },
-        { .level = 1300UL, .voltage = 790 },   /* sustained */
+        { .level = 1300UL, .voltage = 800 },
     },
 };
 
 static domain_opp_config_t dxs_npu = {
-    .size = 4,
-    .sustained_idx = 2,
+    .size = 5,
+    .sustained_idx = 0,
     .opp_table = {
+        { .level =  400UL },   /* safe sustained (hidden) */
         { .level =  400UL },
         { .level =  600UL },
         { .level =  800UL },
@@ -122,9 +133,10 @@ static domain_opp_config_t dxs_npu = {
 };
 
 static domain_opp_config_t dxs_vpu = {
-    .size = 6,
-    .sustained_idx = 5,
+    .size = 7,
+    .sustained_idx = 0,
     .opp_table = {
+        { .level =  150UL },   /* safe sustained (hidden) */
         { .level =  150UL },
         { .level =  300UL },
         { .level =  480UL },
@@ -135,18 +147,18 @@ static domain_opp_config_t dxs_vpu = {
 };
 
 static domain_opp_config_t dxs_ci = {
-    .size = 2,
-    .sustained_idx = 1,
+    .size = 1,
+    .sustained_idx = 0,
     .opp_table = {
-        { .level =  500UL },
         { .level = 1500UL },
     },
 };
 
 static domain_opp_config_t dxs_mm = {
-    .size = 3,
-    .sustained_idx = 2,
+    .size = 4,
+    .sustained_idx = 0,
     .opp_table = {
+        { .level =  375UL },   /* safe sustained (hidden) */
         { .level =  375UL },
         { .level =  600UL },
         { .level =  750UL },

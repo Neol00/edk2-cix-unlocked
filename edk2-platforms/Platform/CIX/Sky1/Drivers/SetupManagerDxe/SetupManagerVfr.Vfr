@@ -65,7 +65,7 @@ formset
         prompt  = STRING_TOKEN(STR_DATE_PROMPT),
         help    = STRING_TOKEN(STR_DATE_HELP),
         flags   = STORAGE_TIME,
-        default = 2004/1/1,
+        default = 2026/01/01,
 
         inconsistentif prompt = STRING_TOKEN(STR_ERROR_POPUP),
           ideqval Date.Day == 31
@@ -91,7 +91,7 @@ formset
           ideqval Date.Month == 2
           AND
           NOT
-          ideqvallist Date.Year == 2004 2008 20012 20016 2020 2024 2028 2032 2036
+          ideqvallist Date.Year == 2004 2008 2012 2016 2020 2024 2028 2032 2036 2040 2044 2048 2052 2056
         endif;
 
       enddate;
@@ -155,16 +155,6 @@ formset
 
     text
       help   = STRING_TOKEN(STR_EMPTY_STRING),
-      text   = STRING_TOKEN(STR_MEMORY_FREQ_NAME),
-      text   = STRING_TOKEN(STR_MEMORY_FREQ_VALUE);
-
-    text
-      help   = STRING_TOKEN(STR_EMPTY_STRING),
-      text   = STRING_TOKEN(STR_CPU_SPEED_NAME),
-      text   = STRING_TOKEN(STR_CPU_SPEED_VALUE);
-
-    text
-      help   = STRING_TOKEN(STR_EMPTY_STRING),
       text   = STRING_TOKEN(STR_PCB_SKU_NAME),
       text   = STRING_TOKEN(STR_PCB_SKU_VALUE);
 
@@ -178,52 +168,54 @@ formset
       text   = STRING_TOKEN(STR_MEMORY_TYPE_NAME),
       text   = STRING_TOKEN(STR_MEMORY_TYPE_VALUE);
 
-    text
-      help   = STRING_TOKEN(STR_EMPTY_STRING),
-      text   = STRING_TOKEN(STR_PMIC_VER_NAME),
-      text   = STRING_TOKEN(STR_PMIC_VER_VALUE);
+    subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+    subtitle text = STRING_TOKEN(STR_DOMAIN_FREQ_INFO);
 
     text
       help   = STRING_TOKEN(STR_EMPTY_STRING),
-      text   = STRING_TOKEN(STR_PD_VER_NAME),
-      text   = STRING_TOKEN(STR_PD_VER_VALUE);
-
-    subtitle text = STRING_TOKEN(STR_FIRMWARE_INFO);
+      text   = STRING_TOKEN(STR_MEMORY_FREQ_NAME),
+      text   = STRING_TOKEN(STR_MEMORY_FREQ_VALUE);
 
     text
       help   = STRING_TOKEN(STR_EMPTY_STRING),
-      text   = STRING_TOKEN(STR_SE_VER_NAME),
-      text   = STRING_TOKEN(STR_SE_VER_VALUE);
+      text   = STRING_TOKEN(STR_CPU_SPEED_NAME),
+      text   = STRING_TOKEN(STR_CPU_SPEED_VALUE);
 
     text
       help   = STRING_TOKEN(STR_EMPTY_STRING),
-      text   = STRING_TOKEN(STR_PBL_VER_NAME),
-      text   = STRING_TOKEN(STR_PBL_VER_VALUE);
+      text   = STRING_TOKEN(STR_CPU_SUSTAINED_NAME),
+      text   = STRING_TOKEN(STR_CPU_SUSTAINED_VALUE);
 
     text
       help   = STRING_TOKEN(STR_EMPTY_STRING),
-      text   = STRING_TOKEN(STR_ATF_VER_NAME),
-      text   = STRING_TOKEN(STR_ATF_VER_VALUE);
+      text   = STRING_TOKEN(STR_GPU_CORE_FREQ_NAME),
+      text   = STRING_TOKEN(STR_GPU_CORE_FREQ_VALUE);
 
     text
       help   = STRING_TOKEN(STR_EMPTY_STRING),
-      text   = STRING_TOKEN(STR_PM_VER_NAME),
-      text   = STRING_TOKEN(STR_PM_VER_VALUE);
+      text   = STRING_TOKEN(STR_GPU_TOP_FREQ_NAME),
+      text   = STRING_TOKEN(STR_GPU_TOP_FREQ_VALUE);
 
     text
       help   = STRING_TOKEN(STR_EMPTY_STRING),
-      text   = STRING_TOKEN(STR_TEE_VER_NAME),
-      text   = STRING_TOKEN(STR_TEE_VER_VALUE);
+      text   = STRING_TOKEN(STR_DSU_FREQ_NAME),
+      text   = STRING_TOKEN(STR_DSU_FREQ_VALUE);
 
     text
       help   = STRING_TOKEN(STR_EMPTY_STRING),
-      text   = STRING_TOKEN(STR_UEFI_VER_NAME),
-      text   = STRING_TOKEN(STR_UEFI_VER_VALUE);
+      text   = STRING_TOKEN(STR_NPU_FREQ_NAME),
+      text   = STRING_TOKEN(STR_NPU_FREQ_VALUE);
 
     text
       help   = STRING_TOKEN(STR_EMPTY_STRING),
-      text   = STRING_TOKEN(STR_EC_VER_NAME),
-      text   = STRING_TOKEN(STR_EC_VER_VALUE);
+      text   = STRING_TOKEN(STR_VPU_FREQ_NAME),
+      text   = STRING_TOKEN(STR_VPU_FREQ_VALUE);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY_STRING),
+      text   = STRING_TOKEN(STR_MMHUB_FREQ_NAME),
+      text   = STRING_TOKEN(STR_MMHUB_FREQ_VALUE);
+
   endform;
 
   form formid = SOC_FORM_SET_ID,

@@ -29,6 +29,42 @@
 #define RESOURCE_IRQ 0x0400
 
 DefinitionBlock("DsdtTable.aml", "DSDT", 5, "CIXTEK", "SKY1EDK2", 1) {
+
+  // GPIO MMIO regions for USB VBUS power control
+  // GPI4: S5 GPIO Bank 0 (GPIO001-014, GPIO025-042)
+  // GPI5: S5 GPIO Bank 1 (GPIO015-024)
+  OperationRegion (GS50, SystemMemory, 0x16004000, 0x08)
+  Field (GS50, DWordAcc, NoLock, Preserve) {
+    GD50, 32,  // GPIO0_S5 Data Register (SWPORTA_DR)
+    GR50, 32,  // GPIO0_S5 Direction Register (SWPORTA_DDR)
+  }
+  OperationRegion (GS51, SystemMemory, 0x16005000, 0x08)
+  Field (GS51, DWordAcc, NoLock, Preserve) {
+    GD51, 32,  // GPIO1_S5 Data Register (SWPORTA_DR)
+    GR51, 32,  // GPIO1_S5 Direction Register (SWPORTA_DDR)
+  }
+
+  // Prepare To Sleep — called by Linux before reboot (S5) and shutdown
+  // Drives USB VBUS GPIOs LOW so devices re-enumerate cleanly on next boot
+  Method (_PTS, 1, NotSerialized) {
+    If (LEqual (Arg0, 5)) {
+      // Set direction bits to output (1) for our VBUS pins
+      // Bank 0: GPIO040=BIT29, GPIO041=BIT30, GPIO042=BIT31
+      Store (Or (GR50, 0xE0000000), GR50)
+      // Bank 1: GPIO019=BIT4, GPIO020=BIT5, GPIO021=BIT6
+      Store (Or (GR51, 0x00000070), GR51)
+
+      // Clear data bits to drive VBUS LOW
+      // Bank 0: clear bits 29-31
+      Store (And (GD50, Not (0xE0000000)), GD50)
+      // Bank 1: clear bits 4-6
+      Store (And (GD51, Not (0x00000070)), GD51)
+
+      // Small delay for USB devices to detect VBUS drop
+      Sleep (50)
+    }
+  }
+
   Scope(_SB) {
     include("Dsdt-Debug.asl")
     include("Dsdt-CPU.asl")

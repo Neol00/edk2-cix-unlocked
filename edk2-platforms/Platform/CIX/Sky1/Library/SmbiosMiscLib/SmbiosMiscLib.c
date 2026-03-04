@@ -130,8 +130,10 @@ OemGetProcessorInformation (
   }
 
   MiscProcessorData->Voltage      = 0;
-  MiscProcessorData->CurrentSpeed = (UINT16)(ROUND_DIVISION (GetCurrentCpuFreq (), 1000000));
-  MiscProcessorData->MaxSpeed     = (UINT16)(ROUND_DIVISION (GetMaxCpuFreq (), 1000000));
+  MiscProcessorData->CurrentSpeed = (UINT16)(ROUND_TO_10_MHZ (ROUND_DIVISION (GetCurrentCpuFreq (), 1000000)));
+  // Use the NVRAM-stored intended max OPP (CPU Big G0 slot6=index45, G1 slot6=index58) instead of
+  // GetMaxCpuFreq() which reads the actual hardware PLL and can overshoot the intended value.
+  MiscProcessorData->MaxSpeed     = (UINT16)(MAX (PlatformSetupVar.PmOppFreq[45], PlatformSetupVar.PmOppFreq[58]));
   MiscProcessorData->CoreCount    = CpuCoreNum;
   MiscProcessorData->ThreadCount  = CpuCoreNum;
   MiscProcessorData->CoresEnabled = EnabledCoreNum;

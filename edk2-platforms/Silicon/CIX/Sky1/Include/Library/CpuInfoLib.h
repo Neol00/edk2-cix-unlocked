@@ -74,6 +74,8 @@ GetCurrentCpuFreq (
   VOID
   );
 
-#define ROUND_DIVISION(a, b)  (((a) / (b)) + ((((a) % (b)) * 2 >= (b)) ? 1 : 0))
+#define ROUND_DIVISION(a, b)    (((a) / (b)) + ((((a) % (b)) * 2 >= (b)) ? 1 : 0))
+// Round a MHz value to the nearest 10 MHz (eliminates PLL overshoot noise).
+#define ROUND_TO_10_MHZ(mhz)   (((mhz) + 5) / 10 * 10)
 
 #endif // CPU_INFO_LIB

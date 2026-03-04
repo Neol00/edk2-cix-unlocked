@@ -191,7 +191,7 @@
 !if $(AMD_GOP_DRIVER_SUPPORT) == TRUE
  FILE DRIVER = 27E5BA77-5839-400b-A7DA-5F5D78F0C539
  {
-   SECTION PE32 = Platform/CIX/Sky1/Drivers/AmdGop/Arm64Gop_1_68.efi
+   SECTION PE32 = Platform/CIX/Sky1/Drivers/AmdGop/ARM64Gop_2_10.efi
    SECTION UI = "AmdGop"
  }
 !endif

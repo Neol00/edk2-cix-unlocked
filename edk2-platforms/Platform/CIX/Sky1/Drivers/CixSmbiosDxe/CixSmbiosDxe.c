@@ -23,7 +23,7 @@ UpdateSmbiosType4 (
   if (!EFI_ERROR (Status) && (SmbiosHandleType4 != SMBIOS_HANDLE_PI_RESERVED)) {
     Type4Record                   = (SMBIOS_TABLE_TYPE4 *)Record;
     Type4Record->ProcessorFamily2 = ProcessorFamilyARMv9;
-    Type4Record->CurrentSpeed     = (UINT16)(ROUND_DIVISION (GetCurrentCpuFreq (), 1000000));
+    Type4Record->CurrentSpeed     = (UINT16)(ROUND_TO_10_MHZ (ROUND_DIVISION (GetCurrentCpuFreq (), 1000000)));
   } else {
     DEBUG ((DEBUG_ERROR, "Fail to locate the handle of Smbios Type4 entry!\n"));
     return EFI_NOT_FOUND;
