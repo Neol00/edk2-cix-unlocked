@@ -29,6 +29,7 @@ typedef enum {
   FwVerATF,
   FwVerTEE,
   FwVerEC,
+  FwVerSTMM,
   FwVerUEFI,
   FwVerBoardId
 } FW_VERSION_TYPE;

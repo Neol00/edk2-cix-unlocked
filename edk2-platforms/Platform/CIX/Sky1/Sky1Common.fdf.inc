@@ -175,6 +175,9 @@
   INF Silicon/CIX/Sky1/Drivers/HdaDxe/HdaDxe.inf
 !endif
 
+  # Hardware RNG
+  INF Silicon/CIX/Sky1/Drivers/RngDxe/RngDxe.inf
+
 !if $(SOC_GOP_ENABLE) == TRUE
   #
   # GOP Support

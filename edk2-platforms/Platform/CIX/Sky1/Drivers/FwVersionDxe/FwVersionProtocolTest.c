@@ -116,6 +116,13 @@ FwVersionProtocolTestEntryPoint (
     DebugPrint (DEBUG_INFO, " UEFI:NULL\n");
   }
 
+  Status = pFwVerProtocol->GetFwVersion (FwVerSTMM, &pFwVerBuff, &FwVerSize);
+  if (!EFI_ERROR (Status)) {
+    DebugPrint (DEBUG_INFO, " STMM:%s\n", pFwVerBuff);
+  } else {
+    DebugPrint (DEBUG_INFO, " STMM:NULL\n");
+  }
+
   Status = pFwVerProtocol->GetFwVersion (FwVerEC, &pFwVerBuff, &FwVerSize);
   if (!EFI_ERROR (Status)) {
     DebugPrint (DEBUG_INFO, " EC:%s\n", pFwVerBuff);

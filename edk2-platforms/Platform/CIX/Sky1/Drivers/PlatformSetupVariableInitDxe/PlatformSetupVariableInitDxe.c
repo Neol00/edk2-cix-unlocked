@@ -483,9 +483,14 @@ ConstructSetupVariable (
   PlatformSetupVar->PmOppFreq[16] = 800;  PlatformSetupVar->PmOppVolt[16] = 800;
   PlatformSetupVar->PmOppFreq[17] = 1000; PlatformSetupVar->PmOppVolt[17] = 800;
   PlatformSetupVar->PmOppFreq[18] = 1000; PlatformSetupVar->PmOppVolt[18] = 800;
-  // Domain 2: CPU Little (2 entries)
+  // Domain 2: CPU Little (7 entries)
   PlatformSetupVar->PmOppFreq[26] = 800;  PlatformSetupVar->PmOppVolt[26] = 790;
-  PlatformSetupVar->PmOppFreq[27] = 1800; PlatformSetupVar->PmOppVolt[27] = 790;
+  PlatformSetupVar->PmOppFreq[27] = 1000; PlatformSetupVar->PmOppVolt[27] = 790;
+  PlatformSetupVar->PmOppFreq[28] = 1200; PlatformSetupVar->PmOppVolt[28] = 800;
+  PlatformSetupVar->PmOppFreq[29] = 1400; PlatformSetupVar->PmOppVolt[29] = 810;
+  PlatformSetupVar->PmOppFreq[30] = 1600; PlatformSetupVar->PmOppVolt[30] = 820;
+  PlatformSetupVar->PmOppFreq[31] = 1800; PlatformSetupVar->PmOppVolt[31] = 850;
+  PlatformSetupVar->PmOppFreq[32] = 2200; PlatformSetupVar->PmOppVolt[32] = 930;
   // Domain 3: CPU Big G0 (7 entries)
   PlatformSetupVar->PmOppFreq[39] = 800;  PlatformSetupVar->PmOppVolt[39] = 790;
   PlatformSetupVar->PmOppFreq[40] = 1200; PlatformSetupVar->PmOppVolt[40] = 800;
@@ -548,6 +553,9 @@ ConstructSetupVariable (
   PlatformSetupVar->PmTdp[5] = 5500;
   PlatformSetupVar->PmTdp[6] = 12000;
   PlatformSetupVar->PmTdp[7] = 9000;
+
+  PlatformSetupVar->PmSocVoltagePolarity = 0;
+  PlatformSetupVar->PmSocVoltageOffset = 0;
 }
 
 EFI_STATUS
@@ -610,7 +618,12 @@ PlatformSetupVariableInit (
       PlatformSetupVar.PmOppFreq[18] = 1000; PlatformSetupVar.PmOppVolt[18] = 800;
       // Domain 2: CPU Little
       PlatformSetupVar.PmOppFreq[26] = 800;  PlatformSetupVar.PmOppVolt[26] = 790;
-      PlatformSetupVar.PmOppFreq[27] = 1800; PlatformSetupVar.PmOppVolt[27] = 790;
+      PlatformSetupVar.PmOppFreq[27] = 1000; PlatformSetupVar.PmOppVolt[27] = 790;
+      PlatformSetupVar.PmOppFreq[28] = 1200; PlatformSetupVar.PmOppVolt[28] = 800;
+      PlatformSetupVar.PmOppFreq[29] = 1400; PlatformSetupVar.PmOppVolt[29] = 810;
+      PlatformSetupVar.PmOppFreq[30] = 1600; PlatformSetupVar.PmOppVolt[30] = 820;
+      PlatformSetupVar.PmOppFreq[31] = 1800; PlatformSetupVar.PmOppVolt[31] = 850;
+      PlatformSetupVar.PmOppFreq[32] = 2200; PlatformSetupVar.PmOppVolt[32] = 930;
       // Domain 3: CPU Big G0
       PlatformSetupVar.PmOppFreq[39] = 800;  PlatformSetupVar.PmOppVolt[39] = 790;
       PlatformSetupVar.PmOppFreq[40] = 1200; PlatformSetupVar.PmOppVolt[40] = 800;
@@ -673,6 +686,9 @@ PlatformSetupVariableInit (
       PlatformSetupVar.PmTdp[5] = 5500;
       PlatformSetupVar.PmTdp[6] = 12000;
       PlatformSetupVar.PmTdp[7] = 9000;
+
+      PlatformSetupVar.PmSocVoltagePolarity = 0;
+      PlatformSetupVar.PmSocVoltageOffset = 0;
 
       DEBUG ((DEBUG_INFO, "%a: Migrating PM defaults into existing variable\n", __FUNCTION__));
       gRT->SetVariable (

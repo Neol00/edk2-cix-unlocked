@@ -2,12 +2,12 @@
  *
  *  Processor Properties Topology Table (PPTT) for CIX CD8180
  *
- *  CIX CD8180 (Sky1) SoC topology:
- *    Cluster L0: CPU 0-3  (Cortex-A520 Little) - 32KB L1I, 32KB L1D, no L2
- *    Cluster M0: CPU 4-5  (Cortex-A720 Mid)    - 64KB L1I, 64KB L1D, 512KB L2
- *    Cluster M1: CPU 6-7  (Cortex-A720 Mid)    - 64KB L1I, 64KB L1D, 512KB L2
- *    Cluster B0: CPU 8-9  (Cortex-A720 Big)    - 64KB L1I, 64KB L1D, 512KB L2
- *    Cluster B1: CPU 10-11 (Cortex-A720 Big)   - 64KB L1I, 64KB L1D, 512KB L2
+ *  CIX CD8180 (Sky1) SoC topology (ordered by MADT enumeration):
+ *    Cluster B1: UID 0-1  (Cortex-A720 Big, boot cluster) - 64KB L1I, 64KB L1D, 512KB L2
+ *    Cluster B0: UID 2-3  (Cortex-A720 Big)    - 64KB L1I, 64KB L1D, 512KB L2
+ *    Cluster M0: UID 4-5  (Cortex-A720 Mid)    - 64KB L1I, 64KB L1D, 512KB L2
+ *    Cluster M1: UID 6-7  (Cortex-A720 Mid)    - 64KB L1I, 64KB L1D, 512KB L2
+ *    Cluster L0: UID 8-11 (Cortex-A520 Little) - 32KB L1I, 32KB L1D, no L2
  *    All 12 cores share a 12MB L3 cache (Haydn DSU)
  *
  *  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
@@ -97,15 +97,16 @@ typedef struct {
 } PPTT_CLUSTER_A720;
 
 // Package (SoC) with L3
+// Cluster order matches MADT enumeration: Big1 (boot), Big0, Mid0, Mid1, Little
 typedef struct {
   EFI_ACPI_6_3_PPTT_STRUCTURE_PROCESSOR  Package;
   UINT32                                 Offset[1];   // L3
   EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE      L3Cache;
-  PPTT_CLUSTER_L0                        ClusterL0;   // CPU 0-3
-  PPTT_CLUSTER_A720                      ClusterM0;   // CPU 4-5
-  PPTT_CLUSTER_A720                      ClusterM1;   // CPU 6-7
-  PPTT_CLUSTER_A720                      ClusterB0;   // CPU 8-9
-  PPTT_CLUSTER_A720                      ClusterB1;   // CPU 10-11
+  PPTT_CLUSTER_A720                      ClusterB1;   // UID 0-1 (boot cluster)
+  PPTT_CLUSTER_A720                      ClusterB0;   // UID 2-3
+  PPTT_CLUSTER_A720                      ClusterM0;   // UID 4-5
+  PPTT_CLUSTER_A720                      ClusterM1;   // UID 6-7
+  PPTT_CLUSTER_L0                        ClusterL0;   // UID 8-11
 } PPTT_PACKAGE;
 
 // Full PPTT table
@@ -280,35 +281,7 @@ PPTT_TABLE Pptt = {
     },
 
     //
-    // Cluster L0: 4x Cortex-A520 (Little) - CPU 0-3, no L2
-    //
-    {
-      // Cluster processor node
-      {
-        EFI_ACPI_6_3_PPTT_TYPE_PROCESSOR,
-        sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_PROCESSOR),
-        {},
-        {
-          EFI_ACPI_6_3_PPTT_PACKAGE_NOT_PHYSICAL,
-          EFI_ACPI_6_3_PPTT_PROCESSOR_ID_INVALID,
-          EFI_ACPI_6_3_PPTT_PROCESSOR_IS_NOT_THREAD,
-          EFI_ACPI_6_3_PPTT_NODE_IS_NOT_LEAF,
-          EFI_ACPI_6_3_PPTT_IMPLEMENTATION_IDENTICAL,
-        },
-        FIELD_OFFSET (PPTT_TABLE, Package),   // Parent = Package
-        0,
-        0,    // No private resources (no L2 for A520)
-      },
-      {
-        PPTT_A520_CORE_INIT (ClusterL0, 0, 0),
-        PPTT_A520_CORE_INIT (ClusterL0, 1, 1),
-        PPTT_A520_CORE_INIT (ClusterL0, 2, 2),
-        PPTT_A520_CORE_INIT (ClusterL0, 3, 3),
-      },
-    },
-
-    //
-    // Cluster M0: 2x Cortex-A720 (Mid) - CPU 4-5
+    // Cluster B1: 2x Cortex-A720 (Big, boot cluster) - UID 0-1
     //
     {
       // Cluster processor node
@@ -330,9 +303,93 @@ PPTT_TABLE Pptt = {
       },
       // L2 cache offset
       {
-        FIELD_OFFSET (PPTT_TABLE, Package.ClusterM0.L2Cache),
+        FIELD_OFFSET (PPTT_TABLE, Package.ClusterB1.L2Cache),
       },
       // L2 cache (512KB)
+      {
+        EFI_ACPI_6_3_PPTT_TYPE_CACHE,
+        sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE), {},
+        { 1, 1, 1, 1, 1, 1, 1 },
+        FIELD_OFFSET (PPTT_TABLE, Package.L3Cache),
+        A720_L2_SIZE, A720_L2_SETS, A720_L2_ASSC,
+        {
+          EFI_ACPI_6_3_CACHE_ATTRIBUTES_ALLOCATION_READ_WRITE,
+          EFI_ACPI_6_3_CACHE_ATTRIBUTES_CACHE_TYPE_UNIFIED,
+          EFI_ACPI_6_3_CACHE_ATTRIBUTES_WRITE_POLICY_WRITE_BACK,
+        },
+        CACHE_LINE_SIZE,
+      },
+      {
+        PPTT_A720_CORE_INIT (ClusterB1, 0, 0),
+        PPTT_A720_CORE_INIT (ClusterB1, 1, 1),
+      },
+    },
+
+    //
+    // Cluster B0: 2x Cortex-A720 (Big) - UID 2-3
+    //
+    {
+      {
+        EFI_ACPI_6_3_PPTT_TYPE_PROCESSOR,
+        FIELD_OFFSET (PPTT_CLUSTER_A720, L2Cache) -
+          FIELD_OFFSET (PPTT_CLUSTER_A720, Cluster),
+        {},
+        {
+          EFI_ACPI_6_3_PPTT_PACKAGE_NOT_PHYSICAL,
+          EFI_ACPI_6_3_PPTT_PROCESSOR_ID_INVALID,
+          EFI_ACPI_6_3_PPTT_PROCESSOR_IS_NOT_THREAD,
+          EFI_ACPI_6_3_PPTT_NODE_IS_NOT_LEAF,
+          EFI_ACPI_6_3_PPTT_IMPLEMENTATION_IDENTICAL,
+        },
+        FIELD_OFFSET (PPTT_TABLE, Package),
+        0,
+        1,
+      },
+      {
+        FIELD_OFFSET (PPTT_TABLE, Package.ClusterB0.L2Cache),
+      },
+      {
+        EFI_ACPI_6_3_PPTT_TYPE_CACHE,
+        sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE), {},
+        { 1, 1, 1, 1, 1, 1, 1 },
+        FIELD_OFFSET (PPTT_TABLE, Package.L3Cache),
+        A720_L2_SIZE, A720_L2_SETS, A720_L2_ASSC,
+        {
+          EFI_ACPI_6_3_CACHE_ATTRIBUTES_ALLOCATION_READ_WRITE,
+          EFI_ACPI_6_3_CACHE_ATTRIBUTES_CACHE_TYPE_UNIFIED,
+          EFI_ACPI_6_3_CACHE_ATTRIBUTES_WRITE_POLICY_WRITE_BACK,
+        },
+        CACHE_LINE_SIZE,
+      },
+      {
+        PPTT_A720_CORE_INIT (ClusterB0, 0, 2),
+        PPTT_A720_CORE_INIT (ClusterB0, 1, 3),
+      },
+    },
+
+    //
+    // Cluster M0: 2x Cortex-A720 (Mid) - UID 4-5
+    //
+    {
+      {
+        EFI_ACPI_6_3_PPTT_TYPE_PROCESSOR,
+        FIELD_OFFSET (PPTT_CLUSTER_A720, L2Cache) -
+          FIELD_OFFSET (PPTT_CLUSTER_A720, Cluster),
+        {},
+        {
+          EFI_ACPI_6_3_PPTT_PACKAGE_NOT_PHYSICAL,
+          EFI_ACPI_6_3_PPTT_PROCESSOR_ID_INVALID,
+          EFI_ACPI_6_3_PPTT_PROCESSOR_IS_NOT_THREAD,
+          EFI_ACPI_6_3_PPTT_NODE_IS_NOT_LEAF,
+          EFI_ACPI_6_3_PPTT_IMPLEMENTATION_IDENTICAL,
+        },
+        FIELD_OFFSET (PPTT_TABLE, Package),
+        0,
+        1,
+      },
+      {
+        FIELD_OFFSET (PPTT_TABLE, Package.ClusterM0.L2Cache),
+      },
       {
         EFI_ACPI_6_3_PPTT_TYPE_CACHE,
         sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE), {},
@@ -353,7 +410,7 @@ PPTT_TABLE Pptt = {
     },
 
     //
-    // Cluster M1: 2x Cortex-A720 (Mid) - CPU 6-7
+    // Cluster M1: 2x Cortex-A720 (Mid) - UID 6-7
     //
     {
       {
@@ -395,13 +452,13 @@ PPTT_TABLE Pptt = {
     },
 
     //
-    // Cluster B0: 2x Cortex-A720 (Big) - CPU 8-9
+    // Cluster L0: 4x Cortex-A520 (Little) - UID 8-11, no L2
     //
     {
+      // Cluster processor node
       {
         EFI_ACPI_6_3_PPTT_TYPE_PROCESSOR,
-        FIELD_OFFSET (PPTT_CLUSTER_A720, L2Cache) -
-          FIELD_OFFSET (PPTT_CLUSTER_A720, Cluster),
+        sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_PROCESSOR),
         {},
         {
           EFI_ACPI_6_3_PPTT_PACKAGE_NOT_PHYSICAL,
@@ -410,71 +467,15 @@ PPTT_TABLE Pptt = {
           EFI_ACPI_6_3_PPTT_NODE_IS_NOT_LEAF,
           EFI_ACPI_6_3_PPTT_IMPLEMENTATION_IDENTICAL,
         },
-        FIELD_OFFSET (PPTT_TABLE, Package),
+        FIELD_OFFSET (PPTT_TABLE, Package),   // Parent = Package
         0,
-        1,
+        0,    // No private resources (no L2 for A520)
       },
       {
-        FIELD_OFFSET (PPTT_TABLE, Package.ClusterB0.L2Cache),
-      },
-      {
-        EFI_ACPI_6_3_PPTT_TYPE_CACHE,
-        sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE), {},
-        { 1, 1, 1, 1, 1, 1, 1 },
-        FIELD_OFFSET (PPTT_TABLE, Package.L3Cache),
-        A720_L2_SIZE, A720_L2_SETS, A720_L2_ASSC,
-        {
-          EFI_ACPI_6_3_CACHE_ATTRIBUTES_ALLOCATION_READ_WRITE,
-          EFI_ACPI_6_3_CACHE_ATTRIBUTES_CACHE_TYPE_UNIFIED,
-          EFI_ACPI_6_3_CACHE_ATTRIBUTES_WRITE_POLICY_WRITE_BACK,
-        },
-        CACHE_LINE_SIZE,
-      },
-      {
-        PPTT_A720_CORE_INIT (ClusterB0, 0, 8),
-        PPTT_A720_CORE_INIT (ClusterB0, 1, 9),
-      },
-    },
-
-    //
-    // Cluster B1: 2x Cortex-A720 (Big) - CPU 10-11
-    //
-    {
-      {
-        EFI_ACPI_6_3_PPTT_TYPE_PROCESSOR,
-        FIELD_OFFSET (PPTT_CLUSTER_A720, L2Cache) -
-          FIELD_OFFSET (PPTT_CLUSTER_A720, Cluster),
-        {},
-        {
-          EFI_ACPI_6_3_PPTT_PACKAGE_NOT_PHYSICAL,
-          EFI_ACPI_6_3_PPTT_PROCESSOR_ID_INVALID,
-          EFI_ACPI_6_3_PPTT_PROCESSOR_IS_NOT_THREAD,
-          EFI_ACPI_6_3_PPTT_NODE_IS_NOT_LEAF,
-          EFI_ACPI_6_3_PPTT_IMPLEMENTATION_IDENTICAL,
-        },
-        FIELD_OFFSET (PPTT_TABLE, Package),
-        0,
-        1,
-      },
-      {
-        FIELD_OFFSET (PPTT_TABLE, Package.ClusterB1.L2Cache),
-      },
-      {
-        EFI_ACPI_6_3_PPTT_TYPE_CACHE,
-        sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE), {},
-        { 1, 1, 1, 1, 1, 1, 1 },
-        FIELD_OFFSET (PPTT_TABLE, Package.L3Cache),
-        A720_L2_SIZE, A720_L2_SETS, A720_L2_ASSC,
-        {
-          EFI_ACPI_6_3_CACHE_ATTRIBUTES_ALLOCATION_READ_WRITE,
-          EFI_ACPI_6_3_CACHE_ATTRIBUTES_CACHE_TYPE_UNIFIED,
-          EFI_ACPI_6_3_CACHE_ATTRIBUTES_WRITE_POLICY_WRITE_BACK,
-        },
-        CACHE_LINE_SIZE,
-      },
-      {
-        PPTT_A720_CORE_INIT (ClusterB1, 0, 10),
-        PPTT_A720_CORE_INIT (ClusterB1, 1, 11),
+        PPTT_A520_CORE_INIT (ClusterL0, 0, 8),
+        PPTT_A520_CORE_INIT (ClusterL0, 1, 9),
+        PPTT_A520_CORE_INIT (ClusterL0, 2, 10),
+        PPTT_A520_CORE_INIT (ClusterL0, 3, 11),
       },
     },
   },

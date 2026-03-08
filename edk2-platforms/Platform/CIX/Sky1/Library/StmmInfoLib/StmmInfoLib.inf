@@ -1,0 +1,41 @@
+#/** @file
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = StmmInfoLib
+  FILE_GUID                      = FA445513-8848-4BCB-863E-4369EAA47D8E
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = StmmInfoLib
+  CONSTRUCTOR                    = StmmInfoLibConstructor
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  ArmPlatformPkg/ArmPlatformPkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+
+[LibraryClasses]
+  BaseLib
+  DebugLib
+  BaseMemoryLib
+  MemoryAllocationLib
+  UefiBootServicesTableLib
+
+[Guids]
+  gCixMmStmmInfoCommunicateGuid
+  gEfiEventVirtualAddressChangeGuid
+
+[Protocols]
+  gEfiMmCommunication2ProtocolGuid
+
+[Sources.common]
+  StmmInfoLib.c
+
+

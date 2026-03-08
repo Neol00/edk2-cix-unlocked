@@ -287,7 +287,7 @@
 
         subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
         // --------------------------------------------------
-        // Domain 2: CPU Little (2 visible entries, +1 hidden safe sustained at OPP[0])
+        // Domain 2: CPU Little (7 visible entries, +1 hidden safe sustained at OPP[0])
         // NVRAM slot N maps to OPP[N+1]. OPP[0] is never patched.
         // --------------------------------------------------
         subtitle text = STRING_TOKEN(STR_PM_CPU_LITTLE_TITLE);
@@ -319,7 +319,7 @@
             minimum = 800,
             maximum = 4500,
             step    = 10,
-            default = 1800,
+            default = 1000,
         endnumeric;
 
         numeric varid   = PlatformSetupVar.PmOppVolt[27],
@@ -330,6 +330,106 @@
             maximum = 1600,
             step    = 10,
             default = 790,
+        endnumeric;
+
+        numeric varid   = PlatformSetupVar.PmOppFreq[28],
+            prompt  = STRING_TOKEN(STR_PM_E2_FREQ),
+            help    = STRING_TOKEN(STR_PM_FREQ_HELP),
+            flags   = NUMERIC_SIZE_2 | RESET_REQUIRED,
+            minimum = 800,
+            maximum = 4500,
+            step    = 10,
+            default = 1200,
+        endnumeric;
+
+        numeric varid   = PlatformSetupVar.PmOppVolt[28],
+            prompt  = STRING_TOKEN(STR_PM_E2_VOLT),
+            help    = STRING_TOKEN(STR_PM_VOLT_HELP),
+            flags   = NUMERIC_SIZE_2 | RESET_REQUIRED,
+            minimum = 0,
+            maximum = 1600,
+            step    = 10,
+            default = 800,
+        endnumeric;
+
+        numeric varid   = PlatformSetupVar.PmOppFreq[29],
+            prompt  = STRING_TOKEN(STR_PM_E3_FREQ),
+            help    = STRING_TOKEN(STR_PM_FREQ_HELP),
+            flags   = NUMERIC_SIZE_2 | RESET_REQUIRED,
+            minimum = 800,
+            maximum = 4500,
+            step    = 10,
+            default = 1400,
+        endnumeric;
+
+        numeric varid   = PlatformSetupVar.PmOppVolt[29],
+            prompt  = STRING_TOKEN(STR_PM_E3_VOLT),
+            help    = STRING_TOKEN(STR_PM_VOLT_HELP),
+            flags   = NUMERIC_SIZE_2 | RESET_REQUIRED,
+            minimum = 0,
+            maximum = 1600,
+            step    = 10,
+            default = 810,
+        endnumeric;
+
+        numeric varid   = PlatformSetupVar.PmOppFreq[30],
+            prompt  = STRING_TOKEN(STR_PM_E4_FREQ),
+            help    = STRING_TOKEN(STR_PM_FREQ_HELP),
+            flags   = NUMERIC_SIZE_2 | RESET_REQUIRED,
+            minimum = 800,
+            maximum = 4500,
+            step    = 10,
+            default = 1600,
+        endnumeric;
+
+        numeric varid   = PlatformSetupVar.PmOppVolt[30],
+            prompt  = STRING_TOKEN(STR_PM_E4_VOLT),
+            help    = STRING_TOKEN(STR_PM_VOLT_HELP),
+            flags   = NUMERIC_SIZE_2 | RESET_REQUIRED,
+            minimum = 0,
+            maximum = 1600,
+            step    = 10,
+            default = 820,
+        endnumeric;
+
+        numeric varid   = PlatformSetupVar.PmOppFreq[31],
+            prompt  = STRING_TOKEN(STR_PM_E5_FREQ),
+            help    = STRING_TOKEN(STR_PM_FREQ_HELP),
+            flags   = NUMERIC_SIZE_2 | RESET_REQUIRED,
+            minimum = 800,
+            maximum = 4500,
+            step    = 10,
+            default = 1800,
+        endnumeric;
+
+        numeric varid   = PlatformSetupVar.PmOppVolt[31],
+            prompt  = STRING_TOKEN(STR_PM_E5_VOLT),
+            help    = STRING_TOKEN(STR_PM_VOLT_HELP),
+            flags   = NUMERIC_SIZE_2 | RESET_REQUIRED,
+            minimum = 0,
+            maximum = 1600,
+            step    = 10,
+            default = 850,
+        endnumeric;
+
+        numeric varid   = PlatformSetupVar.PmOppFreq[32],
+            prompt  = STRING_TOKEN(STR_PM_E6_FREQ),
+            help    = STRING_TOKEN(STR_PM_FREQ_HELP),
+            flags   = NUMERIC_SIZE_2 | RESET_REQUIRED,
+            minimum = 800,
+            maximum = 4500,
+            step    = 10,
+            default = 2200,
+        endnumeric;
+
+        numeric varid   = PlatformSetupVar.PmOppVolt[32],
+            prompt  = STRING_TOKEN(STR_PM_E6_VOLT),
+            help    = STRING_TOKEN(STR_PM_VOLT_HELP),
+            flags   = NUMERIC_SIZE_2 | RESET_REQUIRED,
+            minimum = 0,
+            maximum = 1600,
+            step    = 10,
+            default = 930,
         endnumeric;
 
         subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
@@ -1204,6 +1304,29 @@
             maximum = 65000,
             step    = 100,
             default = 9000,
+        endnumeric;
+
+        // --------------------------------------------------
+        // SoC Voltage Offset
+        // --------------------------------------------------
+        subtitle text = STRING_TOKEN(STR_PM_SOC_VOFFSET_TITLE);
+
+        oneof varid   = PlatformSetupVar.PmSocVoltagePolarity,
+            prompt  = STRING_TOKEN(STR_PM_SOC_VOFFSET_POLARITY),
+            help    = STRING_TOKEN(STR_PM_SOC_VOFFSET_POL_HELP),
+            flags   = NUMERIC_SIZE_1 | RESET_REQUIRED,
+            option text = STRING_TOKEN(STR_PM_SOC_VOFFSET_POS), value = 0, flags = DEFAULT;
+            option text = STRING_TOKEN(STR_PM_SOC_VOFFSET_NEG), value = 1, flags = 0;
+        endoneof;
+
+        numeric varid   = PlatformSetupVar.PmSocVoltageOffset,
+            prompt  = STRING_TOKEN(STR_PM_SOC_VOFFSET_PROMPT),
+            help    = STRING_TOKEN(STR_PM_SOC_VOFFSET_HELP),
+            flags   = NUMERIC_SIZE_2 | RESET_REQUIRED,
+            minimum = 0,
+            maximum = 500,
+            step    = 10,
+            default = 0,
         endnumeric;
 
     endform;

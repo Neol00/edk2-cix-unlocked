@@ -71,3 +71,12 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #string STR_PM_TDP_GPU_PROMPT          #language en-US "  GPU TDP (mW)"
 #string STR_PM_TDP_SOC_PROMPT          #language en-US "  SoC TDP (mW)"
 #string STR_PM_TDP_HELP                #language en-US "Per-rail TDP power cap in milliwatts. Reset to defaults to restore stock values."
+
+// SoC Voltage Offset
+#string STR_PM_SOC_VOFFSET_TITLE       #language en-US "--- SoC Voltage ---"
+#string STR_PM_SOC_VOFFSET_POLARITY    #language en-US "  SoC Voltage Polarity"
+#string STR_PM_SOC_VOFFSET_POL_HELP    #language en-US "Select whether the SoC voltage offset is added (+) or subtracted (-) from the base voltage."
+#string STR_PM_SOC_VOFFSET_POS         #language en-US "Positive (+)"
+#string STR_PM_SOC_VOFFSET_NEG         #language en-US "Negative (-)"
+#string STR_PM_SOC_VOFFSET_PROMPT      #language en-US "  SoC Voltage Offset (mV)"
+#string STR_PM_SOC_VOFFSET_HELP        #language en-US "Voltage offset applied to the fixed SoC rail via delta_mV in csu_pm_config.\nUse the Polarity setting to control direction.\nRange: 0 to 500 mV. 0 = no offset.\nWARNING: Incorrect voltage may cause instability or damage."

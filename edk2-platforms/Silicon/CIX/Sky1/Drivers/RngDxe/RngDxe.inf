@@ -1,0 +1,42 @@
+## @file
+# This driver produces an EFI_RNG_PROTOCOL instance
+#
+# Copyright 2025 Cix Technology Group Co., Ltd. All Rights Reserved
+# Copyright (C) 2016, Linaro Ltd. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = RngDxe
+  FILE_GUID                      = 1E97605F-9DF2-4DE0-BCE9-7ADAEFE09345
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = RngDxeEntryPoint
+
+[Sources]
+  RngDxe.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+
+[LibraryClasses]
+  BaseMemoryLib
+  RngLib
+  UefiBootServicesTableLib
+  DebugLib
+  UefiDriverEntryPoint
+
+[Pcd]
+
+[Protocols]
+  gEfiRngProtocolGuid              ## PRODUCES
+
+[Guids]
+  gEfiRngAlgorithmRaw
+  gEfiEventReadyToBootGuid
+
+[Depex]
+  TRUE

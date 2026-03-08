@@ -10,6 +10,7 @@
 
 #include "pm_export_config.h"
 #include "cfg_dpm_pwrrail.h"
+#include "opp_config_custom.h"
 
 #pragma pack(push, 1)
 
@@ -32,14 +33,14 @@ static shadow_pm_config_pmic_t pmic_config = {
 	},
     .opp_max = { 4500, 4500, 4500, 4500, 4500, 4500, 4500, 4500, 4500, 4500, 4500, 4500, 4500 },
     .edp_cfg = {
-        [DPM_EDP_CPU_LIT] = { .vr_type = VR_MP2845, .pwr_cap =  2400, .i2c_port = 0, .i2c_addr = 0x45, .i2c_buck = 1, .vboot_mV = 790, .delta_mV = 0 },
-        [DPM_EDP_CPU_GM0] = { .vr_type = VR_MP2845, .pwr_cap =  6700, .i2c_port = 1, .i2c_addr = 0x45, .i2c_buck = 2, .vboot_mV = 790, .delta_mV = 0 },
-        [DPM_EDP_CPU_GM1] = { .vr_type = VR_MP2845, .pwr_cap =  6500, .i2c_port = 0, .i2c_addr = 0x45, .i2c_buck = 0, .vboot_mV = 790, .delta_mV = 0 },
-        [DPM_EDP_CPU_GB0] = { .vr_type = VR_MP2845, .pwr_cap =  8000, .i2c_port = 0, .i2c_addr = 0x45, .i2c_buck = 2, .vboot_mV = 790, .delta_mV = 0 },
-        [DPM_EDP_CPU_GB1] = { .vr_type = VR_MP2845, .pwr_cap =  8200, .i2c_port = 0, .i2c_addr = 0x45, .i2c_buck = 3, .vboot_mV = 790, .delta_mV = 0 },
-        [DPM_EDP_DSU]     = { .vr_type = VR_MP2845, .pwr_cap =  5500, .i2c_port = 1, .i2c_addr = 0x45, .i2c_buck = 3, .vboot_mV = 790, .delta_mV = 0 },
-        [DPM_EDP_GPU]     = { .vr_type = VR_MP2845, .pwr_cap = 12000, .i2c_port = 1, .i2c_addr = 0x45, .i2c_buck = 1, .vboot_mV = 790, .delta_mV = 10 },
-        [DPM_EDP_SOC]     = { .vr_type = VR_MP2845, .pwr_cap =  9000, .i2c_port = 1, .i2c_addr = 0x45, .i2c_buck = 0, .vboot_mV = 790, .delta_mV = 0 },
+        [DPM_EDP_CPU_LIT] = { .vr_type = VR_MP2845, .pwr_cap =  2400, .i2c_port = 0, .i2c_addr = 0x45, .i2c_buck = 1, .vboot_mV = 790, .delta_mV = CPU_LIT_DELTA_MV },
+        [DPM_EDP_CPU_GM0] = { .vr_type = VR_MP2845, .pwr_cap =  6700, .i2c_port = 1, .i2c_addr = 0x45, .i2c_buck = 2, .vboot_mV = 790, .delta_mV = CPU_GM0_DELTA_MV },
+        [DPM_EDP_CPU_GM1] = { .vr_type = VR_MP2845, .pwr_cap =  6500, .i2c_port = 0, .i2c_addr = 0x45, .i2c_buck = 0, .vboot_mV = 790, .delta_mV = CPU_GM1_DELTA_MV },
+        [DPM_EDP_CPU_GB0] = { .vr_type = VR_MP2845, .pwr_cap =  8000, .i2c_port = 0, .i2c_addr = 0x45, .i2c_buck = 2, .vboot_mV = 790, .delta_mV = CPU_GB0_DELTA_MV },
+        [DPM_EDP_CPU_GB1] = { .vr_type = VR_MP2845, .pwr_cap =  8200, .i2c_port = 0, .i2c_addr = 0x45, .i2c_buck = 3, .vboot_mV = 790, .delta_mV = CPU_GB1_DELTA_MV },
+        [DPM_EDP_DSU]     = { .vr_type = VR_MP2845, .pwr_cap =  5500, .i2c_port = 1, .i2c_addr = 0x45, .i2c_buck = 3, .vboot_mV = 790, .delta_mV = DSU_DELTA_MV },
+        [DPM_EDP_GPU]     = { .vr_type = VR_MP2845, .pwr_cap = 12000, .i2c_port = 1, .i2c_addr = 0x45, .i2c_buck = 1, .vboot_mV = 790, .delta_mV = GPU_DELTA_MV },
+        [DPM_EDP_SOC]     = { .vr_type = VR_MP2845, .pwr_cap =  9000, .i2c_port = 1, .i2c_addr = 0x45, .i2c_buck = 0, .vboot_mV = 790, .delta_mV = SOC_DELTA_MV },
     },
 };
 

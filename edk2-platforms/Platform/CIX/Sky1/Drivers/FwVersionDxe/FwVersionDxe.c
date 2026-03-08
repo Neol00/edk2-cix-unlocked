@@ -21,6 +21,13 @@
 #include <Library/CacheMaintenanceLib.h>
 #include "UefiMemRecords.h"
 
+VOID
+EFIAPI
+InstallType45Structure (
+  IN EFI_EVENT  Event,
+  IN VOID       *Context
+  );
+
 // #ifdef DEBUG
 // #undef DEBUG
 // #define DEBUG(Expression) DebugPrint Expression
@@ -595,6 +602,17 @@ FwVersionDxeEntryPoint (
   }
 
   RecordUefiMemoryWrapper ();
+
+  EFI_EVENT  Type45Event;
+  Status = EfiCreateEventReadyToBootEx (
+             TPL_CALLBACK,
+             InstallType45Structure,
+             &CixFwVerProtocol,
+             &Type45Event
+             );
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "%a: Create ReadyToBoot Event failed with Status = %r\n", __FUNCTION__, Status));
+  }
 
   return Status;
 }

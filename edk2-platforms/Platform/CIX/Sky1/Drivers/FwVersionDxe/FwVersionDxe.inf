@@ -16,6 +16,7 @@
 
 [Sources]
   FwVersionDxe.c
+  SmbiosType45.c
 
 [Packages]
   ArmPkg/ArmPkg.dec
@@ -45,6 +46,7 @@
 [Protocols]
   gCixFwVersionProtocolGuid
   gCixEcPlatformProtocolGuid
+  gEfiSmbiosProtocolGuid
 
 [Pcd]
   gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString

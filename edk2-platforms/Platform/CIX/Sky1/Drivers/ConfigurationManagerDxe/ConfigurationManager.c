@@ -259,6 +259,13 @@ InitializeCmArmCpcInfo (
   return EFI_SUCCESS;
 }
 
+// Core iteration order: Big G1 (boot cluster), Big G0, Mid G0, Mid G1, Little.
+// Boot core (physical 10, Big G1) is always placed first by the enumeration loop;
+// remaining cores follow this order with the boot core skipped.
+STATIC CONST UINT8 mCoreIterOrder[PLAT_CPU_COUNT] = {
+  10, 11, 8, 9, 4, 5, 6, 7, 0, 1, 2, 3
+};
+
 /** Initialize the GIC CPU interface information in platform configuration repository.
 
   @param [in]  This     Pointer to the Configuration Manager Protocol.
@@ -276,7 +283,7 @@ InitializeCmArmGiccInfo (
   SKY1_PLATFORM_REPOSITORY_INFO  *PlatformRepo;
   UINT8                          CpuBootCoreId, CpuCoreNum;
   UINT8                          SetupCpuIndex;
-  UINT32                         CpuCoreMask, MaxCpuCoreNum, i, Index;
+  UINT32                         CpuCoreMask, MaxCpuCoreNum, i, j, Index;
   UINTN                          VarSize;
   CM_ARM_GICC_INFO               DefalutGicCInfo[PLAT_CPU_COUNT] = PLAT_GIC_CPU_INTERFACE;
   PLATFORM_SETUP_DATA            PlatformSetupVar;
@@ -341,7 +348,9 @@ InitializeCmArmGiccInfo (
     return EFI_SUCCESS;
   }
 
-  for (i = 0; i < PLAT_CPU_COUNT; i++) {
+  // Iterate in performance order (Big, Mid, Little) so Linux sees fast cores first
+  for (j = 0; j < PLAT_CPU_COUNT; j++) {
+    i = mCoreIterOrder[j];
     if (((CpuCoreMask>>i)&BIT0) == 1) {
       continue;
     }

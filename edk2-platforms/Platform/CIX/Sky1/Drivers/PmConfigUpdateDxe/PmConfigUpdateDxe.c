@@ -274,6 +274,255 @@ AcpiFixChecksum (
   Table->Checksum = (UINT8)(0 - Sum);
 }
 
+//
+// CPU cluster CPPC patching — maps OPP domain index to the DesiredPerf
+// hardware register address that uniquely identifies each cluster's _CPC
+// package in the compiled DSDT AML.
+//
+typedef struct {
+  UINT8   DvfsIdx;      // DVFS_ELEMENT_IDX_*
+  UINT32  DesiredReg;   // CORE_*_DESIRED_PERF_REG
+  UINT8   CoreCount;    // number of cores sharing this OPP
+} CPPC_CLUSTER_MAP;
+
+STATIC CONST CPPC_CLUSTER_MAP  mClusterMap[] = {
+  { DVFS_ELEMENT_IDX_LITTLE, 0x06590094, 4 },  // cores 0-3
+  { DVFS_ELEMENT_IDX_MID_G0, 0x065900A0, 2 },  // cores 4-5
+  { DVFS_ELEMENT_IDX_MID_G1, 0x065900A4, 2 },  // cores 6-7
+  { DVFS_ELEMENT_IDX_BIG_G0, 0x06590098, 2 },  // cores 8-9
+  { DVFS_ELEMENT_IDX_BIG_G1, 0x0659009C, 2 },  // cores 10-11
+};
+
+#define CLUSTER_MAP_COUNT  (sizeof (mClusterMap) / sizeof (mClusterMap[0]))
+
+/**
+  Find the maximum OPP frequency (in MHz) for a given DVFS domain.
+
+  @param[in]  OppConfig  Pointer to the OPP config for this domain
+  @retval     Maximum frequency in MHz, or 0 if not found
+**/
+STATIC
+UINT32
+GetMaxOppFreqMhz (
+  IN DOMAIN_OPP_CONFIG_T  *OppConfig
+  )
+{
+  UINT32  MaxFreqKhz;
+  UINT16  I;
+
+  MaxFreqKhz = 0;
+  for (I = 0; I < OppConfig->Size && I < DOMAIN_MAX_OPP_ENTRIES; I++) {
+    if (OppConfig->OppTable[I].Frequency > MaxFreqKhz) {
+      MaxFreqKhz = OppConfig->OppTable[I].Frequency;
+    }
+  }
+
+  return MaxFreqKhz / 1000;
+}
+
+/**
+  Patch CPPC HighestPerf and NominalPerf in the DSDT for all CPU clusters
+  based on actual OPP table maximum frequencies.
+
+  Searches for each cluster's unique DesiredPerf register address within
+  ACPI Generic Register Descriptors in _CPC packages. The _CPC package
+  layout (from CPPC_PACKAGE_INIT macro) places HighestPerf and NominalPerf
+  as the 3rd and 4th elements.  In compiled AML these are integer constants
+  preceding the first ResourceTemplate (GuaranteedPerf register).
+
+  We locate the DesiredPerf register descriptor (the 8th _CPC element),
+  then scan backwards to find and patch the HighestPerf/NominalPerf values.
+
+  @param[in]  PmCrc  Pointer to the pm_config binary (validated)
+**/
+STATIC
+VOID
+PatchCppcInDsdt (
+  IN PM_EXPORT_CONFIG_CRC_T  *PmCrc
+  )
+{
+  EFI_STATUS              Status;
+  EFI_ACPI_SDT_PROTOCOL   *AcpiSdt;
+  EFI_ACPI_SDT_HEADER     *Table;
+  EFI_ACPI_TABLE_VERSION  TableVersion;
+  UINTN                   TableKey;
+  UINTN                   I;
+  UINT8                   *Buf;
+  UINT32                  Len;
+  UINTN                   Pos;
+  UINTN                   Cluster;
+  UINT32                  MaxFreq;
+  UINT32                  DesiredReg;
+  UINT8                   DesiredRegLe[4];
+  UINTN                   Patched;
+  UINTN                   Expected;
+  UINTN                   Back;
+  UINTN                   IntCount;
+  UINTN                   IntPos[6];
+  UINTN                   Scan;
+  UINTN                   Idx;
+  UINT32                  NumEntries;
+  UINT32                  Revision;
+  UINT8                   Prefix;
+
+  Status = gBS->LocateProtocol (&gEfiAcpiSdtProtocolGuid, NULL, (VOID **)&AcpiSdt);
+  if (EFI_ERROR (Status)) {
+    return;
+  }
+
+  for (I = 0; I < ACPI_MAX_TABLES; I++) {
+    Status = AcpiSdt->GetAcpiTable (I, &Table, &TableVersion, &TableKey);
+    if (EFI_ERROR (Status)) {
+      break;
+    }
+
+    if (Table->Signature != SIGNATURE_32 ('D','S','D','T')) {
+      continue;
+    }
+
+    Buf = (UINT8 *)Table;
+    Len = Table->Length;
+
+    for (Cluster = 0; Cluster < CLUSTER_MAP_COUNT; Cluster++) {
+      MaxFreq = GetMaxOppFreqMhz (
+                  &PmCrc->Config.OppConfig.Opps[mClusterMap[Cluster].DvfsIdx]
+                  );
+      if (MaxFreq == 0) {
+        continue;
+      }
+
+      DesiredReg = mClusterMap[Cluster].DesiredReg;
+      DesiredRegLe[0] = (UINT8)(DesiredReg);
+      DesiredRegLe[1] = (UINT8)(DesiredReg >> 8);
+      DesiredRegLe[2] = (UINT8)(DesiredReg >> 16);
+      DesiredRegLe[3] = (UINT8)(DesiredReg >> 24);
+
+      //
+      // Count expected _CPC instances (one per core in this cluster)
+      //
+      Expected = mClusterMap[Cluster].CoreCount;
+      Patched  = 0;
+
+      for (Pos = 0; Pos + 15 < Len; Pos++) {
+        //
+        // Look for Generic Register Descriptor (0x82) containing our address.
+        // Format: 0x82 0x0C 0x00 AddrSpaceId BitWidth BitOffset AccessSize Addr[8]
+        // The DesiredPerf register is SystemMemory(0x00), BitWidth=32(0x20), BitOffset=0, AccessSize=3
+        //
+        if (Buf[Pos] != 0x82 || Buf[Pos+1] != 0x0C || Buf[Pos+2] != 0x00) {
+          continue;
+        }
+        if (Buf[Pos+3] != 0x00 || Buf[Pos+4] != 0x20 || Buf[Pos+5] != 0x00 || Buf[Pos+6] != 0x03) {
+          continue;
+        }
+        if (CompareMem (&Buf[Pos+7], DesiredRegLe, 4) != 0) {
+          continue;
+        }
+
+        //
+        // Found the DesiredPerf register descriptor at Pos.
+        // Now scan backwards to find the integer constants that form
+        // HighestPerf(3rd), NominalPerf(4th), LowestNonlinear(5th), LowestPerf(6th).
+        // Before the DesiredPerf register there are several ResourceTemplate buffers
+        // (GuaranteedPerf register) and the 4 integer performance values and
+        // NumEntries(23) + Revision(3).
+        //
+        // Strategy: scan backwards up to ~200 bytes looking for integer opcodes.
+        // Collect the last 6 integers found (NumEntries, Revision, Highest,
+        // Nominal, LowestNonlinear, LowestPerf).
+        // Patch integers [2] (Highest) and [3] (Nominal).
+        //
+        IntCount = 0;
+        Back = Pos;
+        if (Back > 200) {
+          Back = Pos - 200;
+        } else {
+          Back = 0;
+        }
+
+        for (Scan = Back; Scan < Pos && IntCount < 6; Scan++) {
+          if (Buf[Scan] == AML_DWORD_PREFIX && Scan + 4 < Pos) {
+            IntPos[IntCount++] = Scan + 1;  // offset of the 4-byte value
+            Scan += 4;  // skip past the DWORD
+          } else if (Buf[Scan] == AML_WORD_PREFIX && Scan + 2 < Pos) {
+            IntPos[IntCount++] = Scan + 1;  // offset of the 2-byte value
+            Scan += 2;
+          } else if (Buf[Scan] == AML_BYTE_PREFIX) {
+            IntPos[IntCount++] = Scan + 1;
+            Scan += 1;
+          }
+        }
+
+        //
+        // We need at least 4 integers: NumEntries, Revision, Highest, Nominal
+        // Patch Highest (index 2) and Nominal (index 3)
+        //
+        if (IntCount >= 4) {
+          //
+          // Verify NumEntries = 23 and Revision = 3 to confirm we found _CPC
+          //
+          NumEntries = 0;
+          Revision = 0;
+
+          // Read NumEntries (could be byte/word/dword encoded)
+          if (Buf[IntPos[0] - 1] == AML_BYTE_PREFIX) {
+            NumEntries = Buf[IntPos[0]];
+          } else if (Buf[IntPos[0] - 1] == AML_WORD_PREFIX) {
+            NumEntries = *(UINT16 *)&Buf[IntPos[0]];
+          } else {
+            NumEntries = *(UINT32 *)&Buf[IntPos[0]];
+          }
+
+          if (Buf[IntPos[1] - 1] == AML_BYTE_PREFIX) {
+            Revision = Buf[IntPos[1]];
+          } else if (Buf[IntPos[1] - 1] == AML_WORD_PREFIX) {
+            Revision = *(UINT16 *)&Buf[IntPos[1]];
+          } else {
+            Revision = *(UINT32 *)&Buf[IntPos[1]];
+          }
+
+          if (NumEntries != 23 || Revision != 3) {
+            continue;  // not a _CPC package
+          }
+
+          //
+          // Patch HighestPerf (index 2) and NominalPerf (index 3)
+          // The value encoding determines how we write:
+          // BytePrefix (0x0A): 1 byte, max 255
+          // WordPrefix (0x0B): 2 bytes, max 65535
+          // DWordPrefix (0x0C): 4 bytes
+          //
+          // Frequencies up to 4500 MHz fit in a WORD. The existing values
+          // are compiled with the same encoding, so we can safely overwrite
+          // in-place as long as the new value fits in the same encoding size.
+          //
+          for (Idx = 2; Idx <= 3; Idx++) {
+            Prefix = Buf[IntPos[Idx] - 1];
+
+            if (Prefix == AML_WORD_PREFIX && MaxFreq <= 0xFFFF) {
+              *(UINT16 *)&Buf[IntPos[Idx]] = (UINT16)MaxFreq;
+            } else if (Prefix == AML_DWORD_PREFIX) {
+              *(UINT32 *)&Buf[IntPos[Idx]] = MaxFreq;
+            } else if (Prefix == AML_BYTE_PREFIX && MaxFreq <= 0xFF) {
+              Buf[IntPos[Idx]] = (UINT8)MaxFreq;
+            }
+            // If encoding is too small for the value, skip (shouldn't happen
+            // since existing value is 4500 which requires at least WORD).
+          }
+
+          Patched++;
+        }
+      }
+
+      DEBUG ((DEBUG_INFO, "[PmConfigUpdate] CPPC cluster %d: patched %d/%d cores, max=%u MHz\n",
+              (UINT32)Cluster, (UINT32)Patched, (UINT32)Expected, MaxFreq));
+    }
+
+    AcpiFixChecksum (Table);
+    break;  // only one DSDT
+  }
+}
+
 /**
   Patch the gpu-microvolt property in the DSDT to reflect the actual
   maximum GPU voltage after applying user-configured voltage changes.
@@ -445,6 +694,11 @@ PmConfigReadyToBootCallback (
     PatchGpuMicrovoltInDsdt (MaxVoltMv * 1000);
   }
 
+  //
+  // Patch CPPC HighestPerf/NominalPerf for all CPU clusters
+  //
+  PatchCppcInDsdt (PmCrc);
+
 Done:
   FreePool (PmBuf);
 }
@@ -585,6 +839,32 @@ PatchSpiFlashPmConfig (
                 Rail, SetupVar->PmTdp[Rail]));
         Changed = TRUE;
       }
+    }
+  }
+
+  //
+  // Patch SoC voltage offset (delta_mV on DPM_EDP_SOC rail)
+  //
+  if (SetupVar->PmSocVoltageOffset != 0) {
+    INT32 SocDeltaMv;
+
+    SocDeltaMv = (INT32)SetupVar->PmSocVoltageOffset;
+    if (SetupVar->PmSocVoltagePolarity == 1) {
+      SocDeltaMv = -SocDeltaMv;
+    }
+
+    if (Cfg->PmicConfig.PmicScheme.Fields.Valid != PM_CONFIG_VALID ||
+        Cfg->PmicConfig.PmicScheme.Fields.RawData != CONFIG_EDP_CFG_CUSTOM) {
+      Cfg->PmicConfig.PmicScheme.Fields.Valid   = PM_CONFIG_VALID;
+      Cfg->PmicConfig.PmicScheme.Fields.RawData = CONFIG_EDP_CFG_CUSTOM;
+      Changed = TRUE;
+    }
+
+    if (Cfg->PmicConfig.EdpCfg[DPM_EDP_SOC].DeltaMv != SocDeltaMv) {
+      DEBUG ((DEBUG_INFO, "[PmConfigUpdate] Patched SoC delta_mV: %d -> %d mV\n",
+              Cfg->PmicConfig.EdpCfg[DPM_EDP_SOC].DeltaMv, SocDeltaMv));
+      Cfg->PmicConfig.EdpCfg[DPM_EDP_SOC].DeltaMv = SocDeltaMv;
+      Changed = TRUE;
     }
   }
 

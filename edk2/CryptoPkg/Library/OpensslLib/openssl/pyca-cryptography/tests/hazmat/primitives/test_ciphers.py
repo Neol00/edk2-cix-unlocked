@@ -214,7 +214,7 @@ class TestCipherUpdateInto(object):
         key = binascii.unhexlify(params["key"])
         pt = binascii.unhexlify(params["plaintext"])
         ct = binascii.unhexlify(params["ciphertext"])
-        c = ciphers.Cipher(AES(key), modes.ECB(), backend)
+        c = ciphers.Cipher(AES(key), modes.GCM(b"\x00" * 12), backend)
         encryptor = c.encryptor()
         buf = bytearray(len(pt) + 15)
         res = encryptor.update_into(pt, buf)
@@ -279,7 +279,7 @@ class TestCipherUpdateInto(object):
         key = binascii.unhexlify(params["key"])
         pt = binascii.unhexlify(params["plaintext"])
         ct = binascii.unhexlify(params["ciphertext"])
-        c = ciphers.Cipher(AES(key), modes.ECB(), backend)
+        c = ciphers.Cipher(AES(key), modes.GCM(b"\x00" * 12), backend)
         encryptor = c.encryptor()
         buf = bytearray(len(pt) + 15)
         res = encryptor.update_into(pt[:3], buf)
@@ -290,7 +290,7 @@ class TestCipherUpdateInto(object):
 
     def test_update_into_buffer_too_small(self, backend):
         key = b"\x00" * 16
-        c = ciphers.Cipher(AES(key), modes.ECB(), backend)
+        c = ciphers.Cipher(AES(key), modes.GCM(b"\x00" * 12), backend)
         encryptor = c.encryptor()
         buf = bytearray(16)
         with pytest.raises(ValueError):

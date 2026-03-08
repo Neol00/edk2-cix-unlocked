@@ -326,7 +326,7 @@
   gCixTokenSpaceGuid.PcdSystemTableSelect|0x01|UINT8|0x00002002 #0x1-DT 0-ACPI
   gCixTokenSpaceGuid.PcdDtbMenuEntry|0x00|UINT8|0x00002004
   gCixTokenSpaceGuid.PcdSocWatchdogTimer|0x00|UINT8|0x00002006
-  gCixTokenSpaceGuid.PcdVddSocVoltage|750|UINT16|0x00002007
+  gCixTokenSpaceGuid.PcdVddSocVoltage|800|UINT16|0x00002007
   gCixTokenSpaceGuid.PcdVddGpuVoltage|800|UINT16|0x00002008
   gCixTokenSpaceGuid.PcdVddDpuVoltage|800|UINT16|0x00002009
   gCixTokenSpaceGuid.PcdVddCpuBigCore0Voltage|800|UINT16|0x0000200A
@@ -401,10 +401,10 @@
   gCixTokenSpaceGuid.PcdSpi1Mode|0x01|UINT8|0x00000149            #0-SPI_MODE_0, 1-SPI_MODE_1 (0|SPI_CPHA), 2-SPI_MODE_2 (SPI_CPOL|0), 3-SPI_MODE_3 (SPI_CPOL|SPI_CPHA)
 
   # GPU
-  gCixTokenSpaceGuid.PcdNpuEnable|FALSE|BOOLEAN|0x00000481
+  gCixTokenSpaceGuid.PcdNpuEnable|TRUE|BOOLEAN|0x00000481
   gCixTokenSpaceGuid.PcdNpuReservedMemoryBase|0x90000000|UINT32|0x00000482
   gCixTokenSpaceGuid.PcdNpuReservedMemorySize|0x2000000|UINT32|0x00000483
-  gCixTokenSpaceGuid.PcdGpuEnable|FALSE|BOOLEAN|0x000004C1
+  gCixTokenSpaceGuid.PcdGpuEnable|TRUE|BOOLEAN|0x000004C1
   gCixTokenSpaceGuid.PcdGpuReservedMemoryBase|0xBCE00000|UINT32|0x000004C2
   gCixTokenSpaceGuid.PcdGpuReservedMemorySize|0x1000000|UINT32|0x000004C3
 
@@ -444,7 +444,7 @@
   gCixTokenSpaceGuid.PcdAcpiUart0Enable|TRUE|BOOLEAN|0x0000A004
   gCixTokenSpaceGuid.PcdAcpiUart1Enable|TRUE|BOOLEAN|0x0000A005
   gCixTokenSpaceGuid.PcdAcpiUart2Enable|TRUE|BOOLEAN|0x0000A006
-  gCixTokenSpaceGuid.PcdAcpiUart3Enable|FALSE|BOOLEAN|0x0000A007
+  gCixTokenSpaceGuid.PcdAcpiUart3Enable|TRUE|BOOLEAN|0x0000A007
   gCixTokenSpaceGuid.PcdAcpiI2s0Enable|FALSE|BOOLEAN|0x0000A008
   gCixTokenSpaceGuid.PcdAcpiI2s1Enable|FALSE|BOOLEAN|0x0000A009
   gCixTokenSpaceGuid.PcdAcpiI2s2Enable|FALSE|BOOLEAN|0x0000A00A

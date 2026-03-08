@@ -118,17 +118,16 @@ The Power Management menu in BIOS settings lets you tune frequency and voltage f
 
 ### Domains
 
-
 | Domain | Stock entries | Freq range (MHz) | Voltage | Notes |
 |--------|--------------|-------------------|---------|-------|
 | GPU Core | 7 | 250–1100 | 800 mV | Configurable |
 | GPU Top | 6 | 250–1000 | 800 mV | Configurable |
-| CPU Little | 2 | 800–1800 | 790 mV | Configurable |
-| CPU Big G0 | 7 | 800–2600 | 790–920 mV | Configurable |
-| CPU Big G1 | 7 | 800–2600 | 790–920 mV | Configurable |
-| CPU Mid G0 | 7 | 800–2400 | 790–920 mV | Configurable |
-| CPU Mid G1 | 7 | 800–2400 | 790–920 mV | Configurable |
-| DSU | 2 | 400–2250 | 790 mV | Configurable |
+| CPU Little | 7 | 800–2200 | 790-930 mV | Configurable |
+| CPU Big G0 | 7 | 800–2600 | 790–930 mV | Configurable |
+| CPU Big G1 | 7 | 800–2600 | 790–930 mV | Configurable |
+| CPU Mid G0 | 7 | 800–2400 | 790–930 mV | Configurable |
+| CPU Mid G1 | 7 | 800–2400 | 790–930 mV | Configurable |
+| DSU | 2 | 400–1300 | 790 mV | Configurable |
 | NPU | 4 | 400–1200 | Fixed (SOC rail) | Frequency only |
 | VPU | 6 | 150–1200 | Fixed (SOC rail) | Frequency only |
 | MMHUB | 3 | 350–750 | Fixed (SOC rail) | Frequency only |
@@ -331,7 +330,7 @@ This ensures the OS sees the correct GPU voltage limit matching the user's confi
 
 A compatible programmer such as [CH341A 3.3V with a 1.8V adapter] is required, along with an SOP8 clip adapter (if not already included with the programmer).
 
-The flash chip is a [W25Q64JWSSIQ](https://www.winbond.com/hq/product/code-storage-flash-memory/serial-nor-flash/?__locale=en&partNo=W25Q64JW) (1.8V, 64Mbit or 8MiB). Be aware that many counterfeit chips exist that do not support the required 133 MHz operation.
+The flash chip is a [W25Q64JWSSIQ](https://www.winbond.com/hq/product/code-storage-flash/qspi-nor/w25q-jw/?__locale=en&partNo=W25Q64JWSSIQ) (1.8V, 64Mbit or 8MiB). Be aware that many counterfeit chips exist that do not support the required 133 MHz operation.
 
 Make sure to connect the notch (pin1 marked with a small dot) in the correct direction to the SOP8 clip. There is usually a marking on the SOP8 clip or a different colored wire indicating the correct direction.
 
@@ -354,70 +353,7 @@ When reinstalling the flash chip, the notch (pin 1) is closest to the 40-pin gpi
 
 ## Changelog
 
-This firmware is based on edk2-cix v0.2.2-1 with its prebuilt closed-source binaries (bootloader1.img containing the SE/PBL and SCP firmware) that support OPP table tuning via pm_config. Newer Radxa releases (v1.1.0+) use updated SCP firmware that controls CPU frequency internally, ignoring pm_config OPP tables entirely — which is why runtime overclocking requires staying on the older bootloader1.img.
-
-### V2.1
-
-#### Power management
-- **Added a safe hidden sustained OPP entry for all domains** — each domain now has a hidden OPP entry at index 0 that cannot be edited from the BIOS settings. The system always boots at this safe frequency, guaranteeing a stable environment during early boot initialization. If the user sets unstable or invalid OPP values that prevent the OS from booting, a simple reboot will return to UEFI at the safe sustained frequency where settings can be corrected. Note that the hidden entry acts as a floor: the SCP firmware tests all lower OPP entries before settling at the sustained value, so users cannot underclock below it. Another flaw is that the DSU always runs at the highest allowed frequency and does not have a safeguard.
-
-#### GPU
-- **AMD GOP driver updated** — updated from v1.68 to v2.10. Adds support for newer AMD GPUs that were not recognized by the old driver.
-
-#### Filesystem
-- **Ext4 driver updated** — enabled the ext4 driver and updated Ext4Pkg from the September 2022 snapshot to upstream tianocore/edk2-platforms mainline (February 2026). Includes 3+ years of bug fixes for block group checksum validation, extent handling, directory parsing, symlink resolution, and inode management.
-
-#### USB
-- **USB VBUS power cycling on Linux reboot** — added an ACPI `_PTS` (Prepare To Sleep) method to the DSDT that drives all 6 USB VBUS GPIOs LOW with a 50ms delay before Linux-initiated reboots. Linux calls PSCI `SYSTEM_RESET` directly via SMC, bypassing the UEFI `ResetSystem` runtime service where the existing USB power cycling code runs. Without this, USB devices would not see a VBUS power cycle and occasionally fail to re-enumerate on the next boot.
-
-#### Hardware Information menu
-- **Memory Chip identification** — expanded the Memory Chip display from 4 entries to 15, covering all known Orion O6 board revisions and RAM vendors (Samsung, Hynix, Hive Semi, Rayson). Previously showed "Undefined" for any board not in the original 4-entry list.
-- **Domain frequency display** — added a new "Domain Frequencies" section showing sustained frequencies (in MHz) for GPU Core, GPU Top, DSU, NPU, VPU, and MMHUB. Frequencies are queried live from the SCP via SCMI performance protocol.
-- **CPU Max and Sustained Frequency** — split the single "CPU Speed" entry into "CPU Max Frequency" and "CPU Sustained Frequency" for more detailed CPU clock reporting. Fixed rounding errors: max frequency now truncates correctly (e.g. 2800 MHz displays as 2800, not 2801), sustained frequency rounds correctly (e.g. 800 MHz displays as 800, not 799).
-- **Removed duplicate entries** — removed PMIC Version, PD Version, and the entire Firmware Information section (SE, PBL, ATF, PM, TEE, UEFI, EC versions) from Hardware Information as they are already listed under System Information.
-
-#### Platform defaults
-- **ACPI as default boot mode** — set `PcdDefaultDtPref` to `FALSE` so that a fresh flash, NVRAM reset, or "Reset all System settings" defaults to ACPI instead of Device Tree.
-- **GPU stock OPP defaults corrected** — GPU Core and GPU Top default OPP tables had an off-by-one error causing a duplicate 250 MHz entry and the top-end entries (1100 MHz for GPU Core, 1000 MHz for GPU Top) being missing. Fixed to match the stock `opp_config_custom.h` values exactly.
-- **DSU OPP range widened** — the DSU hidden sustained OPP was changed from 500 MHz to 400 MHz and the maximum configurable frequency was increased to 2250 MHz. Note: the SCP firmware always boots the DSU at its highest configured OPP entry regardless of the `sustained_idx` setting. Setting an unstable maximum DSU frequency may prevent the system from booting.
-
-#### Build system
-- **Automatic Python command detection** — removed the static `PYTHON3_ENABLE=TRUE` export. The build system now auto-detects the correct Python command: `python3` if available, falling back to `python`. No manual configuration required for systems where only `python` is installed.
-
-### V2.0
-
-#### USB
-- **Reliable USB detection** — fixed GPIO VBUS configuration (GPIO 19/20 set to INOUT_HIGH, added GPIO 40 for USB port 6-7 VBUS, corrected USB_DRIVE_VBUS0 pin mux) and ported updated USB stack source code (XhciDxe, UsbBusDxe, UsbMassStorageDxe, etc.) to eliminate the ~50% USB detection failure on boot.
-- **USB power cycling on reboot** — all USB VBUS GPIOs are driven LOW with a 50ms delay before PSCI reset, ensuring connected USB devices re-enumerate cleanly after reboot.
-
-#### ACPI
-- **Restored iomux pin controller** — a previous modification had removed the `Dsdt-iomux.asl` include from the DSDT and changed the DSDT revision from 5 to 2, breaking all I2C and PCIe pin mux references. Both restored.
-- **I2C bus frequency initialization** — restored I2C `_INI` methods with zero-check fallbacks and added 8 I2C frequency writes to the AcpiSocDxe GNVA area so Linux sees correct bus speeds.
-- **PCIe root port initialization** — restored `_INI` methods for all 5 root ports (PRC0–PRC4) with zero-check fallbacks, added 25 PCIe config writes to GNVA (bandwidth, speed, payload, ASPM), and updated all `_DSD` properties to use dynamic values.
-- **PCIe _OSC capabilities** — changed `_OSC` control mask from `0x10` to `0x1C` to grant Linux native **PME** (Power Management Events) and **AER** (Advanced Error Reporting) control. The hardware defines AER interrupt lines (correctable, fatal, non-fatal) for all 5 root ports. Hotplug/SHPC/LTR remain disabled (no hardware support).
-- **PCIe boot reliability** — all 8 PCIe `_STA` methods (PRC0–PRC4, PCP0–PCP2) now unconditionally return 0xF. The original code checked a `PcieLinkUpStatus` snapshot which caused failure when PCIe links hadn't trained by GNVA write time, permanently hiding NVMe and other devices.
-- **PCIe power regulators** — moved `CdnsPciePwr.asl` (PVC0–PVC4 devices) from SSDT to DSDT include to fix `AE_NOT_FOUND` errors on PVC4 cross-table Package references.
-- **Missing iomux pin groups** — added 9 missing pin groups to MUX1 (5 PCIe PERST + 4 power regulator groups) that were causing `reg-fixed-voltage` probe failures (`-ENOMEM`).
-- **Ramoops** — changed `RAMOOPS_RES_SIZE` from 0xA0000 (not power of 2) to 0x80000 and reduced record/console sizes to fit, fixing ramoops probe failure (`-EINVAL`).
-- **Removed non-existent hardware** — removed TPM device includes (no TPM on O6), disabled CSI-DMA camera devices (`PcdAcpiCsiDmaEnable=FALSE`), disabled battery/lid support in EC.asl (O6 is a single-board computer).
-- **AC power supply** — fixed missing `Return` in EC.asl `_PSR` method that caused ACPI warnings.
-- **GPU coherency** — changed GPU device (CIXH5000) `_CCA` from 1 (coherent) to 0 (non-coherent). The SoC was designed for non-coherent GPU operation; the DPU reads framebuffer non-coherently from DRAM, so coherent GPU DMA causes stale framebuffer data and display corruption.
-- **Thermal zone improvements** — expanded from 5 thermal zones to 16 by exposing all available SoC temperature sensors. Added 11 new zones: VPU, GPU Bottom, GPU Top, SoC Bridge, DDR Bottom, DDR Top, CI700 Interconnect, NPU, SoC Trace, and 2 board NTC thermistors. Added `_TZD` (Thermal Zone Devices) methods to CPU and GPU zones so Linux properly associates thermal sensors with their CPU/GPU devices for cpufreq thermal throttling. Updated `_STR` names with descriptive labels (e.g. "CPU Big Cluster 0 (CPU 8-9)"). Fixed sustainable power values to match Sky1-Linux DTS (B0=5500mW, B1=6000mW, M0=5000mW, M1=4500mW). Removed `_PSV` from monitoring-only zones that lack cooling devices to eliminate `_PSL evaluation failure` warnings.
-- **DSU PMU** — added ARM DynamIQ Shared Unit Performance Monitoring Unit device (HID `ARMHD500`, GIC SPI 2) to the DSDT. Enables `perf` to read DSU-level performance counters (L3 cache hits/misses, bus cycles, interconnect traffic) via `/sys/bus/event_source/devices/arm_dsu_0/`. Useful for verifying overclocking success by measuring actual DSU cycle counts.
-- **Compilation error cleanup** — added 26 missing `External()` declarations to Ssdt.asl, fixed RX8900 RTC HID to `EPSO0001`, removed iasl error-suppression flags from the build so all warnings are visible.
-- **SMMU HTTU override** — corrected the Hardware Translation Table Update flags on all 3 SMMU nodes. The EDK2 header defines `HTTU_OVERRIDE` as `BIT1` but HTTU is actually a 2-bit field at bits [2:1]. Changed from `BIT1` to `(2 << 1)` for HA+HD (Access+Dirty) to match hardware IDR0 capabilities and eliminate the `IDR0.HTTU features overridden by FW configuration (0x0)` kernel warning.
-- **PCIe RMR bypass** — added a Reserved Memory Region node with all 10 PCIe root port Stream IDs mapped through the PCIe SMMU. This pre-installs bypass Stream Table Entries during SMMU init, preventing `F_TRANSLATION` faults before IOMMU domains are attached by device drivers.
-- **CPU cache topology** — created a complete PPTT table describing the CIX CD8180's 12-core big.LITTLE topology: Cluster L0 (4× A520: 32KB L1I/D), Clusters M0/M1 (2× A720 each: 64KB L1I/D, 512KB L2), Clusters B0/B1 (2× A720 each: 64KB L1I/D, 512KB L2), shared 12MB L3 (Haydn DSU). Linux reports correct cache sizes in `/sys`.
-
-#### SMBIOS
-- **Memory reporting** — corrected Type 17 form factor to `Die` (LPDDR5 on-package), added `VolatileSize` and `MemoryOperatingModeCapability` fields.
-
-#### Power management
-- **GNVA initialization** — added `UpdateAcpiGpnv()` to the ReadyToBoot hook array so DSDT runtime variables are populated before Linux boots (was only running at ExitBootServices, too late for ACPI).
-- **Shutdown** — rewrote PowerButtonDxe with proper event handling and 5-second polling. Green LED (GPIO 15) is turned off on shutdown.
-
-#### Memory configuration
-- **Multi-revision board support** — expanded BoardIdMap from 6 to 12 entries to support newer Orion O6 board revisions with different DRAM configurations. Added support for: 16G Hive Semi (HS), 24G HS, 32G x8 HS, 32G Hynix, 48G HS, and 64G Rayson RAM types. Includes per-vendor PHY pad and bus configuration blocks (Hive Semi, Hynix) and vendor-specific training optimizations. All changes use the old v1.6 binary format for compatibility with the existing MemConfigUpdateDxe firmware.
+See the CHANGELOG file for detailed information about changes made.
 
 ## Verifying the BIOS is working correctly
 

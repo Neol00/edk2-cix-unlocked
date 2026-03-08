@@ -116,8 +116,8 @@
   # the version of RVD I have does not support scripts accessing system memory.
   #
   #PeCoffExtraActionLib|ArmPkg/Library/RvdPeCoffExtraActionLib/RvdPeCoffExtraActionLib.inf
-  PeCoffExtraActionLib|ArmPkg/Library/DebugPeCoffExtraActionLib/DebugPeCoffExtraActionLib.inf
-  #PeCoffExtraActionLib|MdePkg/Library/BasePeCoffExtraActionLibNull/BasePeCoffExtraActionLibNull.inf
+  #PeCoffExtraActionLib|ArmPkg/Library/DebugPeCoffExtraActionLib/DebugPeCoffExtraActionLib.inf
+  PeCoffExtraActionLib|MdePkg/Library/BasePeCoffExtraActionLibNull/BasePeCoffExtraActionLibNull.inf
 
   DebugAgentLib|MdeModulePkg/Library/DebugAgentLibNull/DebugAgentLibNull.inf
   DebugAgentTimerLib|EmbeddedPkg/Library/DebugAgentTimerLibNull/DebugAgentTimerLibNull.inf
@@ -132,6 +132,7 @@
   LaunchEfiLib|Platform/CIX/Sky1/Library/LaunchEfiLib/LaunchEfiLib.inf
   MiniFastbootLib|Platform/CIX/Sky1/Library/FastbootLib/MiniFastbootLib.inf
   OpteeLib|Platform/CIX/Sky1/Library/OpteeLib/OpteeLib.inf
+  StmmInfoLib|Platform/CIX/Sky1/Library/StmmInfoLib/StmmInfoLib.inf
 
   #
   # Secure Boot dependencies
@@ -154,7 +155,7 @@
   TpmMeasurementLib|MdeModulePkg/Library/TpmMeasurementLibNull/TpmMeasurementLibNull.inf
   AuthVariableLib|MdeModulePkg/Library/AuthVariableLibNull/AuthVariableLibNull.inf
 !endif
-  # RngLib|MdePkg/Library/DxeRngLib/DxeRngLib.inf
+  RngLib|MdePkg/Library/DxeRngLib/DxeRngLib.inf
   RngLib|MdePkg/Library/BaseRngLibTimerLib/BaseRngLibTimerLib.inf
   VarCheckLib|MdeModulePkg/Library/VarCheckLib/VarCheckLib.inf
   VariableFlashInfoLib|MdeModulePkg/Library/BaseVariableFlashInfoLib/BaseVariableFlashInfoLib.inf
@@ -241,9 +242,9 @@
   DisplayUpdateProgressLib|MdeModulePkg/Library/DisplayUpdateProgressLibGraphics/DisplayUpdateProgressLibGraphics.inf
 !endif
 !if $(REBOOT_REASON_ENABLE)
-  #RebootReasonLib|Silicon/CIX/Sky1/Library/RebootReasonLib/RebootReasonLib.inf
+  RebootReasonLib|Silicon/CIX/Sky1/Library/RebootReasonLib/RebootReasonLib.inf
 !else
-  #RebootReasonLib|Silicon/CIX/Sky1/Library/RebootReasonLib/RebootReasonLibNull.inf
+  RebootReasonLib|Silicon/CIX/Sky1/Library/RebootReasonLib/RebootReasonLibNull.inf
 !endif
   CsuPmIpcLib|Silicon/CIX/Sky1/Library/CsuPmIpcLib/CsuPmIpcLib.inf
 
@@ -592,8 +593,8 @@
   #
   gEfiMdeModulePkgTokenSpaceGuid.PcdVideoHorizontalResolution|1920
   gEfiMdeModulePkgTokenSpaceGuid.PcdVideoVerticalResolution|1080
-  gEfiMdeModulePkgTokenSpaceGuid.PcdSetupVideoHorizontalResolution|640
-  gEfiMdeModulePkgTokenSpaceGuid.PcdSetupVideoVerticalResolution|480
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSetupVideoHorizontalResolution|1920
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSetupVideoVerticalResolution|1080
 
 !if $(VARIABLE_SUPPORT) == "SPI"
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableBase64|$(SPI_VARIABLE_BASE)
@@ -726,7 +727,7 @@
 !endif
 
   ArmPkg/Drivers/TimerDxe/TimerDxe.inf
-  #MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf
+  MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf
   Silicon/CIX/Sky1/Drivers/GenericWatchdogDxe/GenericWatchdogDxe.inf
 !if $(GLOBAL_WATCHDOG_ENABLE) == TRUE
   Silicon/CIX/Sky1/Drivers/GenericWatchdogDxe/GlobalWatchdogDxe.inf
@@ -856,6 +857,9 @@
   Silicon/CIX/Sky1/Drivers/HdaDxe/HdaDxe.inf
 !endif
 
+  # Hardware RNG
+  Silicon/CIX/Sky1/Drivers/RngDxe/RngDxe.inf
+
   #
   # PCI Support
   #
@@ -935,7 +939,7 @@
     <LibraryClasses>
       PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
   }
-#  Platform/CIX/Sky1/Drivers/SystemFirmwareDescriptor/SystemFirmwareDescriptor.inf
+  Platform/CIX/Sky1/Drivers/SystemFirmwareDescriptor/SystemFirmwareDescriptor.inf
 
 !endif
   MdeModulePkg/Application/HelloWorld/HelloWorld.inf
@@ -960,11 +964,11 @@
 !if $(INCLUDE_TFTP_COMMAND) == TRUE
 ShellPkg/DynamicCommand/TftpDynamicCommand/TftpDynamicCommand.inf {
   <PcdsFixedAtBuild>
-    gEfiShellPkgTokenSpaceGuid.PcdShellLibAutoInitialize|FALSE
+    #gEfiShellPkgTokenSpaceGuid.PcdShellLibAutoInitialize|FALSE
 }
 ShellPkg/DynamicCommand/HttpDynamicCommand/HttpDynamicCommand.inf {
   <PcdsFixedAtBuild>
-    gEfiShellPkgTokenSpaceGuid.PcdShellLibAutoInitialize|FALSE
+    #gEfiShellPkgTokenSpaceGuid.PcdShellLibAutoInitialize|FALSE
 }
 !endif
 

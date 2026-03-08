@@ -122,8 +122,10 @@
 !endif
 
 #ACPI Boot
-  DEFINE SPI_VARIABLE_BASE          = 0x00390000
+  DEFINE SPI_VARIABLE_BASE          = 0x00380000
   DEFINE SPI_VARIABLE_SIZE          = 0x28000
+
+  DEFINE LINUX_ACPI_CONFIG_OVERRIDE = TRUE
 
 !include Platform/CIX/Sky1/Sky1Common.dsc.inc
 !include Platform/Radxa/RadxaCommon.dsc.inc
@@ -266,6 +268,11 @@
   GCC:*_*_*_CC_FLAGS              = -DSOC_GPIO_INTR_ENABLE
 !endif
 
+!if $(LINUX_ACPI_CONFIG_OVERRIDE) == TRUE
+  GCC:*_*_*_ASLPP_FLAGS           = -DLINUX_ACPI_CONFIG_OVERRIDE
+  GCC:*_*_*_ASLPP_FLAGS           = -I$(WORKSPACE)/../edk2-platforms/Platform/Radxa/Orion/O6/Drivers
+!endif
+
 !if $(STMM_SUPPORT) == TRUE
   GCC:*_*_*_CC_FLAGS              = -DSTMM_SUPPORT
 !endif
@@ -396,8 +403,8 @@
 
   gEfiMdeModulePkgTokenSpaceGuid.PcdVideoHorizontalResolution|1920
   gEfiMdeModulePkgTokenSpaceGuid.PcdVideoVerticalResolution|1080
-  gEfiMdeModulePkgTokenSpaceGuid.PcdSetupVideoHorizontalResolution|800
-  gEfiMdeModulePkgTokenSpaceGuid.PcdSetupVideoVerticalResolution|600
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSetupVideoHorizontalResolution|1920
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSetupVideoVerticalResolution|1080
 
   gCixPlatformTokenSpaceGuid.PcdDynamicUint64Test|0x11111111
 [PcdsDynamicHii.common.DEFAULT]

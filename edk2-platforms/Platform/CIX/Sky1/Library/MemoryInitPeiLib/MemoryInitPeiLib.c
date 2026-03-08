@@ -238,6 +238,12 @@ MemoryPeim (
     EfiRuntimeServicesData
     );
 
+  BuildMemoryAllocationHob (
+    FixedPcdGet64 (PcdReservedFwShareMemoryBase),
+    FixedPcdGet64 (PcdReservedFwShareMemorySize),
+    EfiRuntimeServicesData
+    );
+
   // Build Memory Allocation Hob
   InitMmu (MemoryTable);
 

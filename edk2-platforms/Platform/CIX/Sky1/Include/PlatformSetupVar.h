@@ -149,6 +149,13 @@ typedef struct {
   //
   UINT8     PmSptFastPowerRsvd;          // Reserved for struct layout compat
   UINT8     PmSptSlowPowerRsvd;          // Reserved for struct layout compat
+
+  //
+  // SoC voltage offset in mV, applied to the fixed SoC rail via delta_mV.
+  // Range: 0 to 500. Polarity controls sign: 0 = positive, 1 = negative.
+  //
+  UINT8     PmSocVoltagePolarity;          // 0 = positive (+), 1 = negative (-)
+  UINT16    PmSocVoltageOffset;
 } PLATFORM_SETUP_DATA;
 
 typedef struct {

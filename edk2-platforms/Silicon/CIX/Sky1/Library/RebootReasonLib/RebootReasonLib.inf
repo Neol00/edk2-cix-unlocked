@@ -1,0 +1,35 @@
+#  @file
+#  Component description file for SocInitLib module
+#
+#  Copyright 2024 Cix Technology Group Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = RebootReasonLib
+  FILE_GUID                      = A1DA5090-1219-82A1-DC89-37C638D68641
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = RebootReasonLib
+
+[Sources.common]
+  RebootReasonLib.c
+
+[LibraryClasses]
+  BaseLib
+  IoLib
+  PcdLib
+  ArmSmcLib
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[Pcd]
+  gCixTokenSpaceGuid.PcdRebootReasonRegisterAddr
