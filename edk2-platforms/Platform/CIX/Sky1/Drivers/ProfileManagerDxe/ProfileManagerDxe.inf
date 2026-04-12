@@ -1,0 +1,59 @@
+## @file
+#
+#  Profile Manager DXE Driver.
+#
+#  Provides an HII setup submenu for saving / loading / deleting
+#  BIOS settings profiles on a dedicated SPI flash region.
+#
+#  Copyright 2025 Radxa Computer (Shenzhen) Co., Ltd. All Rights Reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = ProfileManagerDxe
+  FILE_GUID                      = 3A7C8E1F-D529-4A6B-BE07-5F9D2C3E1A74
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = ProfileManagerDxeEntryPoint
+
+[Sources]
+  ProfileManagerDxe.c
+  ProfileManagerDxe.h
+  ProfileManagerVfr.Vfr
+  ProfileManagerStrings.uni
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+
+[LibraryClasses]
+  BaseLib
+  BaseMemoryLib
+  DebugLib
+  DevicePathLib
+  HiiLib
+  MemoryAllocationLib
+  PrintLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiHiiServicesLib
+  UefiLib
+  UefiRuntimeServicesTableLib
+
+[Protocols]
+  gEfiHiiConfigAccessProtocolGuid       ## PRODUCES
+  gEfiDevicePathProtocolGuid            ## PRODUCES
+  gEfiDiskIoProtocolGuid                ## CONSUMES
+
+[Guids]
+  gPlatformSetupVariableGuid
+  gCixPrivateSetupFormsetGuid
+  gCixNorFlashDevicePathGuid
+
+[Depex]
+  gEfiDiskIoProtocolGuid

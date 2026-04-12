@@ -138,13 +138,11 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #string STR_ENABLE_SPCR_TABLE                            #language en-US "Support SPCR"
 #string STR_ENABLE_SPCR_TABLE_HELP                       #language en-US "Enable or Disable SPCR Table."
 
-#string STR_CPU_FREQ_MAX_PROMPT                          #language en-US "CPU Max Frequency"
-#string STR_CPU_FREQ_MAX_PROMPT_HELP                     #language en-US "Select Max Frequency of CPU"
-#string STR_CPU_FREQ_0                                   #language en-US "2.5G"
-#string STR_CPU_FREQ_1                                   #language en-US "2.6G"
-
 #string STR_EC_FAN_MODE_PROMPT                           #language en-US "EC Fan Mode"
 #string STR_EC_FAN_MODE_PROMPT_HELP                      #language en-US "Select the default EC fan mode."
 #string STR_AUTO_MODE                                    #language en-US "Auto Mode"
 #string STR_PERF_MODE                                    #language en-US "Performance Mode"
 #string STR_QUIET_MODE                                   #language en-US "Quiet Mode"
+
+#string STR_EDP_SUPPORT_PROMPT                           #language en-US "eDP Panel Support"
+#string STR_EDP_SUPPORT_PROMPT_HELP                      #language en-US "Enable or disable eDP (embedded DisplayPort) panel support.\nDisable if no eDP panel is connected to avoid boot hangs."

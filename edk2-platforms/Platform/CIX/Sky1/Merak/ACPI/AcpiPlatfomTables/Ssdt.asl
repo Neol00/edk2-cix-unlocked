@@ -6,7 +6,7 @@
 
 **/
 
-DefinitionBlock("SsdtTable.aml", "SSDT", 5, "CIXTEK", "SKY1EDK2", 1) {
+DefinitionBlock("SsdtTable.aml", "SSDT", 6, "CIXTEK", "SKY1EDK2", 1) {
   /* External declarations for DSDT-defined objects referenced by this SSDT */
   External (\_SB.I2C0, DeviceObj)
   External (\_SB.I2C1, DeviceObj)
@@ -20,11 +20,7 @@ DefinitionBlock("SsdtTable.aml", "SSDT", 5, "CIXTEK", "SKY1EDK2", 1) {
   External (\_SB.SPI1, DeviceObj)
   External (\_SB.GPI1, DeviceObj)
   External (\_SB.GPI3, DeviceObj)
-  External (\_SB.GPI4, DeviceObj)
-  External (\_SB.HDA, DeviceObj)
   External (\_SB.ISP0, DeviceObj)
-  External (\_SB.MUX0, DeviceObj)
-  External (\_SB.MUX1, DeviceObj)
   External (\_SB.SUB0.CUB0, DeviceObj)
   External (\_SB.SUB1.CUB1, DeviceObj)
   External (\_SB.SUB2.CUB2, DeviceObj)
@@ -43,7 +39,18 @@ DefinitionBlock("SsdtTable.aml", "SSDT", 5, "CIXTEK", "SKY1EDK2", 1) {
     include("Wlan.asl")
     include("EC.asl")
     include("I2cHid.asl")
-    include("I2cPD.asl")
+    // I2cPD.asl (PD10/PD11) removed: these PD controller devices are now
+    // defined in the DSDT via the O6-specific I2cPD.asl include (Dsdt.asl
+    // line 114, guarded by USBC0_PD_EN).  Dsdt-SUSB.asl references them by
+    // name, so they must live in the DSDT.  Duplicating Device() blocks in
+    // the SSDT causes AE_ALREADY_EXISTS.
+    // include("I2cPD.asl")
     include("CixWmi.asl")
+    // Iomux.asl (MUX0/MUX1) removed: both devices are defined in full in the
+    // DSDT via Dsdt-iomux.asl which is also a superset (extra power-enable pin
+    // groups).  Duplicating Device() blocks in the SSDT causes AE_ALREADY_EXISTS.
+    include("CdnsPciePwr.asl")
+    include("HardwareMonitor.asl")
+    include("Dtpm.asl")
   }
 }

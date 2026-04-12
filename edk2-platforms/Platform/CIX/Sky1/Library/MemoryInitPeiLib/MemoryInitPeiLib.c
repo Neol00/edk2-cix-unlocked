@@ -219,6 +219,22 @@ MemoryPeim (
     EfiReservedMemoryType
     );
 
+  //
+  // Audio DMA reserved DRAM regions (no-map buffers for DMA1, HDA, DSP).
+  //
+  // The CIX acpi_resource_lookup driver (CIXA1019 / RSVL table) calls
+  // dma_declare_coherent_memory() on each audio device.  These regions must
+  // appear as EfiReservedMemoryType in the EFI memory map so that Linux
+  // never adds them to the buddy allocator.
+  //
+  //   0xCDE08000  1 MB   DSP no-map buffer    (\_SB.DSP  / CIXH6000)
+  //   0xD0000000  7 MB   audio DMA no-map buf (\_SB.DMA1 / CIXH1006)
+  //   0xD0700000  7 MB   HDA DMA no-map buf   (\_SB.HDA  / CIXH6020)
+  //
+  BuildMemoryAllocationHob (0xCDE08000, 0x00100000, EfiReservedMemoryType);
+  BuildMemoryAllocationHob (0xD0000000, 0x00700000, EfiReservedMemoryType);
+  BuildMemoryAllocationHob (0xD0700000, 0x00700000, EfiReservedMemoryType);
+
  #ifdef ANDROID_BOOT
   // BuildMemoryAllocationHob (
   //   FixedPcdGet32 (PcdReservedAndroidBase),

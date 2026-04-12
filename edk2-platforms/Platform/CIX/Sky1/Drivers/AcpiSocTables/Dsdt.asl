@@ -28,7 +28,7 @@
 #define RESOURCE_MEM 0x0200
 #define RESOURCE_IRQ 0x0400
 
-DefinitionBlock("DsdtTable.aml", "DSDT", 5, "CIXTEK", "SKY1EDK2", 1) {
+DefinitionBlock("DsdtTable.aml", "DSDT", 6, "CIXTEK", "SKY1EDK2", 1) {
 
   // GPIO MMIO regions for USB VBUS power control
   // GPI4: S5 GPIO Bank 0 (GPIO001-014, GPIO025-042)
@@ -81,6 +81,13 @@ DefinitionBlock("DsdtTable.aml", "DSDT", 5, "CIXTEK", "SKY1EDK2", 1) {
     include("Dsdt-ScmiMailbox.asl")
     include("Dsdt-Audss.asl")
     include("Dsdt-Gpio.asl")
+// GpioLines.asl defines GPIN packages (friendly 40-pin header names) inside
+// the GPI0-GPI5 device scopes.  They must live in the DSDT - not the SSDT -
+// so that the named-reference package elements in Dsdt-Gpio.asl _DSD resolve
+// at DSDT load time instead of producing AE_NOT_FOUND errors.
+#ifdef GPI0_LINE_NAMES
+#include "../../../../Radxa/Orion/O6/Drivers/AcpiPlatfomTables/GpioLines.asl"
+#endif
     include("Dsdt-Pwm.asl")
     //include("Dsdt-Wdt.asl")
     include("Dsdt-Timer.asl")
@@ -93,13 +100,19 @@ DefinitionBlock("DsdtTable.aml", "DSDT", 5, "CIXTEK", "SKY1EDK2", 1) {
     include("Dsdt-I3c.asl")
     include("Dsdt-Pcie.asl")
     include("Dsdt-CdnsPcie.asl")
-    include("Dsdt-CdnsPciePwr.asl")
     include("Dsdt-Vpu.asl")
     include("Dsdt-Dpu.asl")
     include("Dsdt-GPU.asl")
     include("Dsdt-NPU.asl")
     include("Dsdt-I2s.asl")
     include("Dsdt-USB.asl")
+// I2cPD defines PD controller devices (PD10, PD11) inside \_SB.I2C1.
+// They must live in the DSDT — not the SSDT — so that the named-reference
+// package elements in Dsdt-SUSB.asl _DSD resolve at DSDT load time instead
+// of producing AE_NOT_FOUND errors.
+#ifdef USBC0_PD_EN
+#include "../../../../Radxa/Orion/O6/Drivers/AcpiPlatfomTables/I2cPD.asl"
+#endif
     include("Dsdt-SUSB.asl")
     include("Dsdt-ISP.asl")
     include("Dsdt-CSI-DMA.asl")

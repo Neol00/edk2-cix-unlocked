@@ -21,6 +21,7 @@
   AcpiSocDxe.c
   AcpiSocDxe.h
   UpdateDsdt.c
+  InstallSrat.c
 
 [Packages]
   MdePkg/MdePkg.dec

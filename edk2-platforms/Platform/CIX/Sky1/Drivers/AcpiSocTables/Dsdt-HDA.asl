@@ -30,6 +30,11 @@ Device (HDA) {
 #ifdef HDA_EXT_CRS
     HDA_EXT_CRS
 #endif
+    // Reserved DRAM buffer for HDA DMA (no-map region).
+    // acpi_resource_lookup (CIXA1019 RSVL) validates this address against
+    // _CRS and then calls dma_declare_coherent_memory() — the ACPI
+    // equivalent of the Device Tree reserved-memory "no-map" property.
+    Memory32Fixed (ReadWrite, 0xd0700000, 0x700000)
   })
 
   Name (_DSD, Package () {

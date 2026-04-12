@@ -7,6 +7,21 @@
 #include "pm_export_config.h"
 #include "opp_config.h"
 
+/*
+ * SoC voltage offset applied on top of the fixed 750 mV rail.
+ * Range: -500 to +500 mV. Higher values help stability when overclocking.
+ */
+#define SOC_DELTA_MV  0
+
+/* Per-domain voltage offsets (applied to OPP table voltages) */
+#define CPU_LIT_DELTA_MV  0
+#define CPU_GM0_DELTA_MV  0
+#define CPU_GM1_DELTA_MV  0
+#define CPU_GB0_DELTA_MV  0
+#define CPU_GB1_DELTA_MV  0
+#define DSU_DELTA_MV      0
+#define GPU_DELTA_MV      10
+
 #define PM_OPP_TABLE_CONFIG   1
 
 #if PM_OPP_TABLE_CONFIG
@@ -41,12 +56,17 @@ static domain_opp_config_t dxs_gt = {
 };
 
 static domain_opp_config_t dxs_lit = {
-    .size = 3,
+    .size = 8,
     .sustained_idx = 0,
     .opp_table = {
         { .level =  800UL, .voltage = 790 },   /* safe sustained (hidden) */
         { .level =  800UL, .voltage = 790 },
-        { .level = 1800UL, .voltage = 800 },
+        { .level = 1000UL, .voltage = 790 },
+        { .level = 1200UL, .voltage = 800 },
+        { .level = 1400UL, .voltage = 810 },
+        { .level = 1600UL, .voltage = 820 },
+        { .level = 1800UL, .voltage = 850 },
+        { .level = 2200UL, .voltage = 930 },
     },
 };
 
@@ -114,9 +134,9 @@ static domain_opp_config_t dxs_dsu = {
     .size = 3,
     .sustained_idx = 0,
     .opp_table = {
-        { .level =  500UL, .voltage = 790 },   /* safe sustained (hidden) */
-        { .level =  500UL, .voltage = 790 },
-        { .level = 1300UL, .voltage = 800 },
+        { .level =  400UL, .voltage = 790 },   /* safe sustained (hidden) */
+        { .level =  400UL, .voltage = 790 },
+        { .level = 1300UL, .voltage = 790 },
     },
 };
 
@@ -158,8 +178,8 @@ static domain_opp_config_t dxs_mm = {
     .size = 4,
     .sustained_idx = 0,
     .opp_table = {
-        { .level =  375UL },   /* safe sustained (hidden) */
-        { .level =  375UL },
+        { .level =  350UL },   /* safe sustained (hidden) */
+        { .level =  350UL },
         { .level =  600UL },
         { .level =  750UL },
     },

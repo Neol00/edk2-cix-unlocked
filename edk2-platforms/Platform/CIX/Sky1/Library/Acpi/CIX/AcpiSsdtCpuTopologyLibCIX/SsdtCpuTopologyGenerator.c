@@ -211,7 +211,7 @@ CreateAmlPsdNode (
 
   @param [in]  CfgMgrProtocol         Pointer to the Configuration Manager
                                       Protocol Interface.
-  @param [in]  Coreid                 CPU Core id.
+  @param [in]  CpuUid                 CPU UID.
   @param [in]  Node                   CPU Node to which the _CPC node is
                                       attached.
 
@@ -224,7 +224,7 @@ EFI_STATUS
 EFIAPI
 CreateAmlCpcNode (
   IN  CONST EDKII_CONFIGURATION_MANAGER_PROTOCOL  *CONST  CfgMgrProtocol,
-  IN  UINTN                                               Coreid,
+  IN  UINTN                                               CpuUid,
   IN  AML_OBJECT_NODE_HANDLE                              *Node
   )
 {
@@ -247,7 +247,7 @@ CreateAmlCpcNode (
   }
 
   Status = AmlCreateCpcNode (
-             &CpcInfo[Coreid],
+             &CpcInfo[CpuUid],
              Node,
              NULL
              );
@@ -596,7 +596,6 @@ CreateTopologyFromGicC (
   UINT32                        Index;
   AML_OBJECT_NODE_HANDLE        CpuNode;
   UINT32                        CpuUid;
-  UINT32                        Coreid;
   CM_CIX_CPUUID_CORENUMBER_MAP  *CpuUidtoCoreNumberMap;
 
   ASSERT (Generator != NULL);
@@ -640,20 +639,19 @@ CreateTopologyFromGicC (
     }
 
     CpuUid = GicCInfo[Index].AcpiProcessorUid;
-    Coreid = CpuUidtoCoreNumberMap[CpuUid];
-    Status = CreateAmlLpiMethod (CpuNode, LpiMapInfo[Coreid]);
+    Status = CreateAmlLpiMethod (CpuNode, LpiMapInfo[CpuUid]);
     if (EFI_ERROR (Status)) {
       ASSERT (0);
       return Status;
     }
 
-    Status = CreateAmlCpcNode (CfgMgrProtocol, Coreid, CpuNode);
+    Status = CreateAmlCpcNode (CfgMgrProtocol, CpuUid, CpuNode);
     if (EFI_ERROR (Status)) {
       ASSERT_EFI_ERROR (Status);
       break;
     }
 
-    Status = CreateAmlPsdNode (PsdInfo[Coreid], CpuNode);
+    Status = CreateAmlPsdNode (PsdInfo[CpuUid], CpuNode);
     if (EFI_ERROR (Status)) {
       ASSERT_EFI_ERROR (Status);
       break;

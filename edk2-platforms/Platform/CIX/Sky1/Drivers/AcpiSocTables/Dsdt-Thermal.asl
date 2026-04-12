@@ -14,6 +14,16 @@ External (\_SB.CPM0, PkgObj)          //(CPU4, CPU5)
 External (\_SB.CPM1, PkgObj)          //(CPU6, CPU7)
 External (\_SB.CPUL, PkgObj)          // All CPUs
 
+// SSTP named integers — patched at boot by PmConfigUpdateDxe from EdpCfg[].PwrCap.
+// Default values match pmic_config.h stock EDP power caps (mW).
+// PmConfigUpdateDxe searches for NameOp + 4-char name in the compiled DSDT AML
+// and overwrites the value in-place, so these must remain simple global Name() objects.
+Name (SB0P, 21000)  // TZB0: DPM_EDP_CPU_GB0 (Big G0)
+Name (SB1P, 21000)  // TZB1: DPM_EDP_CPU_GB1 (Big G1)
+Name (SM0P, 19500)  // TZM0: DPM_EDP_CPU_GM0 (Mid G0)
+Name (SM1P, 19500)  // TZM1: DPM_EDP_CPU_GM1 (Mid G1)
+Name (SGPP, 20000)  // TZGT: DPM_EDP_GPU
+
 // Temperature conversion method (Celsius to Kelvin)
 // Celsius to Kelvin conversion formula: K = 10 * C + 2732
 Method(C2DK, 1, Serialized) {
@@ -31,8 +41,8 @@ ThermalZone(TZB0) {
   Method(_TSP) { Return(1) }          // Sampling Period: 100ms
   Method(_PSL) { Return(\_SB.CPB0)}   // Passive cooling list
   Method(SWIT) { Return(3332) }       // Switch-On trip point: 60°C
-  Method(SSTP) { Return(5500) }       // sustainable power in mW
-  Method(_TZD) { Return(\_SB.CPB0) }  // Thermal Zone Devices
+  Method(SSTP) { Return(SB0P) }       // sustainable power — patched by PmConfigUpdateDxe
+  // _TZD removed: cpufreq_cooling requires OF nodes not available in ACPI mode
   Method(_TMP, 0, Serialized) {       // Temperature reading
     Store(\_SB.PMMX.SENG(CPU_B0_TEMP_SENSOR_ID, 0), Local0)
     CreateDWordField(Local0, 0x00, STAT)
@@ -41,7 +51,7 @@ ThermalZone(TZB0) {
       TEMP = ToInteger(TEMP)
       Return(C2DK(TEMP))
     } Else {
-      Return (0xFFFFFFFFFFFFFFFF)
+      Return (2982)
     }
   }
   Method(_SCP, 1, Serialized) {}      // Set Cooling Policy
@@ -58,8 +68,8 @@ ThermalZone(TZB1) {
   Method(_TSP) { Return(1) }          // Sampling Period: 100ms
   Method(_PSL) { Return(\_SB.CPB1) }  // Passive cooling list
   Method(SWIT) { Return(3332) }       // Switch-On trip point: 60°C
-  Method(SSTP) { Return(6000) }       // sustainable power in mW
-  Method(_TZD) { Return(\_SB.CPB1) }  // Thermal Zone Devices
+  Method(SSTP) { Return(SB1P) }       // sustainable power — patched by PmConfigUpdateDxe
+  // _TZD removed: cpufreq_cooling requires OF nodes not available in ACPI mode
   Method(_TMP, 0, Serialized) {       // Temperature reading
     Store(\_SB.PMMX.SENG(CPU_B1_TEMP_SENSOR_ID, 0), Local0)
     CreateDWordField(Local0, 0x00, STAT)
@@ -68,7 +78,7 @@ ThermalZone(TZB1) {
       TEMP = ToInteger(TEMP)
       Return(C2DK(TEMP))
     } Else {
-      Return (0xFFFFFFFFFFFFFFFF)
+      Return (2982)
     }
   }
   Method(_SCP, 1, Serialized) {}      // Set Cooling Policy
@@ -85,8 +95,8 @@ ThermalZone(TZM0) {
   Method(_TSP) { Return(1) }          // Sampling Period: 100ms
   Method(_PSL) { Return(\_SB.CPM0) }  // Passive cooling list
   Method(SWIT) { Return(3332) }       // Switch-On trip point: 60°C
-  Method(SSTP) { Return(5000) }       // sustainable power in mW
-  Method(_TZD) { Return(\_SB.CPM0) }  // Thermal Zone Devices
+  Method(SSTP) { Return(SM0P) }       // sustainable power — patched by PmConfigUpdateDxe
+  // _TZD removed: cpufreq_cooling requires OF nodes not available in ACPI mode
   Method(_TMP, 0, Serialized) {       // Temperature reading
     Store(\_SB.PMMX.SENG(CPU_M0_TEMP_SENSOR_ID, 0), Local0)
     CreateDWordField(Local0, 0x00, STAT)
@@ -95,7 +105,7 @@ ThermalZone(TZM0) {
       TEMP = ToInteger(TEMP)
       Return(C2DK(TEMP))
     } Else {
-      Return (0xFFFFFFFFFFFFFFFF)
+      Return (2982)
     }
   }
   Method(_SCP, 1, Serialized) {}      // Set Cooling Policy
@@ -112,8 +122,8 @@ ThermalZone(TZM1) {
   Method(_TSP) { Return(1) }          // Sampling Period: 100ms
   Method(_PSL) { Return(\_SB.CPM1) }  // Passive cooling list
   Method(SWIT) { Return(3332) }       // Switch-On trip point: 60°C
-  Method(SSTP) { Return(4500) }       // sustainable power in mW
-  Method(_TZD) { Return(\_SB.CPM1) }  // Thermal Zone Devices
+  Method(SSTP) { Return(SM1P) }       // sustainable power — patched by PmConfigUpdateDxe
+  // _TZD removed: cpufreq_cooling requires OF nodes not available in ACPI mode
   Method(_TMP, 0, Serialized) {       // Temperature reading
     Store(\_SB.PMMX.SENG(CPU_M1_TEMP_SENSOR_ID, 0), Local0)
     CreateDWordField(Local0, 0x00, STAT)
@@ -122,7 +132,7 @@ ThermalZone(TZM1) {
       TEMP = ToInteger(TEMP)
       Return(C2DK(TEMP))
     } Else {
-      Return (0xFFFFFFFFFFFFFFFF)
+      Return (2982)
     }
   }
   Method(_SCP, 1, Serialized) {}      // Set Cooling Policy
@@ -193,7 +203,7 @@ Method (DPRG, 1, Serialized)
 ThermalZone(TZGT) {
   Method(_PSV) { Return (3582) }      // Passive trip point: 85°C
   Method(SWIT) { Return(3432) }       // Switch-On trip point: 70°C
-  Method(SSTP) { Return(15000) }      // sustainable power in mW
+  Method(SSTP) { Return(SGPP) }       // sustainable power — patched by PmConfigUpdateDxe
   Method(_TC1) { Return(4) }          // Thermal Constant1
   Method(_TC2) { Return(3) }          // Thermal Constant2
   Method(_TSP) { Return(1) }          // Sampling Period: 100ms
@@ -207,7 +217,7 @@ ThermalZone(TZGT) {
       TEMP = ToInteger(TEMP)
       Return(C2DK(TEMP))
     } Else {
-      Return (0xFFFFFFFFFFFFFFFF)
+      Return (2982)
     }
   }
   Method(_SCP, 1, Serialized) {}      // Set Cooling Policy
@@ -226,7 +236,7 @@ ThermalZone(TZVP) {
       TEMP = ToInteger(TEMP)
       Return(C2DK(TEMP))
     } Else {
-      Return (0xFFFFFFFFFFFFFFFF)
+      Return (2982)
     }
   }
   Method(_TZP) { Return(10) }
@@ -245,7 +255,7 @@ ThermalZone(TZGB) {
       TEMP = ToInteger(TEMP)
       Return(C2DK(TEMP))
     } Else {
-      Return (0xFFFFFFFFFFFFFFFF)
+      Return (2982)
     }
   }
   Method(_TZP) { Return(10) }
@@ -264,7 +274,7 @@ ThermalZone(TZGP) {
       TEMP = ToInteger(TEMP)
       Return(C2DK(TEMP))
     } Else {
-      Return (0xFFFFFFFFFFFFFFFF)
+      Return (2982)
     }
   }
   Method(_TZP) { Return(10) }
@@ -282,7 +292,7 @@ ThermalZone(TZBR) {
       TEMP = ToInteger(TEMP)
       Return(C2DK(TEMP))
     } Else {
-      Return (0xFFFFFFFFFFFFFFFF)
+      Return (2982)
     }
   }
   Method(_TZP) { Return(10) }
@@ -300,7 +310,7 @@ ThermalZone(TZD0) {
       TEMP = ToInteger(TEMP)
       Return(C2DK(TEMP))
     } Else {
-      Return (0xFFFFFFFFFFFFFFFF)
+      Return (2982)
     }
   }
   Method(_TZP) { Return(10) }
@@ -318,7 +328,7 @@ ThermalZone(TZD1) {
       TEMP = ToInteger(TEMP)
       Return(C2DK(TEMP))
     } Else {
-      Return (0xFFFFFFFFFFFFFFFF)
+      Return (2982)
     }
   }
   Method(_TZP) { Return(10) }
@@ -337,7 +347,7 @@ ThermalZone(TZCI) {
       TEMP = ToInteger(TEMP)
       Return(C2DK(TEMP))
     } Else {
-      Return (0xFFFFFFFFFFFFFFFF)
+      Return (2982)
     }
   }
   Method(_TZP) { Return(10) }
@@ -355,7 +365,7 @@ ThermalZone(TZNP) {
       TEMP = ToInteger(TEMP)
       Return(C2DK(TEMP))
     } Else {
-      Return (0xFFFFFFFFFFFFFFFF)
+      Return (2982)
     }
   }
   Method(_TZP) { Return(10) }
@@ -373,7 +383,7 @@ ThermalZone(TZTR) {
       TEMP = ToInteger(TEMP)
       Return(C2DK(TEMP))
     } Else {
-      Return (0xFFFFFFFFFFFFFFFF)
+      Return (2982)
     }
   }
   Method(_TZP) { Return(10) }
@@ -391,7 +401,7 @@ ThermalZone(TZN0) {
       TEMP = ToInteger(TEMP)
       Return(C2DK(TEMP))
     } Else {
-      Return (0xFFFFFFFFFFFFFFFF)
+      Return (2982)
     }
   }
   Method(_TZP) { Return(10) }
@@ -409,7 +419,7 @@ ThermalZone(TZN1) {
       TEMP = ToInteger(TEMP)
       Return(C2DK(TEMP))
     } Else {
-      Return (0xFFFFFFFFFFFFFFFF)
+      Return (2982)
     }
   }
   Method(_TZP) { Return(10) }

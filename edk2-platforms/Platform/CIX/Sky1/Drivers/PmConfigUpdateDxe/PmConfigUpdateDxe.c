@@ -285,12 +285,18 @@ typedef struct {
   UINT8   CoreCount;    // number of cores sharing this OPP
 } CPPC_CLUSTER_MAP;
 
+// 5-cluster map matching MADT UID order (mCoreIterOrder = [10,11,8,9,4,5,6,7,0,1,2,3]):
+//   UIDs 0-1:  BIG G1 (boot cluster), DesiredPerf reg = BIG G1 (0x0659009C)
+//   UIDs 2-3:  BIG G0,                DesiredPerf reg = BIG G0 (0x06590098)
+//   UIDs 4-5:  MID G0,                DesiredPerf reg = MID G0 (0x065900A0)
+//   UIDs 6-7:  MID G1,                DesiredPerf reg = MID G1 (0x065900A4)
+//   UIDs 8-11: LITTLE,                DesiredPerf reg = LITTLE (0x06590094)
 STATIC CONST CPPC_CLUSTER_MAP  mClusterMap[] = {
-  { DVFS_ELEMENT_IDX_LITTLE, 0x06590094, 4 },  // cores 0-3
-  { DVFS_ELEMENT_IDX_MID_G0, 0x065900A0, 2 },  // cores 4-5
-  { DVFS_ELEMENT_IDX_MID_G1, 0x065900A4, 2 },  // cores 6-7
-  { DVFS_ELEMENT_IDX_BIG_G0, 0x06590098, 2 },  // cores 8-9
-  { DVFS_ELEMENT_IDX_BIG_G1, 0x0659009C, 2 },  // cores 10-11
+  { DVFS_ELEMENT_IDX_BIG_G1,  0x0659009C, 2 },  // BIG G1 (boot), UIDs 0-1
+  { DVFS_ELEMENT_IDX_BIG_G0,  0x06590098, 2 },  // BIG G0,        UIDs 2-3
+  { DVFS_ELEMENT_IDX_MID_G0,  0x065900A0, 2 },  // MID G0,        UIDs 4-5
+  { DVFS_ELEMENT_IDX_MID_G1,  0x065900A4, 2 },  // MID G1,        UIDs 6-7
+  { DVFS_ELEMENT_IDX_LITTLE,  0x06590094, 4 },  // LITTLE,         UIDs 8-11
 };
 
 #define CLUSTER_MAP_COUNT  (sizeof (mClusterMap) / sizeof (mClusterMap[0]))
@@ -298,37 +304,242 @@ STATIC CONST CPPC_CLUSTER_MAP  mClusterMap[] = {
 /**
   Find the maximum OPP frequency (in MHz) for a given DVFS domain.
 
+  GPU domains (indices 0-1) store clock rate in the Frequency field (kHz).
+  All other domains (CPU, DSU, NPU, VPU, ...) store it in the Level field
+  (MHz) and leave Frequency at 0.
+
   @param[in]  OppConfig  Pointer to the OPP config for this domain
+  @param[in]  DvfsIdx    DVFS_ELEMENT_IDX_* for this domain
   @retval     Maximum frequency in MHz, or 0 if not found
 **/
 STATIC
 UINT32
 GetMaxOppFreqMhz (
-  IN DOMAIN_OPP_CONFIG_T  *OppConfig
+  IN DOMAIN_OPP_CONFIG_T  *OppConfig,
+  IN UINT8                 DvfsIdx
   )
 {
-  UINT32  MaxFreqKhz;
+  UINT32  MaxFreq;
   UINT16  I;
 
-  MaxFreqKhz = 0;
+  MaxFreq = 0;
   for (I = 0; I < OppConfig->Size && I < DOMAIN_MAX_OPP_ENTRIES; I++) {
-    if (OppConfig->OppTable[I].Frequency > MaxFreqKhz) {
-      MaxFreqKhz = OppConfig->OppTable[I].Frequency;
+    UINT32  Freq;
+    if (DvfsIdx <= DVFS_ELEMENT_IDX_GPU_TOP) {
+      //
+      // GPU: clock rate in Frequency field (kHz) → convert to MHz
+      //
+      Freq = OppConfig->OppTable[I].Frequency / 1000;
+    } else {
+      //
+      // CPU/DSU/etc.: clock rate in Level field (already MHz)
+      //
+      Freq = OppConfig->OppTable[I].Level;
+    }
+    if (Freq > MaxFreq) {
+      MaxFreq = Freq;
     }
   }
 
-  return MaxFreqKhz / 1000;
+  return MaxFreq;
+}
+
+//
+// SSTP patch table: maps AML Named integer name to EDP rail index.
+// These Named integers are defined in Dsdt-Thermal.asl and hold the
+// sustainable power (mW) for each thermal zone.  PwrCap == 0 means
+// "disabled / no hardware limit" — skip patching so the ACPI default
+// (which already matches the stock pmic_config.h value) is preserved.
+//
+typedef struct {
+  CHAR8  Name[4];   // AML NameSeg (4 chars, not NUL-terminated)
+  UINT8  EdpRail;   // DPM_EDP_* index into PmicConfig.EdpCfg[]
+} SSTP_PATCH_ENTRY;
+
+STATIC CONST SSTP_PATCH_ENTRY  mSstpMap[] = {
+  { {'S','B','0','P'}, DPM_EDP_CPU_GB0 },  // TZB0 — Big G0
+  { {'S','B','1','P'}, DPM_EDP_CPU_GB1 },  // TZB1 — Big G1
+  { {'S','M','0','P'}, DPM_EDP_CPU_GM0 },  // TZM0 — Mid G0
+  { {'S','M','1','P'}, DPM_EDP_CPU_GM1 },  // TZM1 — Mid G1
+  { {'S','G','P','P'}, DPM_EDP_GPU     },  // TZGT — GPU
+};
+
+#define SSTP_MAP_COUNT  (sizeof (mSstpMap) / sizeof (mSstpMap[0]))
+
+/**
+  Patch a single AML Named integer (Name op + 4-char NameSeg) in the DSDT.
+
+  Searches the AML buffer for the pattern:
+    0x08  <Name[0]> <Name[1]> <Name[2]> <Name[3]>  <opcode>  <value bytes>
+  and overwrites the value bytes in-place.  Handles Byte (0x0A), Word (0x0B)
+  and DWord (0x0C) integer encodings; the new value must fit within the
+  existing encoding width or the patch is skipped.
+
+  @param[in,out]  Buf       DSDT AML buffer
+  @param[in]      Len       Buffer length in bytes
+  @param[in]      Name4     Pointer to 4-byte AML NameSeg (not NUL-terminated)
+  @param[in]      NewValue  New integer value to write
+
+  @retval TRUE   Value was patched
+  @retval FALSE  Pattern not found or value does not fit encoding
+**/
+STATIC
+BOOLEAN
+PatchNamedIntInDsdt (
+  IN OUT UINT8        *Buf,
+  IN     UINT32        Len,
+  IN     CONST CHAR8  *Name4,
+  IN     UINT32        NewValue
+  )
+{
+  UINTN  Pos;
+  UINT8  Opcode;
+
+  for (Pos = 0; Pos + 6 < (UINTN)Len; Pos++) {
+    //
+    // Look for NameOp (0x08) followed by the 4-byte NameSeg.
+    //
+    if (Buf[Pos]   != 0x08)            { continue; }
+    if (Buf[Pos+1] != (UINT8)Name4[0]) { continue; }
+    if (Buf[Pos+2] != (UINT8)Name4[1]) { continue; }
+    if (Buf[Pos+3] != (UINT8)Name4[2]) { continue; }
+    if (Buf[Pos+4] != (UINT8)Name4[3]) { continue; }
+
+    Opcode = Buf[Pos+5];
+
+    if (Opcode == 0x0A) {
+      // ByteConst: 1-byte value, max 255
+      if (NewValue > 0xFF || Pos + 6 >= Len) {
+        return FALSE;
+      }
+      Buf[Pos+6] = (UINT8)NewValue;
+      return TRUE;
+    }
+
+    if (Opcode == 0x0B) {
+      // WordConst: 2-byte little-endian value, max 65535
+      if (NewValue > 0xFFFF || Pos + 7 >= Len) {
+        return FALSE;
+      }
+      Buf[Pos+6] = (UINT8)(NewValue);
+      Buf[Pos+7] = (UINT8)(NewValue >> 8);
+      return TRUE;
+    }
+
+    if (Opcode == 0x0C) {
+      // DWordConst: 4-byte little-endian value
+      if (Pos + 9 >= Len) {
+        return FALSE;
+      }
+      Buf[Pos+6] = (UINT8)(NewValue);
+      Buf[Pos+7] = (UINT8)(NewValue >> 8);
+      Buf[Pos+8] = (UINT8)(NewValue >> 16);
+      Buf[Pos+9] = (UINT8)(NewValue >> 24);
+      return TRUE;
+    }
+
+    // Found the name but unrecognised opcode — keep searching in case of
+    // a false positive (e.g. the same byte sequence inside a string).
+  }
+
+  return FALSE;
 }
 
 /**
-  Patch CPPC HighestPerf and NominalPerf in the DSDT for all CPU clusters
+  Patch the SSTP Named integers in the DSDT to reflect the effective EDP
+  power caps from the (already patched) pm_config binary.
+
+  For each thermal zone's SSTP variable, reads the corresponding
+  EdpCfg[Rail].PwrCap from pm_config.  If PwrCap is zero (domain disabled /
+  no hardware limit), the ACPI default (which already matches the stock
+  pmic_config.h value) is preserved.
+
+  @param[in]  PmCrc  Pointer to the validated pm_config binary
+**/
+STATIC
+VOID
+PatchSstpInDsdt (
+  IN PM_EXPORT_CONFIG_CRC_T  *PmCrc
+  )
+{
+  EFI_STATUS              Status;
+  EFI_ACPI_SDT_PROTOCOL   *AcpiSdt;
+  EFI_ACPI_SDT_HEADER     *Table;
+  EFI_ACPI_TABLE_VERSION  TableVersion;
+  UINTN                   TableKey;
+  UINTN                   I;
+  UINT8                   *Buf;
+  UINT32                  Len;
+  UINTN                   Entry;
+  UINT8                   Rail;
+  UINT32                  PwrCap;
+  BOOLEAN                 AnyPatched;
+
+  Status = gBS->LocateProtocol (&gEfiAcpiSdtProtocolGuid, NULL, (VOID **)&AcpiSdt);
+  if (EFI_ERROR (Status)) {
+    return;
+  }
+
+  for (I = 0; I < ACPI_MAX_TABLES; I++) {
+    Status = AcpiSdt->GetAcpiTable (I, &Table, &TableVersion, &TableKey);
+    if (EFI_ERROR (Status)) {
+      break;
+    }
+
+    if (Table->Signature != SIGNATURE_32 ('D','S','D','T')) {
+      continue;
+    }
+
+    Buf        = (UINT8 *)Table;
+    Len        = Table->Length;
+    AnyPatched = FALSE;
+
+    for (Entry = 0; Entry < SSTP_MAP_COUNT; Entry++) {
+      Rail   = mSstpMap[Entry].EdpRail;
+      PwrCap = PmCrc->Config.PmicConfig.EdpCfg[Rail].PwrCap;
+
+      //
+      // PwrCap == 0 means "no hardware limit" — skip so the ACPI default
+      // (already set to the stock pmic_config.h value) is preserved.
+      //
+      if (PwrCap == 0 || PwrCap > 65000) {
+        DEBUG ((DEBUG_INFO, "[PmConfigUpdate] SSTP %c%c%c%c: PwrCap=%u, skipping\n",
+                mSstpMap[Entry].Name[0], mSstpMap[Entry].Name[1],
+                mSstpMap[Entry].Name[2], mSstpMap[Entry].Name[3], PwrCap));
+        continue;
+      }
+
+      if (PatchNamedIntInDsdt (Buf, Len, mSstpMap[Entry].Name, PwrCap)) {
+        AnyPatched = TRUE;
+        DEBUG ((DEBUG_INFO, "[PmConfigUpdate] SSTP %c%c%c%c: patched to %u mW\n",
+                mSstpMap[Entry].Name[0], mSstpMap[Entry].Name[1],
+                mSstpMap[Entry].Name[2], mSstpMap[Entry].Name[3], PwrCap));
+      } else {
+        DEBUG ((DEBUG_WARN, "[PmConfigUpdate] SSTP %c%c%c%c: not found in DSDT\n",
+                mSstpMap[Entry].Name[0], mSstpMap[Entry].Name[1],
+                mSstpMap[Entry].Name[2], mSstpMap[Entry].Name[3]));
+      }
+    }
+
+    if (AnyPatched) {
+      AcpiFixChecksum (Table);
+    }
+
+    break;  // only one DSDT
+  }
+}
+
+/**
+  Patch CPPC HighestPerf and NominalPerf in ACPI tables for all CPU clusters
   based on actual OPP table maximum frequencies.
 
-  Searches for each cluster's unique DesiredPerf register address within
-  ACPI Generic Register Descriptors in _CPC packages. The _CPC package
-  layout (from CPPC_PACKAGE_INIT macro) places HighestPerf and NominalPerf
-  as the 3rd and 4th elements.  In compiled AML these are integer constants
-  preceding the first ResourceTemplate (GuaranteedPerf register).
+  The _CPC packages are generated dynamically in the CPU topology SSDT by
+  the SsdtCpuTopologyGenerator.  This function searches both SSDTs and
+  the DSDT for each cluster's unique DesiredPerf register address within
+  ACPI Generic Register Descriptors in _CPC packages.  The _CPC package
+  layout places HighestPerf and NominalPerf as the 3rd and 4th elements.
+  In compiled AML these are integer constants preceding the first
+  ResourceTemplate (GuaranteedPerf register).
 
   We locate the DesiredPerf register descriptor (the 8th _CPC element),
   then scan backwards to find and patch the HighestPerf/NominalPerf values.
@@ -337,7 +548,7 @@ GetMaxOppFreqMhz (
 **/
 STATIC
 VOID
-PatchCppcInDsdt (
+PatchCppcInAcpi (
   IN PM_EXPORT_CONFIG_CRC_T  *PmCrc
   )
 {
@@ -376,7 +587,13 @@ PatchCppcInDsdt (
       break;
     }
 
-    if (Table->Signature != SIGNATURE_32 ('D','S','D','T')) {
+    //
+    // _CPC packages live in the dynamically generated SSDT (CPU topology),
+    // not in the DSDT.  Search both so the patch works regardless of where
+    // future code places the _CPC objects.
+    //
+    if (Table->Signature != SIGNATURE_32 ('S','S','D','T') &&
+        Table->Signature != SIGNATURE_32 ('D','S','D','T')) {
       continue;
     }
 
@@ -385,7 +602,8 @@ PatchCppcInDsdt (
 
     for (Cluster = 0; Cluster < CLUSTER_MAP_COUNT; Cluster++) {
       MaxFreq = GetMaxOppFreqMhz (
-                  &PmCrc->Config.OppConfig.Opps[mClusterMap[Cluster].DvfsIdx]
+                  &PmCrc->Config.OppConfig.Opps[mClusterMap[Cluster].DvfsIdx],
+                  mClusterMap[Cluster].DvfsIdx
                   );
       if (MaxFreq == 0) {
         continue;
@@ -519,7 +737,7 @@ PatchCppcInDsdt (
     }
 
     AcpiFixChecksum (Table);
-    break;  // only one DSDT
+    // continue scanning — _CPC may be in any SSDT or the DSDT
   }
 }
 
@@ -695,9 +913,14 @@ PmConfigReadyToBootCallback (
   }
 
   //
-  // Patch CPPC HighestPerf/NominalPerf for all CPU clusters
+  // Patch CPPC HighestPerf/NominalPerf in the CPU topology SSDT
   //
-  PatchCppcInDsdt (PmCrc);
+  PatchCppcInAcpi (PmCrc);
+
+  //
+  // Patch SSTP Named integers in thermal zones with actual EDP power caps
+  //
+  PatchSstpInDsdt (PmCrc);
 
 Done:
   FreePool (PmBuf);

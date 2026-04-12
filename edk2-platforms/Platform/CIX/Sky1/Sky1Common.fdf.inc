@@ -288,6 +288,12 @@
   # NVMe boot devices
   #
   INF Platform/CIX/Sky1/Drivers/NvmExpressDxe/NvmExpressDxe.inf
+  #
+  # SATA Support (AHCI controller over PCI, e.g. NVMe-to-SATA adapters)
+  #
+  INF MdeModulePkg/Bus/Pci/SataControllerDxe/SataControllerDxe.inf
+  INF MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AtaAtapiPassThru.inf
+  INF MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf
 !endif
 
 !if $(CAPSULE_ENABLE) == TRUE
@@ -313,6 +319,7 @@
 !if $(PM_CONFIG_UPDATE_SUPPORT) == TRUE
   INF Platform/CIX/Sky1/Drivers/PmConfigUpdateDxe/PmConfigUpdateDxe.inf
 !endif
+  INF Platform/CIX/Sky1/Drivers/ProfileManagerDxe/ProfileManagerDxe.inf
 !if $(MEM_CONFIG_UPDATE_SUPPORT) == TRUE
   INF Platform/CIX/Sky1/Drivers/MemConfigUpdateDxe/MemConfigUpdateDxe.inf
 !endif

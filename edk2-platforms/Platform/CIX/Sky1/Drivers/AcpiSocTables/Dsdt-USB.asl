@@ -10,7 +10,7 @@ Device (XHC0)
 {
   Name (_HID, "PNP0D10")
   Name (_UID, 0x00)
-  Name (_CCA, 0x00)
+  Name (_CCA, 0x01)
 
   Method (_STA)
   {
@@ -34,7 +34,7 @@ Device (XHC1)
 {
   Name (_HID, "PNP0D10")
   Name (_UID, 0x01)
-  Name (_CCA, 0x00)
+  Name (_CCA, 0x01)
 
   Method (_STA)
   {
@@ -58,7 +58,7 @@ Device (XHC2)
 {
   Name (_HID, "PNP0D10")
   Name (_UID, 0x02)
-  Name (_CCA, 0x00)
+  Name (_CCA, 0x01)
 
   Method (_STA)
   {
@@ -82,7 +82,7 @@ Device (XHC3)
 {
   Name (_HID, "PNP0D10")
   Name (_UID, 0x03)
-  Name (_CCA, 0x00)
+  Name (_CCA, 0x01)
 
   Method (_STA)
   {
@@ -107,7 +107,7 @@ Device (XHC4)
 {
   Name (_HID, "PNP0D10")
   Name (_UID, 0x04)
-  Name (_CCA, 0x00)
+  Name (_CCA, 0x01)
 
   Method (_STA)
   {
@@ -131,7 +131,7 @@ Device (XHC5)
 {
   Name (_HID, "PNP0D10")
   Name (_UID, 0x05)
-  Name (_CCA, 0x00)
+  Name (_CCA, 0x01)
 
   Method (_STA)
   {
@@ -155,7 +155,7 @@ Device (USB0)
 {
   Name (_HID, "PNP0D10")
   Name (_UID, 0x06)
-  Name (_CCA, 0x00)
+  Name (_CCA, 0x01)
 
   Method (_STA)
   {
@@ -179,7 +179,7 @@ Device (USB1)
 {
   Name (_HID, "PNP0D10")
   Name (_UID, 0x07)
-  Name (_CCA, 0x00)
+  Name (_CCA, 0x01)
 
   Method (_STA)
   {
@@ -203,7 +203,7 @@ Device (USB2)
 {
   Name (_HID, "PNP0D10")
   Name (_UID, 0x08)
-  Name (_CCA, 0x00)
+  Name (_CCA, 0x01)
 
   Method (_STA)
   {
@@ -227,7 +227,7 @@ Device (USB3)
 {
   Name (_HID, "PNP0D10")
   Name (_UID, 0x09)
-  Name (_CCA, 0x00)
+  Name (_CCA, 0x01)
 
   Method (_STA)
   {

@@ -544,15 +544,15 @@ ConstructSetupVariable (
   PlatformSetupVar->PmOppFreq[143] = 350;
   PlatformSetupVar->PmOppFreq[144] = 600;
   PlatformSetupVar->PmOppFreq[145] = 750;
-  // TDP defaults (mW)
-  PlatformSetupVar->PmTdp[0] = 2400;
-  PlatformSetupVar->PmTdp[1] = 6700;
-  PlatformSetupVar->PmTdp[2] = 6500;
-  PlatformSetupVar->PmTdp[3] = 8000;
-  PlatformSetupVar->PmTdp[4] = 8200;
-  PlatformSetupVar->PmTdp[5] = 5500;
-  PlatformSetupVar->PmTdp[6] = 12000;
-  PlatformSetupVar->PmTdp[7] = 9000;
+  // TDP defaults (mW) — matches pmic_config.h stock EDP power caps
+  PlatformSetupVar->PmTdp[0] = 18500;  // DPM_EDP_CPU_LIT
+  PlatformSetupVar->PmTdp[1] = 19500;  // DPM_EDP_CPU_GM0
+  PlatformSetupVar->PmTdp[2] = 19500;  // DPM_EDP_CPU_GM1
+  PlatformSetupVar->PmTdp[3] = 21000;  // DPM_EDP_CPU_GB0
+  PlatformSetupVar->PmTdp[4] = 21000;  // DPM_EDP_CPU_GB1
+  PlatformSetupVar->PmTdp[5] = 18000;  // DPM_EDP_DSU
+  PlatformSetupVar->PmTdp[6] = 20000;  // DPM_EDP_GPU
+  PlatformSetupVar->PmTdp[7] = 35000;  // DPM_EDP_SOC
 
   PlatformSetupVar->PmSocVoltagePolarity = 0;
   PlatformSetupVar->PmSocVoltageOffset = 0;
@@ -677,15 +677,15 @@ PlatformSetupVariableInit (
       PlatformSetupVar.PmOppFreq[143] = 350;
       PlatformSetupVar.PmOppFreq[144] = 600;
       PlatformSetupVar.PmOppFreq[145] = 750;
-      // TDP defaults (mW)
-      PlatformSetupVar.PmTdp[0] = 2400;
-      PlatformSetupVar.PmTdp[1] = 6700;
-      PlatformSetupVar.PmTdp[2] = 6500;
-      PlatformSetupVar.PmTdp[3] = 8000;
-      PlatformSetupVar.PmTdp[4] = 8200;
-      PlatformSetupVar.PmTdp[5] = 5500;
-      PlatformSetupVar.PmTdp[6] = 12000;
-      PlatformSetupVar.PmTdp[7] = 9000;
+      // TDP defaults (mW) — matches pmic_config.h stock EDP power caps
+      PlatformSetupVar.PmTdp[0] = 18500;  // DPM_EDP_CPU_LIT
+      PlatformSetupVar.PmTdp[1] = 19500;  // DPM_EDP_CPU_GM0
+      PlatformSetupVar.PmTdp[2] = 19500;  // DPM_EDP_CPU_GM1
+      PlatformSetupVar.PmTdp[3] = 21000;  // DPM_EDP_CPU_GB0
+      PlatformSetupVar.PmTdp[4] = 21000;  // DPM_EDP_CPU_GB1
+      PlatformSetupVar.PmTdp[5] = 18000;  // DPM_EDP_DSU
+      PlatformSetupVar.PmTdp[6] = 20000;  // DPM_EDP_GPU
+      PlatformSetupVar.PmTdp[7] = 35000;  // DPM_EDP_SOC
 
       PlatformSetupVar.PmSocVoltagePolarity = 0;
       PlatformSetupVar.PmSocVoltageOffset = 0;

@@ -120,7 +120,7 @@ typedef struct {
   UINT8     LightSensorCtrl;
   UINT8     CpuLpiState;
   UINT8     SpcrEnable;
-  UINT8     CpuFMax;
+  UINT8     Reserved0;
   UINT8     EcFanMode;
 
   //
@@ -156,6 +156,11 @@ typedef struct {
   //
   UINT8     PmSocVoltagePolarity;          // 0 = positive (+), 1 = negative (-)
   UINT16    PmSocVoltageOffset;
+
+  //
+  // eDP panel support: 0 = disabled (default), 1 = enabled
+  //
+  UINT8     EdpSupport;
 } PLATFORM_SETUP_DATA;
 
 typedef struct {

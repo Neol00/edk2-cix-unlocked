@@ -14,20 +14,8 @@ export PATH_OUT="${WORKSPACE}/output"
 export ARM_TOOLCHAIN_ELF="gcc-arm-10.2-2020.11-x86_64-aarch64-none-elf"
 export UEFI_PROJECT="Merak"
 export UEFI_PROJECT_PATH="Platform/CIX/Sky1"
-if [ -d "${WORKSPACE}/tools/gcc/${ARM_TOOLCHAIN_ELF}" ]; then
-    export GCC5_AARCH64_PREFIX="${WORKSPACE}/tools/gcc/${ARM_TOOLCHAIN_ELF}/bin/aarch64-none-elf-"
-elif [ "$(uname -m)" = "aarch64" ]; then
-    export GCC5_AARCH64_PREFIX=""
-else
-    export GCC5_AARCH64_PREFIX="aarch64-linux-gnu-"
-fi
-if [ -f "${WORKSPACE}/tools/acpica/generate/unix/bin/iasl" ]; then
-    export IASL_PREFIX="${WORKSPACE}/tools/acpica/generate/unix/bin/"
-elif command -v iasl &>/dev/null; then
-    export IASL_PREFIX="$(dirname $(command -v iasl))/"
-else
-    export IASL_PREFIX="${WORKSPACE}/tools/acpica/generate/unix/bin/"
-fi
+export GCC5_AARCH64_PREFIX="${WORKSPACE}/tools/gcc/${ARM_TOOLCHAIN_ELF}/bin/aarch64-none-elf-"
+export IASL_PREFIX="${WORKSPACE}/tools/acpica/generate/unix/bin/"
 export PACKAGES_PATH=$WORKSPACE/edk2:$WORKSPACE/edk2-platforms:$WORKSPACE/edk2-non-osi
 
 exec_blankfile() {
@@ -59,8 +47,8 @@ if [ ! -e $WORKSPACE/Source/C/bin ]; then
 	make -C edk2/BaseTools
 fi
 
-if ! command -v iasl &>/dev/null && [ ! -e $WORKSPACE/tools/acpica/generate/unix/bin/iasl ]; then
-	echo "Need build acpi tool! (or install acpica-tools package)"
+if [ ! -e $WORKSPACE/tools/acpica/generate/unix/bin ]; then
+	echo "Need build acpi tool!"
 	make -C tools/acpica
 fi
 

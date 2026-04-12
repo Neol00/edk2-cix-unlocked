@@ -14,9 +14,9 @@
 
 #define PM_CONFIG_SIGNATURE      TABLE_SIGNATURE( 'P', 'M', 'C', 'F' )
 
-/* pm-config current supported version (v2.6) */
+/* pm-config current supported version (v2.1) */
 #define PM_CONFIG_VERSION_MAJOR  2
-#define PM_CONFIG_VERSION_MINOR  6
+#define PM_CONFIG_VERSION_MINOR  1
 
 #include "cfg_dpm_pwrrail.h"
 
@@ -39,7 +39,7 @@ typedef union {
 #define OPP_PWR_RAIL_MAX    8
 typedef struct {
     config_data_t    pmic_scheme;
-#define OPP_NO_LIMIT        4000
+#define OPP_NO_LIMIT        4500
     uint16_t         opp_max[OPP_DXS_MAX];
     DPM_PWR_RAIL_CFG edp_cfg[OPP_PWR_RAIL_MAX];
 } pm_config_pmic_t;
@@ -137,52 +137,27 @@ typedef struct pm_config_log {
     config_data_t       uart_baudrate;
 } pm_config_log_t;
 
-typedef struct pm_config_vmin {
-    config_data_t       vmin_disable;
-    config_data_t       vmin_profile;
-} pm_config_vmin_t;
-
-typedef struct pm_config_noc_idle {
-    config_data_t       noc_idle_enable;
-    config_data_t       noc_idle_amu1_thro0;
-    config_data_t       noc_idle_amu1_thro1;
-    config_data_t       noc_idle_ddr_dym_pwr_thro;
-    config_data_t       noc_idle_hysteresis;
-} pm_config_noc_idle_t;
-
-typedef struct pm_config_spt {
-    config_data_t       spt_enable_mask;
-    config_data_t       spt_setpoints[SPT_CTRL_MAX];
-    config_data_t       spt_skin_margin;
-} pm_config_spt_t;
-
 typedef struct {
     pm_config_pmic_t        pmic_config;
     pm_config_pvt_t         pvt_config;
     pm_config_opp_t         opp_config;
     pm_config_fan_t         fan_config[MAX_FAN_NUM];
     pm_config_log_t         log_config;
-    pm_config_vmin_t        vmin_config;
-    pm_config_noc_idle_t    noc_idle_config;
-    pm_config_spt_t         spt_config;
-    config_data_t           wdt_timeout;
-    uint8_t                 reserved[111];
+    uint8_t                 reserved[115];
 } pm_export_config_t;
 
 typedef struct {
-    uint32_t                version_major : 16;
-    uint32_t                version_minor : 16;
-
+    uint32_t                version_major;
+    uint32_t                version_minor;
     uint32_t                timestamp;
-    uint32_t                length;
     uint32_t                signature;
-
-    uint32_t                crc1;
-    uint32_t                crc2;
 
     pm_export_config_t      config;
 
     uint8_t                 padding[TABLE_ALIGN_U32_PADDING(sizeof(pm_export_config_t))];
+
+    uint32_t                crc1;
+    uint32_t                crc2;
 } pm_export_config_crc_t;
 
 #pragma pack(pop)

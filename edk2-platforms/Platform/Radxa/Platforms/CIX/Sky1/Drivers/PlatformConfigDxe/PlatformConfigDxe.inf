@@ -62,8 +62,6 @@
   gEfiNetworkPkgTokenSpaceGuid.PcdIPv6HttpSupport
   gCixTokenSpaceGuid.PcdStateAfterG3
   gCixPlatformTokenSpaceGuid.PcdAcpiSpcrEnable
-  gCixPlatformTokenSpaceGuid.PcdCpuFMax
-  gCixPlatformTokenSpaceGuid.PcdGpuFMax
   gCixPlatformTokenSpaceGuid.PcdEcDefaultFanMode
 
 [Depex]

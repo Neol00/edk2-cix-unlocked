@@ -32,7 +32,7 @@
 #define MNTNDUMP_SIZE  0x20000
 
 #define RAMOOPS_RES_BASE   0x83d00000
-#define RAMOOPS_RES_SIZE   0x80000
+#define RAMOOPS_RES_SIZE   0xE0000
 
 // IORT
 #define PCIE_SMMU_ENABLE        1
@@ -42,8 +42,14 @@
 // MM Hub, the following defines are valid when MM_HUB_SMMU_ENABLE = 1.
 #define DPU_SMMU_ENABLE  1
 #define NPU_SMMU_ENABLE  1
+// Allow platform-specific overrides via -DISP_SMMU_ENABLE=0 / -DCSI_SMMU_ENABLE=0
+// (e.g. O6 has no camera modules so disables ISP/CSI SMMU IORT nodes to match the DSDT)
+#ifndef ISP_SMMU_ENABLE
 #define ISP_SMMU_ENABLE  1
+#endif
+#ifndef CSI_SMMU_ENABLE
 #define CSI_SMMU_ENABLE  1
+#endif
 
 // GTDT
 #define GTDT_WATCHDOG_ENABLE  1

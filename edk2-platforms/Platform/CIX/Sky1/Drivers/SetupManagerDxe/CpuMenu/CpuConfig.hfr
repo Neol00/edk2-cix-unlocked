@@ -22,7 +22,7 @@
       grayoutif TRUE;
          oneof varid   = PlatformSetupVar.CpuCoreEnable[0],
          prompt      = STRING_TOKEN(STR_CPU_CORE0_PROMPT),
-         help        = STRING_TOKEN(STR_CPU_CORE2_HELP),
+         help        = STRING_TOKEN(STR_CPU_CORE0_HELP),
          default     = 1,
          option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
          option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
@@ -32,7 +32,7 @@
       suppressif ideqval PlatformSetupVar.CpuCoreNum < 2 ;
          oneof varid   = PlatformSetupVar.CpuCoreEnable[1],
          prompt      = STRING_TOKEN(STR_CPU_CORE1_PROMPT),
-         help        = STRING_TOKEN(STR_CPU_CORE3_HELP),
+         help        = STRING_TOKEN(STR_CPU_CORE1_HELP),
          default     = FixedPcdGetBool (PcdCpuCore1En),
          option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
          option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
@@ -42,7 +42,7 @@
       suppressif ideqval PlatformSetupVar.CpuCoreNum < 3 ;
          oneof varid   = PlatformSetupVar.CpuCoreEnable[2],
          prompt      = STRING_TOKEN(STR_CPU_CORE2_PROMPT),
-         help        = STRING_TOKEN(STR_CPU_CORE0_HELP),
+         help        = STRING_TOKEN(STR_CPU_CORE2_HELP),
          default     = FixedPcdGetBool (PcdCpuCore2En),
          option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
          option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
@@ -52,7 +52,7 @@
       suppressif ideqval PlatformSetupVar.CpuCoreNum < 4 ;
          oneof varid   = PlatformSetupVar.CpuCoreEnable[3],
          prompt      = STRING_TOKEN(STR_CPU_CORE3_PROMPT),
-         help        = STRING_TOKEN(STR_CPU_CORE1_HELP),
+         help        = STRING_TOKEN(STR_CPU_CORE3_HELP),
          default     = FixedPcdGetBool (PcdCpuCore3En),
          option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
          option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;

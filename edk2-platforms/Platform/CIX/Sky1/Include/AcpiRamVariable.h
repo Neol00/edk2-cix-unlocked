@@ -87,8 +87,10 @@
 #define ARV_PCIE_RP_03_ASPM_OFFSET          0x4B
 #define ARV_PCIE_RP_04_ASPM_OFFSET          0x4C
 
+#define ARV_EDP_SUPPORT_OFFSET              0x4D
+
 //
-#define ARV_VARIABLE_TABLE_TOTAL_SIZE  0x4D
+#define ARV_VARIABLE_TABLE_TOTAL_SIZE  0x4E
 
 #define ARV_I2C_FREQ_UNIT_HZ   10000
 

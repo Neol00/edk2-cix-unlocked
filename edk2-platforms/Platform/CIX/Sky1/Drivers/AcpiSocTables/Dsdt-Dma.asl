@@ -24,6 +24,9 @@ Device (DMA0) {
     }
   })
 
+  Name (CLKT, Package() {
+    Package() {CLK_TREE_FCH_DMA_ACLK, "", \_SB.DMA0},
+  })
   Name (RSTL, Package() {
     Package() {\_SB.RST1, SW_DMA_RST_AXI_N, \_SB.DMA0, "dma_reset"},
   })
@@ -45,6 +48,11 @@ Device (DMA1) {
   Name (_CRS, ResourceTemplate () {
     Memory32Fixed (ReadWrite, AUDIO_DMAC_BASE, AUDIO_DMAC_SIZE)
     Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { AUDIO_IRQ_O_AP_DMA_INTERRUPT_ID }
+    // Reserved DRAM buffer for audio DMA (no-map region).
+    // acpi_resource_lookup (CIXA1019 RSVL) validates this address against
+    // _CRS and then calls dma_declare_coherent_memory() — the ACPI
+    // equivalent of the Device Tree reserved-memory "no-map" property.
+    Memory32Fixed (ReadWrite, 0xd0000000, 0x700000)
   })
 
   Name (_DSD, Package () {

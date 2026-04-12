@@ -70,7 +70,7 @@ Device (GPU) {
   Name (_HID, "CIXH5000")
   Name (_UID, 0x0)
   Name (_STA, 0xF)
-  Name (_CCA, 0)  // Non-coherent — matches HW design (DPU reads non-coherently)
+  Name (_CCA, 1) // Coherent — mali_kbase driver expects _CCA 1
   Name (_CRS, ResourceTemplate () {
     Memory32Fixed (ReadWrite, GPU_RCSU_CONTROLLER_BASE, GPU_RCSU_CONTROLLER_SIZE)
     Memory32Fixed (ReadWrite, GPU_CONTROLLER_BASE, GPU_CONTROLLER_SIZE)
@@ -94,6 +94,7 @@ Device (GPU) {
         Package () {"physical-memory-group-manager",\_SB.PMGM},
         Package () {"power-domains", Package () {\_SB.SCMI.DVFS, 0}},
         Package () {"power-domain-names", Package () {"perf"}},
+        Package () {"scmi-perf-domain-id", 0},
         Package () {"tzgt", \_SB.TZGT },
         Package () {"power-supply", \_SB.GPUP },
     },

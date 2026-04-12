@@ -235,6 +235,14 @@ endif;
         option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
       endoneof;
 
+      oneof varid   = PlatformSetupVar.EdpSupport,
+        prompt      = STRING_TOKEN(STR_EDP_SUPPORT_PROMPT),
+        help        = STRING_TOKEN(STR_EDP_SUPPORT_PROMPT_HELP),
+        default     = 0,
+        option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = RESET_REQUIRED;
+        option text = STRING_TOKEN(STR_ENABLED),  value = 1, flags = RESET_REQUIRED;
+      endoneof;
+
     endform;
 
     form formid = CLOCK_GATING_CONTROL_FORM_ID,

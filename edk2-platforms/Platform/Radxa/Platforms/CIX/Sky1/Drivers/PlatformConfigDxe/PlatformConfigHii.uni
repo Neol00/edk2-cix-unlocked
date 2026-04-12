@@ -40,11 +40,6 @@
 #string STR_ENABLE_SPCR_TABLE           #language en-US "Support SPCR"
 #string STR_ENABLE_SPCR_TABLE_HELP      #language en-US "Enable or Disable SPCR Table."
 
-#string STR_CPU_FREQ_MAX_PROMPT         #language en-US "CPU Max Frequency"
-#string STR_CPU_FREQ_MAX_PROMPT_HELP    #language en-US "Select Max Frequency of CPU"
-#string STR_CPU_FREQ_0                  #language en-US "2.5G"
-#string STR_CPU_FREQ_1                  #language en-US "2.6G"
-
 #string STR_EC_FAN_MODE_PROMPT          #language en-US "EC Fan Mode"
 #string STR_EC_FAN_MODE_PROMPT_HELP     #language en-US "Select the default EC fan mode."
 #string STR_AUTO_MODE                   #language en-US "Auto Mode"

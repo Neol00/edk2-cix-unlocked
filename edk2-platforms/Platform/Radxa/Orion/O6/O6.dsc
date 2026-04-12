@@ -253,6 +253,10 @@
 !endif
 
   GCC:*_*_*_CC_FLAGS              = -DPHYSICAL_PHY
+  # O6 has no camera modules: disable ISP/CSI SMMU IORT nodes to match the DSDT
+  # (Dsdt-CSI-DMA.asl is gated on PcdAcpiCsiDmaEnable=FALSE, but Iort.aslc uses
+  # CommonDefines.h C macros, so we override them here via the compiler flag)
+  GCC:*_*_*_CC_FLAGS              = -DCSI_SMMU_ENABLE=0 -DISP_SMMU_ENABLE=0
 
 !if $(FV_MAIN_COMPRESSED_ENABLE) == TRUE
   GCC:*_*_*_CC_FLAGS              = -DFV_MAIN_COMPRESSED
@@ -312,24 +316,24 @@
   gCixTokenSpaceGuid.PcdPcieRootPort4PeResetPin|6
 
   gCixTokenSpaceGuid.PcdI2c2En|TRUE
-  gCixTokenSpaceGuid.PcdI2c2BusFreq|100000
+  gCixTokenSpaceGuid.PcdI2c2BusFreq|400000
   gCixTokenSpaceGuid.PcdI2c3En|TRUE
-  gCixTokenSpaceGuid.PcdI2c3BusFreq|100000
+  gCixTokenSpaceGuid.PcdI2c3BusFreq|400000
   gCixTokenSpaceGuid.PcdI2c3Runtime|TRUE          # For RTC runtime service
   gCixTokenSpaceGuid.PcdI2c4En|TRUE
-  gCixTokenSpaceGuid.PcdI2c4BusFreq|100000
+  gCixTokenSpaceGuid.PcdI2c4BusFreq|400000
   gCixTokenSpaceGuid.PcdI2c5En|TRUE
-  gCixTokenSpaceGuid.PcdI2c5BusFreq|100000
+  gCixTokenSpaceGuid.PcdI2c5BusFreq|400000
   gCixTokenSpaceGuid.PcdI2c6En|TRUE
-  gCixTokenSpaceGuid.PcdI2c6BusFreq|100000
+  gCixTokenSpaceGuid.PcdI2c6BusFreq|400000
 
   # PD
   gCixTokenSpaceGuid.PcdI2c0En|TRUE
-  gCixTokenSpaceGuid.PcdI2c0BusFreq|100000
+  gCixTokenSpaceGuid.PcdI2c0BusFreq|400000
   gCixTokenSpaceGuid.PcdI2c1En|TRUE
-  gCixTokenSpaceGuid.PcdI2c1BusFreq|100000
+  gCixTokenSpaceGuid.PcdI2c1BusFreq|400000
   gCixTokenSpaceGuid.PcdI2c7En|TRUE
-  gCixTokenSpaceGuid.PcdI2c7BusFreq|100000
+  gCixTokenSpaceGuid.PcdI2c7BusFreq|400000
 
   # RTC I2C canot be controlled in setup
   gCixTokenSpaceGuid.PcdI2cCtrlEn|0xF7
@@ -381,7 +385,7 @@
   gArmTokenSpaceGuid.PcdSystemProductName|L"Radxa Orion O6"
 
   # RTC (taken from Phecda PcdI2c3BusFreq)
-  gPcf8563RealTimeClockLibTokenSpaceGuid.PcdI2cBusFrequency|100000
+  gPcf8563RealTimeClockLibTokenSpaceGuid.PcdI2cBusFrequency|400000
 
   # Fill in dpu index to config display priority
   # Index | Output Name

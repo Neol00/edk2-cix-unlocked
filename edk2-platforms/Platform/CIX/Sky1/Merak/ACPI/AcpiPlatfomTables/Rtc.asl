@@ -10,8 +10,7 @@ Scope (\_SB.I2C3)
 {
   // RTC RX8900
   Device (RTC0) {
-    Name (_HID, "EPSO0001")
-    Name (_CID, "rx8900")
+    Name (_HID, "RX008900")
     Name (_UID, 0x0)
     Name (_STA, 0xF)
     Name (_CRS, ResourceTemplate () {

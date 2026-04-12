@@ -14,7 +14,7 @@ Based on the Radxa EDK2 release with pm_config reverted to version 2.1 (the vers
 - **Memory frequency selection** — DDR frequency selectable from the BIOS menu (DDR5-1600 through DDR5-6400) without recompiling. The build-time `MEM_CFG_MEMFREQ` flag only sets the default.
 
 ### Hardware support
-- **Reliable USB detection** — fixed the ~50% USB detection failure present in the stock BIOS by correcting GPIO VBUS configuration and porting an updated USB stack.
+- **Reliable USB detection** — fixed the ~50% USB detection failure by correcting GPIO VBUS configuration and porting an updated USB stack.
 - **Multi-revision board support** — supports all known Orion O6 board revisions including newer DRAM types (Hive Semi, Hynix, Rayson) across 12 board configurations.
 - **Proper shutdown** — green LED turns off and USB ports power down on shutdown. USB VBUS is power-cycled on reboot for clean device re-enumeration.
 
@@ -137,14 +137,14 @@ The Power Management menu in BIOS settings lets you tune frequency and voltage f
 Per-rail TDP limits in milliwatts. Stock defaults:
 | Rail | Stock TDP (mW) | Notes |
 |------|---------------|-------|
-| CPU Little | 2400 | Configurable |
-| CPU Big G0 | 6700 | Configurable |
-| CPU Big G1 | 6500 | Configurable |
-| CPU Mid G0 | 8000 | Configurable |
-| CPU Mid G1 | 8200 | Configurable |
-| DSU | 5500 | Configurable |
-| GPU | 12000 | Configurable |
-| SOC | 9000 | Configurable |
+| CPU Little | 18500 | Configurable |
+| CPU Big G0 | 19500 | Configurable |
+| CPU Big G1 | 19500 | Configurable |
+| CPU Mid G0 | 21000 | Configurable |
+| CPU Mid G1 | 21000 | Configurable |
+| DSU | 18000 | Configurable |
+| GPU | 20000 | Configurable |
+| SOC | 35000 | Configurable |
 
 ## ⚠️ Warnings
 
@@ -351,6 +351,16 @@ When reinstalling the flash chip, the notch (pin 1) is closest to the 40-pin gpi
 4. **Know your chip** — silicon quality varies. The maximum stable frequency differs per chip. The BIOS has excessive limits and most if not all chips will not be stable anywhere near the max allowed values.
 5. **Have access to a external programmer and backup flash chips** — this is the only recovery path if something goes wrong.
 
+**Cluster layout (ACPI UID order):**
+
+| Cluster | UIDs | Cores | Type |
+|---------|------|-------|------|
+| Big G1  | 0-1  | 2     | A720 |
+| Big G0  | 2-3  | 2     | A720 |
+| Mid G0  | 4-5  | 2     | A720 |
+| Mid G1  | 6-7  | 2     | A720 |
+| Little  | 8-11 | 4     | A520 |
+
 ## Changelog
 
 See the CHANGELOG file for detailed information about changes made.
@@ -370,14 +380,10 @@ cat /sys/devices/system/cpu/cpufreq/policy*/scaling_max_freq
 
 ### Thermal sensors
 ```bash
-# List all thermal zones with temperatures
-for tz in /sys/class/thermal/thermal_zone*/; do
-  echo "$(basename $tz): $(cat $tz/type) — $(cat $tz/temp)m°C"
+# List all thermal zones with temperatures and description names
+for tz in /sys/class/thermal/thermal_zone*; do 
+  echo "$(basename $tz): $(cat $tz/temp 2>/dev/null)m°C - $(cat $tz/device/description 2>/dev/null)"; 
 done
-
-# Or use lm-sensors
-sudo apt install lm-sensors
-sensors
 ```
 
 All 16 thermal zones should appear (4 CPU clusters, 3 GPU, VPU, NPU, 2 DDR, CI700, SoC Bridge, SoC Trace, 2 NTC board sensors).

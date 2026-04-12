@@ -1,0 +1,131 @@
+/**
+  Copyright 2025 Radxa Computer (Shenzhen) Co., Ltd. All Rights Reserved.
+
+  SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+
+#include <Uefi/UefiMultiPhase.h>
+#include <Guid/HiiPlatformSetupFormset.h>
+
+//
+// Constants duplicated from ProfileManagerDxe.h for VFR compiler
+//
+#define PROFILE_NAME_BUF_SIZE           32
+
+#define PROFILE_MANAGER_FORM_ID         0x17
+
+#define QUESTION_PROFILE_SLOT_SELECT    0x1900
+#define QUESTION_PROFILE_SAVE           0x1901
+#define QUESTION_PROFILE_LOAD           0x1902
+#define QUESTION_PROFILE_DELETE         0x1903
+
+#define PROFILE_VARSTORE_ID             0x1910
+
+#define PROFILE_MANAGER_FORMSET_GUID \
+  { 0xc7b3e0a1, 0x5d2f, 0x4816, { 0x9a, 0x3b, 0x7e, 0x1c, 0x6f, 0x8d, 0x4a, 0x50 } }
+
+#define PROFILE_MANAGER_VARSTORE_GUID \
+  { 0xd4e8f1a2, 0x6c3b, 0x4927, { 0x8b, 0x4c, 0x9f, 0x2d, 0x7e, 0x0a, 0x5b, 0x61 } }
+
+#define CIX_PRIVATE_SETUP_FORMSET_GUID \
+  { 0x3182bd97, 0x77ea, 0x44ab, { 0x84, 0xa4, 0x8d, 0x21, 0x0d, 0x10, 0xbb, 0x4c } }
+
+typedef struct {
+  UINT8   SelectedSlot;
+} PROFILE_MANAGER_VARSTORE;
+
+#define SUBTITLE(Text) subtitle text = Text;
+#define SEPARATOR SUBTITLE(STRING_TOKEN(STR_EMPTY))
+
+formset
+  guid      = PROFILE_MANAGER_FORMSET_GUID,
+  title     = STRING_TOKEN(STR_PROFILE_FORM_TITLE),
+  help      = STRING_TOKEN(STR_PROFILE_FORM_HELP),
+  classguid = CIX_PRIVATE_SETUP_FORMSET_GUID,
+
+  varstore PROFILE_MANAGER_VARSTORE,
+    varid   = PROFILE_VARSTORE_ID,
+    name    = ProfileMgrVarStore,
+    guid    = PROFILE_MANAGER_VARSTORE_GUID;
+
+  form formid = PROFILE_MANAGER_FORM_ID,
+    title = STRING_TOKEN(STR_PROFILE_FORM_TITLE);
+
+    subtitle text = STRING_TOKEN(STR_PROFILE_SUBTITLE);
+    SEPARATOR
+
+    //
+    // Profile slot status lines (updated dynamically by the driver)
+    //
+    text
+      help   = STRING_TOKEN(STR_EMPTY),
+      text   = STRING_TOKEN(STR_PROFILE_SLOT0_STATUS),
+      text   = STRING_TOKEN(STR_EMPTY);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY),
+      text   = STRING_TOKEN(STR_PROFILE_SLOT1_STATUS),
+      text   = STRING_TOKEN(STR_EMPTY);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY),
+      text   = STRING_TOKEN(STR_PROFILE_SLOT2_STATUS),
+      text   = STRING_TOKEN(STR_EMPTY);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY),
+      text   = STRING_TOKEN(STR_PROFILE_SLOT3_STATUS),
+      text   = STRING_TOKEN(STR_EMPTY);
+
+    text
+      help   = STRING_TOKEN(STR_EMPTY),
+      text   = STRING_TOKEN(STR_PROFILE_SLOT4_STATUS),
+      text   = STRING_TOKEN(STR_EMPTY);
+
+    SEPARATOR
+
+    //
+    // Slot selector — no INTERACTIVE flag so changing it does NOT
+    // trigger a callback or mark the form as modified.
+    //
+    oneof varid = ProfileMgrVarStore.SelectedSlot,
+      questionid = QUESTION_PROFILE_SLOT_SELECT,
+      prompt     = STRING_TOKEN(STR_PROFILE_SLOT_SELECT),
+      help       = STRING_TOKEN(STR_PROFILE_SLOT_SELECT_HELP),
+      flags      = NUMERIC_SIZE_1,
+      option text = STRING_TOKEN(STR_PROFILE_SLOT0_NAME), value = 0, flags = DEFAULT;
+      option text = STRING_TOKEN(STR_PROFILE_SLOT1_NAME), value = 1, flags = 0;
+      option text = STRING_TOKEN(STR_PROFILE_SLOT2_NAME), value = 2, flags = 0;
+      option text = STRING_TOKEN(STR_PROFILE_SLOT3_NAME), value = 3, flags = 0;
+      option text = STRING_TOKEN(STR_PROFILE_SLOT4_NAME), value = 4, flags = 0;
+    endoneof;
+
+    SEPARATOR
+    subtitle text = STRING_TOKEN(STR_PROFILE_ACTIONS_SUBTITLE);
+    SEPARATOR
+
+    //
+    // Action buttons (Save, Load, Delete)
+    //
+    text
+      help   = STRING_TOKEN(STR_PROFILE_SAVE_HELP),
+      text   = STRING_TOKEN(STR_PROFILE_SAVE),
+      flags  = INTERACTIVE,
+      key    = QUESTION_PROFILE_SAVE;
+
+    text
+      help   = STRING_TOKEN(STR_PROFILE_LOAD_HELP),
+      text   = STRING_TOKEN(STR_PROFILE_LOAD),
+      flags  = INTERACTIVE,
+      key    = QUESTION_PROFILE_LOAD;
+
+    text
+      help   = STRING_TOKEN(STR_PROFILE_DELETE_HELP),
+      text   = STRING_TOKEN(STR_PROFILE_DELETE),
+      flags  = INTERACTIVE,
+      key    = QUESTION_PROFILE_DELETE;
+
+  endform;
+
+endformset;

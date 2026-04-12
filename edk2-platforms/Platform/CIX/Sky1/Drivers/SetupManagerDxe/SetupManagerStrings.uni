@@ -120,3 +120,6 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #string STR_RESET_ALL_DEFAULTS_HELP                  #language en-US "Reset all BIOS settings (PCIe, USB, I2C, PM, etc.) back to factory defaults and reboot."
 #string STR_CLEAR_NVRAM                              #language en-US "Clear NVRAM"
 #string STR_CLEAR_NVRAM_HELP                         #language en-US "Delete all stored UEFI variables (settings, boot entries, etc.) from SPI flash and reboot. This is equivalent to a fresh BIOS flash."
+
+#string STR_PROFILE_MANAGER                          #language en-US "Profile Manager"
+#string STR_PROFILE_MANAGER_HELP                     #language en-US "Save, load, delete, or rename BIOS settings profiles. Profiles survive NVRAM resets."

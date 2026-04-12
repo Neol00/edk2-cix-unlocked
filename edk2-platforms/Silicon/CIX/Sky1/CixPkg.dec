@@ -323,7 +323,7 @@
 
   # Setup variable default define
   gCixTokenSpaceGuid.PcdStateAfterG3|0x00|UINT8|0x00002001
-  gCixTokenSpaceGuid.PcdSystemTableSelect|0x01|UINT8|0x00002002 #0x1-DT 0-ACPI
+  gCixTokenSpaceGuid.PcdSystemTableSelect|0x00|UINT8|0x00002002 #0x1-DT 0-ACPI
   gCixTokenSpaceGuid.PcdDtbMenuEntry|0x00|UINT8|0x00002004
   gCixTokenSpaceGuid.PcdSocWatchdogTimer|0x00|UINT8|0x00002006
   gCixTokenSpaceGuid.PcdVddSocVoltage|800|UINT16|0x00002007

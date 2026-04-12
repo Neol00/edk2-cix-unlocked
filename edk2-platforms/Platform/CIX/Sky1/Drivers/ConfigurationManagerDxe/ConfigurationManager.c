@@ -262,6 +262,7 @@ InitializeCmArmCpcInfo (
 // Core iteration order: Big G1 (boot cluster), Big G0, Mid G0, Mid G1, Little.
 // Boot core (physical 10, Big G1) is always placed first by the enumeration loop;
 // remaining cores follow this order with the boot core skipped.
+// 5-cluster layout: UIDs 0-1 = BIG1, 2-3 = BIG0, 4-5 = MID0, 6-7 = MID1, 8-11 = LITTLE
 STATIC CONST UINT8 mCoreIterOrder[PLAT_CPU_COUNT] = {
   10, 11, 8, 9, 4, 5, 6, 7, 0, 1, 2, 3
 };

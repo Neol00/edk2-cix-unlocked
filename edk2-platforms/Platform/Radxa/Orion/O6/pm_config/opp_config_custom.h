@@ -20,7 +20,7 @@
 #define CPU_GB0_DELTA_MV  0
 #define CPU_GB1_DELTA_MV  0
 #define DSU_DELTA_MV      0
-#define GPU_DELTA_MV      10
+#define GPU_DELTA_MV      0
 
 #define PM_OPP_TABLE_CONFIG   1
 
@@ -159,7 +159,7 @@ static domain_opp_config_t dxs_vpu = {
         { .level =  150UL },   /* safe sustained (hidden) */
         { .level =  150UL },
         { .level =  300UL },
-        { .level =  480UL },
+        { .level =  450UL },
         { .level =  600UL },
         { .level =  800UL },
         { .level = 1200UL },

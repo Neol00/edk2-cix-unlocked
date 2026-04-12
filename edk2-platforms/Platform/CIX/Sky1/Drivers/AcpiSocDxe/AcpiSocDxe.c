@@ -31,8 +31,15 @@ static EFI_ACPI_SDT_PROTOCOL    *mAcpiSdt          = NULL;
 static EFI_ACPI_TABLE_PROTOCOL  *mAcpiTable        = NULL;
 
 EFI_STATUS EFIAPI UpdateAcpiGpnv (VOID);
+VOID EFIAPI InitializeSystemAcpiRam (VOID);
 
-ACPI_FUNCTION_ON_READ_TO_BOOT_HOOK  mAcpiFunctionOReadyToBootHook[] = { InstallAcpiOnReadyToBoot, SpcrDisable, UpdateAcpiGpnv, NULL };
+static EFI_STATUS EFIAPI RefreshSystemAcpiRam (VOID)
+{
+  InitializeSystemAcpiRam ();
+  return EFI_SUCCESS;
+}
+
+ACPI_FUNCTION_ON_READ_TO_BOOT_HOOK  mAcpiFunctionOReadyToBootHook[] = { InstallAcpiOnReadyToBoot, SpcrDisable, RefreshSystemAcpiRam, UpdateAcpiGpnv, AcpiInstallSratTable, NULL };
 
 EFI_ACPI_MEMORY_MAPPED_CONFIGURATION_BASE_ADDRESS_TABLE_HEADER  McfgHeader = {
   {
@@ -581,8 +588,8 @@ InitializeSystemAcpiRam (
   )
 {
   EFI_STATUS  Status;
-  // UINTN                              VarSize;
-  // PLATFORM_SETUP_DATA                PlatformSetupVar;
+  UINTN                              VarSize;
+  PLATFORM_SETUP_DATA                PlatformSetupVar;
   UINT8                              *pSystemGpnvArea = NULL;
   UINT32                             NpuSupportStatus = 0;
   UINT32                             SupportInfoValue = 3;
@@ -595,23 +602,18 @@ InitializeSystemAcpiRam (
 
   pSystemGpnvArea = (UINT8 *)pPlatformAcpiConfigProtocol->pAcpiRamAddress;
 
-  // VarSize = sizeof (PLATFORM_SETUP_DATA);
-  // Status  = gRT->GetVariable (
-  //                  PLATFORM_SETUP_VAR,
-  //                  &gPlatformSetupVariableGuid,
-  //                  NULL,
-  //                  &VarSize,
-  //                  &PlatformSetupVar
-  //                  );
-  // if (!EFI_ERROR (Status)) {
-  //   DEBUG ((DEBUG_INFO, "[%a]Get platform setup variable success\n", __FUNCTION__));
-
-  //   pSystemGpnvArea[ARV_PCIE_RP_00_ENABLE_OFFSET] = PlatformSetupVar.PcieRpEnable[0];
-  //   pSystemGpnvArea[ARV_PCIE_RP_01_ENABLE_OFFSET] = PlatformSetupVar.PcieRpEnable[1];
-  //   pSystemGpnvArea[ARV_PCIE_RP_02_ENABLE_OFFSET] = PlatformSetupVar.PcieRpEnable[2];
-  //   pSystemGpnvArea[ARV_PCIE_RP_03_ENABLE_OFFSET] = PlatformSetupVar.PcieRpEnable[3];
-  //   pSystemGpnvArea[ARV_PCIE_RP_04_ENABLE_OFFSET] = PlatformSetupVar.PcieRpEnable[4];
-  // }
+  // Read eDP support setting from BIOS setup variable
+  VarSize = sizeof (PLATFORM_SETUP_DATA);
+  Status  = gRT->GetVariable (
+                  PLATFORM_SETUP_VAR,
+                  &gPlatformSetupVariableGuid,
+                  NULL,
+                  &VarSize,
+                  &PlatformSetupVar
+                  );
+  if (!EFI_ERROR (Status)) {
+    pSystemGpnvArea[ARV_EDP_SUPPORT_OFFSET] = PlatformSetupVar.EdpSupport;
+  }
 
   Status = gBS->LocateProtocol (
                   &gCixConfigParamsManageProtocolGuid,
@@ -764,6 +766,9 @@ InitializeSystemAcpiRam (
   pSystemGpnvArea[ARV_DPU_04_SUPPORT_OFFSET] = IsIpHarvested (DpuCore4) ? 0 : 1;
   pSystemGpnvArea[ARV_AUDIO_SUPPORT_OFFSET]  = IsIpHarvested (Audio) ? 0 : 1;
   pSystemGpnvArea[ARV_ISP_SUPPORT_OFFSET]    = IsIpHarvested (Isp) ? 0 : 1;
+
+  // eDP panel support: disabled by default (no panel connected on most boards)
+  pSystemGpnvArea[ARV_EDP_SUPPORT_OFFSET]    = 0;
 
   return;
 }

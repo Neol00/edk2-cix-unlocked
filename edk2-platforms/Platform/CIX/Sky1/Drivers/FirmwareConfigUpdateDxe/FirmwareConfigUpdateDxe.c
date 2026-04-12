@@ -138,11 +138,6 @@ CheckPlatformVarUpdate (
 
   MemQuickHeader = (MEM_QUICK_CONFIG *)pImageBuff;
 
-  if (PlatformSetupVar->CpuFMax != MemQuickHeader->cpufmax) {
-     PlatformSetupVar->CpuFMax = MemQuickHeader->cpufmax;
-     *Update = TRUE;
-  }
-
 Done:
   if (pImageBuff) {
     FreePool (pImageBuff);
@@ -205,15 +200,7 @@ GetMemConfigAndUpdate (
   BOOLEAN              *Update
   )
 {
-  MEM_QUICK_CONFIG  *MemQuickCfg = (MEM_QUICK_CONFIG*)pImage;
-
   *Update = FALSE;
-
-  if(MemQuickCfg->cpufmax != pPlatformSetupData->CpuFMax) {
-    DEBUG ((DEBUG_INFO, "Update CpuFMax %x\n", pPlatformSetupData->CpuFMax));
-    MemQuickCfg->cpufmax = pPlatformSetupData->CpuFMax;
-    *Update = TRUE;
-  }
 
   return EFI_SUCCESS;
 }

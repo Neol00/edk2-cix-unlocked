@@ -248,8 +248,6 @@
   gCixPlatformTokenSpaceGuid.PcdLightSensorCtrl
   gCixTokenSpaceGuid.PcdAcpiCpuLpiState
   gCixPlatformTokenSpaceGuid.PcdAcpiSpcrEnable
-  gCixPlatformTokenSpaceGuid.PcdCpuFMax
-  gCixPlatformTokenSpaceGuid.PcdGpuFMax
   gCixPlatformTokenSpaceGuid.PcdEcDefaultFanMode
 
 [Depex]

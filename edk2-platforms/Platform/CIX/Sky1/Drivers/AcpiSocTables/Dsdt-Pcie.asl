@@ -29,10 +29,10 @@
         And(CTRL,0x1E,CTRL) \
       }\
       \
-      /* Allow native PME and AER (hardware supports AER interrupts) */ \
-      /* Never allow SHPC (no SHPC controller in this system)*/ \
-      /* Never allow native hotplug (no hotplug hardware) */ \
-      And(CTRL,0x1C,CTRL) \
+      /* Grant all standard PCIe OS control capabilities: */ \
+      /* PME, AER, PCIeCapability, Hotplug, LTR, DPC */ \
+      /* Only mask SHPC (bit 1) — no SHPC controller in this system */ \
+      And(CTRL,0xFD,CTRL) \
       If(LNotEqual(Arg1,One)) { /* Unknown revision */ \
         Or(CDW1,0x08,CDW1) \
       } \
@@ -62,7 +62,6 @@ Device (PCI0)
 
   // PCIe is only available if PCIe link is up
   Method (_STA, 0x0, Serialized) {
-    // Check if link is already up
     If(\_SB.GETV(ARV_PCIE_RP_00_LINK_STS_OFFSET)){
       Return (0xF)
     } else {
@@ -214,12 +213,12 @@ Device (PCI2)
   Name (_CCA, 1)
 
   // PCIe is only available if PCIe link is up
+  // PCIe is only available if PCIe link is up
   Method (_STA, 0x0, Serialized) {
-    // Check if link is already up
     If(\_SB.GETV(ARV_PCIE_RP_02_LINK_STS_OFFSET)){
-        Return (0xF)
+      Return (0xF)
     } else {
-        Return (0x0)
+      Return (0x0)
     }
   }
 
@@ -293,11 +292,10 @@ Device (PCI3)
 
   // PCIe is only available if PCIe link is up
   Method (_STA, 0x0, Serialized) {
-    // Check if link is already up
     If(\_SB.GETV(ARV_PCIE_RP_03_LINK_STS_OFFSET)){
-        Return (0xF)
+      Return (0xF)
     } else {
-        Return (0x0)
+      Return (0x0)
     }
   }
 
@@ -370,12 +368,12 @@ Device (PCI4)
   Name (_CCA, 1)
 
   // PCIe is only available if PCIe link is up
+  // PCIe is only available if PCIe link is up
   Method (_STA, 0x0, Serialized) {
-    // Check if link is already up
     If(\_SB.GETV(ARV_PCIE_RP_04_LINK_STS_OFFSET)){
-        Return (0xF)
+      Return (0xF)
     } else {
-        Return (0x0)
+      Return (0x0)
     }
   }
 
@@ -436,18 +434,7 @@ Device (PCI4)
 
 }
 
-// reserve ECAM memory range
-Device (RES0)
-{
-  Name (_HID, EISAID ("PNP0C02"))
-  Name (_UID, 0)
-  Name (_CRS, ResourceTemplate () {
-    QWordMemory (ResourceConsumer, PosDecode, MinFixed, MaxFixed, Cacheable, ReadWrite,
-      0x0,         // Granularity
-      0x20000000,  // Range Minimum
-      0x2FFFFFFF,  // Range Maximum
-      0,           // Translation Offset
-      0x10000000,  // Length
-      ,,)
-  })
-}
+// RES0 (PNP0C02) was removed: its sole QWordMemory claim (0x20000000–0x2FFFFFFF)
+// is entirely covered by the Memory32Fixed entries in PRC0–PRC4 _CRS, so the
+// kernel rejected it with "could not be reserved".  The MCFG table already
+// advertises the ECAM range; no PNP0C02 reservation is needed.

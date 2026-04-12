@@ -1,0 +1,42 @@
+/**
+  Copyright 2025 Radxa Computer (Shenzhen) Co., Ltd. All Rights Reserved.
+
+  SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+
+/=#
+
+#langdef   en-US "English"
+
+#string STR_PROFILE_FORM_TITLE             #language en-US "Profile Manager"
+#string STR_PROFILE_FORM_HELP              #language en-US "Save, load, or delete BIOS settings profiles. Profiles are stored on SPI flash and survive NVRAM resets."
+
+#string STR_PROFILE_SUBTITLE               #language en-US "Settings Profiles"
+#string STR_PROFILE_SLOT_SELECT            #language en-US "Active Slot"
+#string STR_PROFILE_SLOT_SELECT_HELP       #language en-US "Select which profile slot to operate on."
+
+#string STR_PROFILE_SLOT0_STATUS           #language en-US "Slot 1: [Empty]"
+#string STR_PROFILE_SLOT1_STATUS           #language en-US "Slot 2: [Empty]"
+#string STR_PROFILE_SLOT2_STATUS           #language en-US "Slot 3: [Empty]"
+#string STR_PROFILE_SLOT3_STATUS           #language en-US "Slot 4: [Empty]"
+#string STR_PROFILE_SLOT4_STATUS           #language en-US "Slot 5: [Empty]"
+
+#string STR_PROFILE_SLOT0_NAME             #language en-US "Slot 1"
+#string STR_PROFILE_SLOT1_NAME             #language en-US "Slot 2"
+#string STR_PROFILE_SLOT2_NAME             #language en-US "Slot 3"
+#string STR_PROFILE_SLOT3_NAME             #language en-US "Slot 4"
+#string STR_PROFILE_SLOT4_NAME             #language en-US "Slot 5"
+
+#string STR_PROFILE_ACTIONS_SUBTITLE       #language en-US "Profile Actions"
+
+#string STR_PROFILE_SAVE                   #language en-US "Save Current Settings"
+#string STR_PROFILE_SAVE_HELP              #language en-US "Save current BIOS settings to the selected profile slot. A reboot is required."
+
+#string STR_PROFILE_LOAD                   #language en-US "Load Profile"
+#string STR_PROFILE_LOAD_HELP              #language en-US "Restore BIOS settings from the selected profile slot. A reboot is required."
+
+#string STR_PROFILE_DELETE                 #language en-US "Delete Profile"
+#string STR_PROFILE_DELETE_HELP            #language en-US "Erase the selected profile slot."
+
+#string STR_EMPTY                          #language en-US ""

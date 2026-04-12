@@ -82,6 +82,61 @@
 
 Scope (\_SB.I2C1)
 {
+  Device (PD00) {
+    Name (_HID, "CIXH200D")
+    Name (_UID, 0x0)
+    Name (_STA, 0x0)  // Disabled — O6 only has 2 PD controllers (PD10/PD11)
+    Name (_CRS, ResourceTemplate () {
+      I2cSerialBusV2 (0x30,
+                      ControllerInitiated,
+                      400000,
+                      AddressingMode7Bit,
+                      "\\_SB.I2C1",
+                      0x0,
+                      ResourceConsumer,
+                      ,
+                      Exclusive
+                      ,)
+      GpioInt(Level, ActiveLow, Shared, PullUp, , "\\_SB.GPI4") { 9 }
+    })
+    Name (_DSD, Package () {
+          ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+          Package () {
+              Package () {"id", 0},
+          },
+          DP_USBC_CON_DSD("usbc_con0")
+    })
+    DP_USBC_CON_NODES(\_SB.SUB0.CUB0, \_SB.UCP0, \_SB.UCP0)
+  }
+
+  Device (PD02) {
+    Name (_HID, "CIXH200D")
+    Name (_UID, 0x2)
+    Name (_STA, 0x0)  // Disabled — O6 only has 2 PD controllers (PD10/PD11)
+    Name (_CRS, ResourceTemplate () {
+      I2cSerialBusV2 (0x31,
+                      ControllerInitiated,
+                      400000,
+                      AddressingMode7Bit,
+                      "\\_SB.I2C1",
+                      0x0,
+                      ResourceConsumer,
+                      ,
+                      Exclusive
+                      ,)
+      GpioInt(Level, ActiveLow, Shared, PullUp, , "\\_SB.GPI4") { 9 }
+    })
+    Name (_DSD, Package () {
+          ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+          Package () {
+              Package () {"id", 2},
+          },
+          DP_USBC_CON_DSD("usbc_con2")
+    })
+    DP_USBC_CON_NODES(\_SB.SUB2.CUB2, \_SB.UCP2, \_SB.UCP2)
+  }
+
+  /* O6 PD controllers — referenced by LinuxAcpiConfig.h as USBC0/2_PD_DEVICE */
   Device (PD10) {
     Name (_HID, "CIXH200D")
     Name (_UID, 0x0)
@@ -89,7 +144,34 @@ Scope (\_SB.I2C1)
     Name (_CRS, ResourceTemplate () {
       I2cSerialBusV2 (0x30,
                       ControllerInitiated,
-                      100000,
+                      400000,
+                      AddressingMode7Bit,
+                      "\\_SB.I2C1",
+                      0x0,
+                      ResourceConsumer,
+                      ,
+                      Exclusive
+                      ,)
+      GpioInt(Level, ActiveLow, Exclusive, PullUp, , "\\_SB.GPI4") { 8 }
+    })
+    Name (_DSD, Package () {
+          ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+          Package () {
+              Package () {"id", 0},
+          },
+          DP_USBC_CON_DSD("usbc_con0")
+    })
+    DP_USBC_CON_NODES(\_SB.SUB0.CUB0, \_SB.UCP0, \_SB.UCP0)
+  }
+
+  Device (PD11) {
+    Name (_HID, "CIXH200D")
+    Name (_UID, 0x1)
+    Name (_STA, 0xF)
+    Name (_CRS, ResourceTemplate () {
+      I2cSerialBusV2 (0x31,
+                      ControllerInitiated,
+                      400000,
                       AddressingMode7Bit,
                       "\\_SB.I2C1",
                       0x0,
@@ -108,41 +190,15 @@ Scope (\_SB.I2C1)
     })
     DP_USBC_CON_NODES(\_SB.SUB2.CUB2, \_SB.UCP2, \_SB.UCP2)
   }
-
-  Device (PD11) {
-    Name (_HID, "CIXH200D")
-    Name (_UID, 0x1)
-    Name (_STA, 0xF)
-    Name (_CRS, ResourceTemplate () {
-      I2cSerialBusV2 (0x31,
-                      ControllerInitiated,
-                      100000,
-                      AddressingMode7Bit,
-                      "\\_SB.I2C1",
-                      0x0,
-                      ResourceConsumer,
-                      ,
-                      Exclusive
-                      ,)
-      GpioInt(Level, ActiveLow, Exclusive, PullUp, , "\\_SB.GPI4") { 8 }
-    })
-    Name (_DSD, Package () {
-          ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-          Package () {
-              Package () {"id", 3},
-          },
-          DP_USBC_CON_DSD("usbc_con3")
-    })
-    DP_USBC_CON_NODES(\_SB.SUB3.CUB3, \_SB.UCP3, \_SB.UCP3)
-  }
 }
 
-Scope (\_SB.I2C7)
+/* I2C7 PD devices removed — Orion O6 uses I2C1 for PD */
+/* Scope (\_SB.I2C7)
 {
   Device (PD00) {
     Name (_HID, "CIXH200D")
-    Name (_UID, 0x1)
-    Name (_STA, 0xF)
+    Name (_UID, 0x0)
+    Name (_STA, 0xB)
     Name (_CRS, ResourceTemplate () {
       I2cSerialBusV2 (0x30,
                       ControllerInitiated,
@@ -154,7 +210,7 @@ Scope (\_SB.I2C7)
                       ,
                       Exclusive
                       ,)
-      GpioInt(Level, ActiveLow, Exclusive, PullUp, , "\\_SB.GPI4") { 7 }
+      GpioInt(Level, ActiveLow, Shared, PullUp, , "\\_SB.GPI4") { 7 }
     })
     Name (_DSD, Package () {
           ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
@@ -168,8 +224,8 @@ Scope (\_SB.I2C7)
 
   Device (PD01) {
     Name (_HID, "CIXH200D")
-    Name (_UID, 0x2)
-    Name (_STA, 0xF)
+    Name (_UID, 0x1)
+    Name (_STA, 0xB)
     Name (_CRS, ResourceTemplate () {
       I2cSerialBusV2 (0x31,
                       ControllerInitiated,
@@ -181,7 +237,7 @@ Scope (\_SB.I2C7)
                       ,
                       Exclusive
                       ,)
-      GpioInt(Level, ActiveLow, Exclusive, PullUp, , "\\_SB.GPI4") { 7 }
+      GpioInt(Level, ActiveLow, Shared, PullUp, , "\\_SB.GPI4") { 7 }
     })
     Name (_DSD, Package () {
           ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
@@ -192,4 +248,4 @@ Scope (\_SB.I2C7)
     })
     DP_USBC_CON_NODES(\_SB.SUB1.CUB1, \_SB.UCP1, \_SB.UCP1)
   }
-}
+} */

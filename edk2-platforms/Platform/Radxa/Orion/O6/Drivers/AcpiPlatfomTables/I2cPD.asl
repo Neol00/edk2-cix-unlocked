@@ -80,12 +80,6 @@
             }\
   })
 
-External (\_SB.I2C1, DeviceObj)
-External (\_SB.SUB2.CUB2, DeviceObj)
-External (\_SB.UCP2, DeviceObj)
-External (\_SB.SUB0.CUB0, DeviceObj)
-External (\_SB.UCP0, DeviceObj)
-
 Scope (\_SB.I2C1)
 {
   Device (PD10) {

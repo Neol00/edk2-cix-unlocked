@@ -141,8 +141,12 @@ Device (I2C2) {
   Name (_CRS, ResourceTemplate () {
     Memory32Fixed (ReadWrite, I2C2_BASE, I2C2_SIZE)
     Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { FCH_INTR_I2C2_INTERRUPT_ID }
-    GpioIo (Exclusive, PullNone, 0, 0, IoRestrictionOutputOnly,
-                "\\_SB.GPI0", 0, ResourceConsumer) { 12, 13 }
+    // GPIO recovery: SCL = GPIO028 (GPI4 pin 17), open drain output.
+    GpioIo (Exclusive, PullUp, 0, 0, IoRestrictionOutputOnly,
+                "\\_SB.GPI4", 0, ResourceConsumer) { 17 }
+    // GPIO recovery: SDA = GPIO027 (GPI4 pin 16), bidirectional.
+    GpioIo (Exclusive, PullUp, 0, 0, IoRestrictionNone,
+                "\\_SB.GPI4", 0, ResourceConsumer) { 16 }
     // Pinctrl
     PinGroupFunction(Exclusive, 0x0, "\\_SB.MUX0", 0, "pinctrl_fch_i2c2", ResourceConsumer,)
   })
@@ -153,7 +157,7 @@ Device (I2C2) {
         Package () {"ClockName", "fch_i2c2_apb"},
         Package () { "clock-frequency", CLKF },
         Package () { "scl-gpios", Package () { ^I2C2, 0, 0, 0 } },
-        Package () { "sda-gpios", Package () { ^I2C2, 0, 1, 0 } },
+        Package () { "sda-gpios", Package () { ^I2C2, 1, 0, 0 } },
       }
   })
 
@@ -224,6 +228,12 @@ Device (I2C4) {
   Name (_CRS, ResourceTemplate () {
     Memory32Fixed (ReadWrite, I2C4_BASE, I2C4_SIZE)
     Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { FCH_INTR_I2C4_INTERRUPT_ID }
+    // GPIO recovery: SCL = GPIO005 (GPI4 pin 4), open drain output.
+    GpioIo (Exclusive, PullUp, 0, 0, IoRestrictionOutputOnly,
+                "\\_SB.GPI4", 0, ResourceConsumer) { 4 }
+    // GPIO recovery: SDA = GPIO003 (GPI4 pin 2), bidirectional.
+    GpioIo (Exclusive, PullUp, 0, 0, IoRestrictionNone,
+                "\\_SB.GPI4", 0, ResourceConsumer) { 2 }
   })
 
   Name (_DSD, Package () {
@@ -231,6 +241,8 @@ Device (I2C4) {
       Package () {
         Package () {"ClockName", "fch_i2c4_apb"},
         Package () { "clock-frequency", CLKF },
+        Package () { "scl-gpios", Package () { ^I2C4, 0, 0, 0 } },
+        Package () { "sda-gpios", Package () { ^I2C4, 1, 0, 0 } },
       }
   })
 

@@ -86,22 +86,76 @@
     0                    /* UINT32 Populate the GIC ITS affinity in SRAT. */ \
   }                                                                          \
 
+// LPI state assignments follow MADT UID order (set by mCoreIterOrder):
+//   UIDs 0-1:  BIG G1 (boot cluster, MPIDR 0xa00/0xb00) -> LPIB
+//   UIDs 2-3:  BIG G0 (MPIDR 0x800/0x900)               -> LPIB
+//   UIDs 4-5:  MID G0 (MPIDR 0x400/0x500)               -> LPIB
+//   UIDs 6-7:  MID G1 (MPIDR 0x600/0x700)               -> LPIB
+//   UIDs 8-11: LITTLE (MPIDR 0x000-0x300)                -> LPIL
 #define PLAT_LPI_MAP_INFO  {                \
+  "LPIB",                                   \
+  "LPIB",                                   \
+  "LPIB",                                   \
+  "LPIB",                                   \
+  "LPIB",                                   \
+  "LPIB",                                   \
+  "LPIB",                                   \
+  "LPIB",                                   \
   "LPIL",                                   \
   "LPIL",                                   \
   "LPIL",                                   \
   "LPIL",                                   \
-  "LPIB",                                   \
-  "LPIB",                                   \
-  "LPIB",                                   \
-  "LPIB",                                   \
-  "LPIB",                                   \
-  "LPIB",                                   \
-  "LPIB",                                   \
-  "LPIB",                                   \
 }                                           \
 
+//
+// 5-cluster CPPC register layout.  Each physical cluster has its own
+// DesiredPerf register so the OS can set independent frequency targets.
+//
+// MADT UID order (set by mCoreIterOrder = [10,11,8,9,4,5,6,7,0,1,2,3]):
+//   UIDs 0-1:  BIG G1 (boot cluster)
+//   UIDs 2-3:  BIG G0
+//   UIDs 4-5:  MID G0
+//   UIDs 6-7:  MID G1
+//   UIDs 8-11: LITTLE
+//
+// SCMI domain indices (from dvfs_element_idx after GPU_CORE=0, GPU_TOP=1):
+//   domain 2 = LITTLE
+//   domain 3 = BIG_G0
+//   domain 4 = BIG_G1
+//   domain 5 = MID_G0
+//   domain 6 = MID_G1
+//
+#define CORE_BIG1_DESIRED_PERF_REG          0x0659009C  // BIG G1 reg (boot cluster)
+#define CORE_BIG1_HIGHEST_PERF              4500
+#define CORE_BIG1_NOMINAL_PERF              4500
+#define CORE_BIG1_LOWEST_NON_LINEAR_PERF    800
+#define CORE_BIG1_LOWEST_PERF               800
 
+#define CORE_BIG0_DESIRED_PERF_REG          0x06590098  // BIG G0 reg
+#define CORE_BIG0_HIGHEST_PERF              4500
+#define CORE_BIG0_NOMINAL_PERF              4500
+#define CORE_BIG0_LOWEST_NON_LINEAR_PERF    800
+#define CORE_BIG0_LOWEST_PERF               800
+
+#define CORE_MID0_DESIRED_PERF_REG          0x065900A0  // MID G0 reg
+#define CORE_MID0_HIGHEST_PERF              4500
+#define CORE_MID0_NOMINAL_PERF              4500
+#define CORE_MID0_LOWEST_NON_LINEAR_PERF    800
+#define CORE_MID0_LOWEST_PERF               800
+
+#define CORE_MID1_DESIRED_PERF_REG          0x065900A4  // MID G1 reg
+#define CORE_MID1_HIGHEST_PERF              4500
+#define CORE_MID1_NOMINAL_PERF              4500
+#define CORE_MID1_LOWEST_NON_LINEAR_PERF    800
+#define CORE_MID1_LOWEST_PERF               800
+
+#define CORE_LITTLE_DESIRED_PERF_REG       0x06590094  // LITTLE cluster reg
+#define CORE_LITTLE_HIGHEST_PERF           4500
+#define CORE_LITTLE_NOMINAL_PERF           4500
+#define CORE_LITTLE_LOWEST_NON_LINEAR_PERF 800
+#define CORE_LITTLE_LOWEST_PERF            800
+
+// Legacy per-pair defines retained for reference / Dsdt-CPU.asl static path
 #define CORE_0_TO_3_DESIRED_PERF_REG        0x06590094
 #define CORE_0_TO_3_HIGHEST_PERF            4500
 #define CORE_0_TO_3_NOMINAL_PERF            4500
@@ -136,34 +190,44 @@
 
 #define CPC_GRANULARITYMHZ  1
 
+// 5-cluster CPC: UIDs 0-1 = BIG1, UIDs 2-3 = BIG0, UIDs 4-5 = MID0, UIDs 6-7 = MID1, UIDs 8-11 = LITTLE
 #define PLAT_CPC_INFO  {\
-            CPC_ENTRY(CORE_0_TO_3_DESIRED_PERF_REG, 0, CPC_GRANULARITYMHZ, CORE_0_TO_3_HIGHEST_PERF, CORE_0_TO_3_NOMINAL_PERF, CORE_0_TO_3_LOWEST_NON_LINEAR_PERF, CORE_0_TO_3_LOWEST_PERF, REF_PERF),\
-            CPC_ENTRY(CORE_0_TO_3_DESIRED_PERF_REG, 0, CPC_GRANULARITYMHZ, CORE_0_TO_3_HIGHEST_PERF, CORE_0_TO_3_NOMINAL_PERF, CORE_0_TO_3_LOWEST_NON_LINEAR_PERF, CORE_0_TO_3_LOWEST_PERF, REF_PERF),\
-            CPC_ENTRY(CORE_0_TO_3_DESIRED_PERF_REG, 0, CPC_GRANULARITYMHZ, CORE_0_TO_3_HIGHEST_PERF, CORE_0_TO_3_NOMINAL_PERF, CORE_0_TO_3_LOWEST_NON_LINEAR_PERF, CORE_0_TO_3_LOWEST_PERF, REF_PERF),\
-            CPC_ENTRY(CORE_0_TO_3_DESIRED_PERF_REG, 0, CPC_GRANULARITYMHZ, CORE_0_TO_3_HIGHEST_PERF, CORE_0_TO_3_NOMINAL_PERF, CORE_0_TO_3_LOWEST_NON_LINEAR_PERF, CORE_0_TO_3_LOWEST_PERF, REF_PERF),\
-            CPC_ENTRY(CORE_4_5_DESIRED_PERF_REG, 0, CPC_GRANULARITYMHZ, CORE_4_5_HIGHEST_PERF, CORE_4_5_NOMINAL_PERF, CORE_4_5_LOWEST_NON_LINEAR_PERF, CORE_4_5_LOWEST_PERF, REF_PERF),\
-            CPC_ENTRY(CORE_4_5_DESIRED_PERF_REG, 0, CPC_GRANULARITYMHZ, CORE_4_5_HIGHEST_PERF, CORE_4_5_NOMINAL_PERF, CORE_4_5_LOWEST_NON_LINEAR_PERF, CORE_4_5_LOWEST_PERF, REF_PERF),\
-            CPC_ENTRY(CORE_6_7_DESIRED_PERF_REG, 0, CPC_GRANULARITYMHZ, CORE_6_7_HIGHEST_PERF, CORE_6_7_NOMINAL_PERF, CORE_6_7_LOWEST_NON_LINEAR_PERF, CORE_6_7_LOWEST_PERF, REF_PERF),\
-            CPC_ENTRY(CORE_6_7_DESIRED_PERF_REG, 0, CPC_GRANULARITYMHZ, CORE_6_7_HIGHEST_PERF, CORE_6_7_NOMINAL_PERF, CORE_6_7_LOWEST_NON_LINEAR_PERF, CORE_6_7_LOWEST_PERF, REF_PERF),\
-            CPC_ENTRY(CORE_8_9_DESIRED_PERF_REG, 0, CPC_GRANULARITYMHZ, CORE_8_9_HIGHEST_PERF, CORE_8_9_NOMINAL_PERF, CORE_8_9_LOWEST_NON_LINEAR_PERF, CORE_8_9_LOWEST_PERF, REF_PERF),\
-            CPC_ENTRY(CORE_8_9_DESIRED_PERF_REG, 0, CPC_GRANULARITYMHZ, CORE_8_9_HIGHEST_PERF, CORE_8_9_NOMINAL_PERF, CORE_8_9_LOWEST_NON_LINEAR_PERF, CORE_8_9_LOWEST_PERF, REF_PERF),\
-            CPC_ENTRY(CORE_10_11_DESIRED_PERF_REG, 0, CPC_GRANULARITYMHZ, CORE_10_11_HIGHEST_PERF, CORE_10_11_NOMINAL_PERF, CORE_10_11_LOWEST_NON_LINEAR_PERF, CORE_10_11_LOWEST_PERF, REF_PERF),\
-            CPC_ENTRY(CORE_10_11_DESIRED_PERF_REG, 0, CPC_GRANULARITYMHZ, CORE_10_11_HIGHEST_PERF, CORE_10_11_NOMINAL_PERF, CORE_10_11_LOWEST_NON_LINEAR_PERF, CORE_10_11_LOWEST_PERF, REF_PERF),\
+            CPC_ENTRY(CORE_BIG1_DESIRED_PERF_REG,   0, CPC_GRANULARITYMHZ, CORE_BIG1_HIGHEST_PERF,   CORE_BIG1_NOMINAL_PERF,   CORE_BIG1_LOWEST_NON_LINEAR_PERF,   CORE_BIG1_LOWEST_PERF,   REF_PERF),\
+            CPC_ENTRY(CORE_BIG1_DESIRED_PERF_REG,   0, CPC_GRANULARITYMHZ, CORE_BIG1_HIGHEST_PERF,   CORE_BIG1_NOMINAL_PERF,   CORE_BIG1_LOWEST_NON_LINEAR_PERF,   CORE_BIG1_LOWEST_PERF,   REF_PERF),\
+            CPC_ENTRY(CORE_BIG0_DESIRED_PERF_REG,   0, CPC_GRANULARITYMHZ, CORE_BIG0_HIGHEST_PERF,   CORE_BIG0_NOMINAL_PERF,   CORE_BIG0_LOWEST_NON_LINEAR_PERF,   CORE_BIG0_LOWEST_PERF,   REF_PERF),\
+            CPC_ENTRY(CORE_BIG0_DESIRED_PERF_REG,   0, CPC_GRANULARITYMHZ, CORE_BIG0_HIGHEST_PERF,   CORE_BIG0_NOMINAL_PERF,   CORE_BIG0_LOWEST_NON_LINEAR_PERF,   CORE_BIG0_LOWEST_PERF,   REF_PERF),\
+            CPC_ENTRY(CORE_MID0_DESIRED_PERF_REG,   0, CPC_GRANULARITYMHZ, CORE_MID0_HIGHEST_PERF,   CORE_MID0_NOMINAL_PERF,   CORE_MID0_LOWEST_NON_LINEAR_PERF,   CORE_MID0_LOWEST_PERF,   REF_PERF),\
+            CPC_ENTRY(CORE_MID0_DESIRED_PERF_REG,   0, CPC_GRANULARITYMHZ, CORE_MID0_HIGHEST_PERF,   CORE_MID0_NOMINAL_PERF,   CORE_MID0_LOWEST_NON_LINEAR_PERF,   CORE_MID0_LOWEST_PERF,   REF_PERF),\
+            CPC_ENTRY(CORE_MID1_DESIRED_PERF_REG,   0, CPC_GRANULARITYMHZ, CORE_MID1_HIGHEST_PERF,   CORE_MID1_NOMINAL_PERF,   CORE_MID1_LOWEST_NON_LINEAR_PERF,   CORE_MID1_LOWEST_PERF,   REF_PERF),\
+            CPC_ENTRY(CORE_MID1_DESIRED_PERF_REG,   0, CPC_GRANULARITYMHZ, CORE_MID1_HIGHEST_PERF,   CORE_MID1_NOMINAL_PERF,   CORE_MID1_LOWEST_NON_LINEAR_PERF,   CORE_MID1_LOWEST_PERF,   REF_PERF),\
+            CPC_ENTRY(CORE_LITTLE_DESIRED_PERF_REG, 0, CPC_GRANULARITYMHZ, CORE_LITTLE_HIGHEST_PERF, CORE_LITTLE_NOMINAL_PERF, CORE_LITTLE_LOWEST_NON_LINEAR_PERF, CORE_LITTLE_LOWEST_PERF, REF_PERF),\
+            CPC_ENTRY(CORE_LITTLE_DESIRED_PERF_REG, 0, CPC_GRANULARITYMHZ, CORE_LITTLE_HIGHEST_PERF, CORE_LITTLE_NOMINAL_PERF, CORE_LITTLE_LOWEST_NON_LINEAR_PERF, CORE_LITTLE_LOWEST_PERF, REF_PERF),\
+            CPC_ENTRY(CORE_LITTLE_DESIRED_PERF_REG, 0, CPC_GRANULARITYMHZ, CORE_LITTLE_HIGHEST_PERF, CORE_LITTLE_NOMINAL_PERF, CORE_LITTLE_LOWEST_NON_LINEAR_PERF, CORE_LITTLE_LOWEST_PERF, REF_PERF),\
+            CPC_ENTRY(CORE_LITTLE_DESIRED_PERF_REG, 0, CPC_GRANULARITYMHZ, CORE_LITTLE_HIGHEST_PERF, CORE_LITTLE_NOMINAL_PERF, CORE_LITTLE_LOWEST_NON_LINEAR_PERF, CORE_LITTLE_LOWEST_PERF, REF_PERF),\
 }
 
+// 5-cluster PSD: each physical cluster gets its own SCMI performance domain.
+//   SCMI domain 4 = BIG_G1  (boot cluster)
+//   SCMI domain 3 = BIG_G0
+//   SCMI domain 5 = MID_G0
+//   SCMI domain 6 = MID_G1
+//   SCMI domain 2 = LITTLE
+//
+// MADT UID order: UIDs 0-1 = BIG1, UIDs 2-3 = BIG0, UIDs 4-5 = MID0,
+//                 UIDs 6-7 = MID1, UIDs 8-11 = LITTLE
 #define PLAT_PSD_INFO  {\
-            {5, 0, 2, 0xFD, 4},\
-            {5, 0, 2, 0xFD, 4},\
-            {5, 0, 2, 0xFD, 4},\
-            {5, 0, 2, 0xFD, 4},\
+            {5, 0, 4, 0xFD, 2},\
+            {5, 0, 4, 0xFD, 2},\
+            {5, 0, 3, 0xFD, 2},\
+            {5, 0, 3, 0xFD, 2},\
             {5, 0, 5, 0xFD, 2},\
             {5, 0, 5, 0xFD, 2},\
             {5, 0, 6, 0xFD, 2},\
             {5, 0, 6, 0xFD, 2},\
-            {5, 0, 3, 0xFD, 2},\
-            {5, 0, 3, 0xFD, 2},\
-            {5, 0, 4, 0xFD, 2},\
-            {5, 0, 4, 0xFD, 2},\
+            {5, 0, 2, 0xFD, 4},\
+            {5, 0, 2, 0xFD, 4},\
+            {5, 0, 2, 0xFD, 4},\
+            {5, 0, 2, 0xFD, 4},\
 }
 
 // PCC for CPPC

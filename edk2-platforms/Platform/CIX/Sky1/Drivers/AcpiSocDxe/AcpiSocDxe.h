@@ -67,6 +67,12 @@ SpcrDisable (
   VOID
   );
 
+EFI_STATUS
+EFIAPI
+AcpiInstallSratTable (
+  VOID
+  );
+
 typedef EFI_STATUS (*ACPI_FUNCTION_ON_READ_TO_BOOT_HOOK)(
   void
   );

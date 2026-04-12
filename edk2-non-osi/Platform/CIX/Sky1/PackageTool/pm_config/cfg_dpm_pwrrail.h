@@ -34,15 +34,6 @@ typedef struct {
     uint32_t rsvd1    : 10;
 } DPM_PWR_RAIL_CFG;
 
-typedef enum {
-    SPT_CTRL_FAST = 0,
-    SPT_CTRL_SLOW,
-    SPT_CTRL_CHASSIS_T,
-    SPT_CTRL_DIE_T,
-
-    SPT_CTRL_MAX
-} SPT_CTRL_TYPE;
-
 #define CONFIG_EDP_CFG_CUSTOM  0
 
 #endif

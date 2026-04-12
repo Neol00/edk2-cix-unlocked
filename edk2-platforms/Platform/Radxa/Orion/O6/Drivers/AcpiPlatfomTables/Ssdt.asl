@@ -17,7 +17,8 @@ DefinitionBlock("SsdtTable.aml", "SSDT", 2, "RADXA", "ORIONO6", 1) {
     include("Audio.asl")
     include("MipiCamera.asl")
     include("EC.asl")
-    include("I2cPD.asl")
+    // I2cPD.asl moved to DSDT — PD device references in Dsdt-SUSB.asl
+    // require them to be in the same table for named-reference resolution.
     include("Iomux.asl")
     include("GpioInt.asl")
     include("GpioLeds.asl")

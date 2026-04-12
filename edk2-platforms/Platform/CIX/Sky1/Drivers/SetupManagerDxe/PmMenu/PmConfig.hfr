@@ -1233,7 +1233,7 @@
             minimum = 0,
             maximum = 65000,
             step    = 100,
-            default = 2400,
+            default = 18500,
         endnumeric;
 
         numeric varid   = PlatformSetupVar.PmTdp[1],
@@ -1243,7 +1243,7 @@
             minimum = 0,
             maximum = 65000,
             step    = 100,
-            default = 6700,
+            default = 19500,
         endnumeric;
 
         numeric varid   = PlatformSetupVar.PmTdp[2],
@@ -1253,7 +1253,7 @@
             minimum = 0,
             maximum = 65000,
             step    = 100,
-            default = 6500,
+            default = 19500,
         endnumeric;
 
         numeric varid   = PlatformSetupVar.PmTdp[3],
@@ -1263,7 +1263,7 @@
             minimum = 0,
             maximum = 65000,
             step    = 100,
-            default = 8000,
+            default = 21000,
         endnumeric;
 
         numeric varid   = PlatformSetupVar.PmTdp[4],
@@ -1273,7 +1273,7 @@
             minimum = 0,
             maximum = 65000,
             step    = 100,
-            default = 8200,
+            default = 21000,
         endnumeric;
 
         numeric varid   = PlatformSetupVar.PmTdp[5],
@@ -1283,7 +1283,7 @@
             minimum = 0,
             maximum = 65000,
             step    = 100,
-            default = 5500,
+            default = 18000,
         endnumeric;
 
         numeric varid   = PlatformSetupVar.PmTdp[6],
@@ -1293,7 +1293,7 @@
             minimum = 0,
             maximum = 65000,
             step    = 100,
-            default = 12000,
+            default = 20000,
         endnumeric;
 
         numeric varid   = PlatformSetupVar.PmTdp[7],
@@ -1303,7 +1303,7 @@
             minimum = 0,
             maximum = 65000,
             step    = 100,
-            default = 9000,
+            default = 35000,
         endnumeric;
 
         // --------------------------------------------------

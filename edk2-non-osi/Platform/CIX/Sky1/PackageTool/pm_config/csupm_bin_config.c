@@ -26,21 +26,7 @@
 #define INVALID         (1)
 pm_export_config_crc_t  g_config;
 
-time_t CixEpoch ()
-{
-    struct tm specific_time = {0};
-
-    specific_time.tm_year = 2021 - 1900;   // 2021
-    specific_time.tm_mon  = 10 - 1;        // Oct.
-    specific_time.tm_mday = 15;            // 15th
-    specific_time.tm_hour = 9;             // 9 AM
-    specific_time.tm_min  = 0;             // 0 min
-    specific_time.tm_sec  = 0;             // 0 sec
-
-    return mktime(&specific_time);
-}
-
-_Static_assert(((sizeof(g_config)) & 0x3) == 0,
+_Static_assert(((sizeof(g_config) - sizeof(g_config.crc1) - sizeof(g_config.crc2)) & 0x3) == 0,
     "PM config block size must be 4-byte aligned!");
 
 static bool double_check_sum(void * start, uint32_t length, uint64_t * sum64, bool do_check)
@@ -69,30 +55,10 @@ static bool double_check_sum(void * start, uint32_t length, uint64_t * sum64, bo
     return false;
 }
 
-static void dump_valid_flag(config_data_t data)
-{
-    if (data.fields.valid == PM_CONFIG_INVALID) {
-        printf("INVALID\n");
-    } else {
-        printf("VALID, data: 0x%08X (%0d)\n", data.fields.raw_data, data.fields.raw_data);
-    }
-}
-
 #if PM_OPP_TABLE_CONFIG
-static uint32_t volt_abs(uint32_t a, uint32_t b)
-{
-    if (a >= b) {
-        return a - b;
-    } else {
-        return b - a;
-    }
-}
-
 static bool check_opp_table(void)
 {
     domain_opp_config_t *config;
-    uint32_t dsu_sust_freq;
-    uint32_t dsu_sust_volt;
     size_t i;
 
     /* sustained index */
@@ -113,37 +79,6 @@ static bool check_opp_table(void)
         }
     }
 
-    /* DSU */
-    config = dom_opps[DVFS_ELEMENT_IDX_DSU];
-    if (!config) {
-        printf("DSU domain OPP mising\n");
-        return false;
-    }
-
-    dsu_sust_freq = config->opp_table[config->sustained_idx].frequency;
-    dsu_sust_volt = config->opp_table[config->sustained_idx].voltage;
-
-    for (i = 0; i < ARRAY_LENGTH(dom_opps); i++) {
-        uint32_t freq;
-        uint32_t volt;
-
-        if (i < DVFS_ELEMENT_IDX_LITTLE || i > DVFS_ELEMENT_IDX_MID_G1) {
-            continue;
-        }
-        config = dom_opps[i];
-        freq = config->opp_table[config->sustained_idx].frequency;
-        volt = config->opp_table[config->sustained_idx].voltage;
-
-        if (volt_abs(volt, dsu_sust_volt) > 200) {
-            printf("domain %zu: Bad sustained voltage %u.\n", i, volt);
-            return false;
-        }
-        if (freq / 2 > dsu_sust_freq) {
-            printf("domain %zu: Bad frequency %u. Too large\n", i, freq);
-            return false;
-        }
-    }
-
     return true;
 }
 #endif
@@ -153,7 +88,7 @@ static void dump_pmic_config(pm_config_pmic_t* config)
     char tmpbuf[16];
     size_t i;
 
-    printf("\tpmic scheme: ");dump_valid_flag(config->pmic_scheme);
+    printf("\tpmic scheme: %u, valid: %s\n", config->pmic_scheme.fields.raw_data, (PM_CONFIG_VALID == config->pmic_scheme.fields.valid) ? "yes" : "no");
     if (PM_CONFIG_VALID != config->pmic_scheme.fields.valid ||
         CONFIG_EDP_CFG_CUSTOM != config->pmic_scheme.fields.raw_data) {
         /* print pmic setting only for CUSTOM */
@@ -189,9 +124,9 @@ static void dump_opp_config(pm_config_opp_t * opp_config)
         }
 
         domain_opp_config_t * config = &opp_config->opps[i];
-        printf("  domain %u\n", i);
+        printf("domain %u\n", i);
         for (j = 0; j < config->size; j++) {
-            printf("   %s opp %u: level %4u",
+            printf(" %s opp %u: level %4u, ",
                 j == config->sustained_idx ? "*" : " ", j, config->opp_table[j].level);
 
             if (config->opp_table[j].frequency) {
@@ -207,7 +142,7 @@ static void dump_opp_config(pm_config_opp_t * opp_config)
             }
 
             if (config->opp_table[j].power) {
-                printf(", pwrCost %4u", config->opp_table[j].power);
+                printf(", pwrCost %3u", config->opp_table[j].voltage);
             }
 
             printf("\n");
@@ -217,10 +152,20 @@ static void dump_opp_config(pm_config_opp_t * opp_config)
     }
 }
 
+static void dump_valid_flag(config_data_t valid)
+{
+    if (valid.fields.valid == PM_CONFIG_INVALID) {
+        printf("INVALID\n");
+    } else {
+        printf("VALID, data:%d\n", valid.fields.raw_data);
+    }
+
+}
+
 static void dump_fan_config(pm_config_fan_t* config, uint32_t num)
 {
     for (uint32_t i = 0; i < num; i++) {
-        printf("  fan[%d]:\n", i);
+        printf("fan[%d]:\n", i);
         if (config[i].fan_valid.fields.valid == PM_CONFIG_INVALID) {
             printf("\tNULL\n");
         } else {
@@ -271,11 +216,11 @@ static void dump_pvt_config(pm_config_pvt_t *config)
         "cpu_b0_sensor",
         "soc_trc_sensor",
     };
-    printf("\tthermal trip point: ");dump_valid_flag(config->thermal_trip_soc);
-    if (config->weight_valid == PM_CONFIG_VALID) {
+    printf("\ttrip point:");dump_valid_flag(config->thermal_trip_soc);
+    if (config->weight_valid == 0) {
         printf("\tsensor weight:\n");
         for (uint32_t i = 0; i < 13; i++) {
-            printf("\t  - %-18s: %d\n", name[i], config->weight[i]);
+            printf("%s\t\t: %d", name[i], config->weight[i]);
         }
     } else {
         printf("\tsensor weight: INVALID\n");
@@ -289,59 +234,31 @@ static void dump_pvt_config(pm_config_pvt_t *config)
 
 static void dump_log_config(pm_config_log_t * log_config)
 {
-    printf("\tlog flag: "); dump_valid_flag(log_config->log_enable);
-    printf("\tbaudrate: "); dump_valid_flag(log_config->uart_baudrate);
-}
-
-static void dump_vmin_config(pm_config_vmin_t * vmin_config)
-{
-    printf("\tvmin disable: "); dump_valid_flag(vmin_config->vmin_disable);
-    printf("\tvmin profile: "); dump_valid_flag(vmin_config->vmin_profile);
-}
-
-static void dump_noc_idle_config(pm_config_noc_idle_t * noc_idle_config)
-{
-    printf("\tenable      : "); dump_valid_flag(noc_idle_config->noc_idle_enable);
-    if (noc_idle_config->noc_idle_enable.fields.valid == PM_CONFIG_INVALID ||
-        (noc_idle_config->noc_idle_enable.fields.valid == PM_CONFIG_VALID &&
-         noc_idle_config->noc_idle_enable.fields.raw_data == 0) ) {
-        return;
+    if (log_config->log_enable.fields.valid == PM_CONFIG_VALID) {
+        printf("\tlog_enable: VALID, raw_data %08X\n", log_config->log_enable.fields.raw_data);
+    } else {
+        printf("\tlog_enable: INVALID\n");
     }
 
-    printf("\tamu1 thro0  : "); dump_valid_flag(noc_idle_config->noc_idle_amu1_thro0);
-    printf("\tamu1 thro1  : "); dump_valid_flag(noc_idle_config->noc_idle_amu1_thro1);
-    printf("\tddr_dym_pwr : "); dump_valid_flag(noc_idle_config->noc_idle_ddr_dym_pwr_thro);
-    printf("\thysteresis  : "); dump_valid_flag(noc_idle_config->noc_idle_hysteresis);
-}
-
-static void dump_spt_config(pm_config_spt_t * spt_config)
-{
-    printf("\t Enable mask: "); dump_valid_flag(spt_config->spt_enable_mask);
-    if (spt_config->spt_enable_mask.fields.valid == PM_CONFIG_INVALID) {
-        return;
+    if (log_config->uart_baudrate.fields.valid == PM_CONFIG_VALID) {
+        printf("\tuart_baudrate: %d\n", log_config->uart_baudrate.fields.raw_data);
+    } else {
+        printf("\tuart_baudrate: INVALID\n");
     }
-
-    for (uint32_t i = 0; i < SPT_CTRL_MAX; i++) {
-        printf("\tSetPoint [%d]: ", i);
-        dump_valid_flag(spt_config->spt_setpoints[i]);
-    }
-
-    printf("\tspt skin margin: "); dump_valid_flag(spt_config->spt_skin_margin);
 }
 
 static void dump_config()
 {
     pm_export_config_t *config = &g_config.config;
 
-    time_t timestamp = CixEpoch() + g_config.timestamp;
+    printf("sizeof(g_config)=%zu, sizeof(opps)=%zu\n", sizeof(g_config), sizeof(config->opp_config.opps));
 
     printf("version   : %u.%u\n", g_config.version_major, g_config.version_minor);
-    printf("timestamp : %u - %s\n", g_config.timestamp, ctime((const time_t *)&timestamp));
-    printf("sizeof(g_config)=%zu, sizeof(opps)=%zu\n", sizeof(g_config), sizeof(config->opp_config.opps));
+    printf("timestamp : %u - %s\n", g_config.timestamp, ctime((const time_t *)&g_config.timestamp));
     printf("pmic config:\n");
     dump_pmic_config(&config->pmic_config);
 
-    printf("OPP config:\n");
+    printf("OPP config\n");
     dump_opp_config(&config->opp_config);
 
     printf("PVT config:\n");
@@ -353,18 +270,7 @@ static void dump_config()
     printf("Log config:\n");
     dump_log_config(&config->log_config);
 
-    printf("Vmin config:\n");
-    dump_vmin_config(&config->vmin_config);
-
-    printf("NOC idle config:\n");
-    dump_noc_idle_config(&config->noc_idle_config);
-
-    printf("SPT config:\n");
-    dump_spt_config(&config->spt_config);
-
-    printf("WDT timeout: "); dump_valid_flag(config->wdt_timeout);
-
-    printf("\ncrc check: cka:0x%08x, ckb:0x%08x\n", g_config.crc1, g_config.crc2);
+    printf("crc check: cka:0x%08x, ckb:0x%08x\n", g_config.crc1, g_config.crc2);
 }
 
 #if (PM_FAN_TABLE_CONFIG)
@@ -440,7 +346,7 @@ static int32_t check_pvt_config(pm_config_pvt_t* config)
 {
     uint32_t i = 0;
     uint32_t total_weight = 0;
-    if (config->weight_valid == PM_CONFIG_VALID) {
+    if (config->weight_valid == 0) {
         for (i = 0; i < 13; i ++) {
             total_weight += config->weight[i];
         }
@@ -466,30 +372,15 @@ int main(int argc, char **argv)
     FILE* bin_file = NULL;
     pm_export_config_t* config = &g_config.config;
 
-    if (argc > 1) {
-        printf("Parse %s ... ", argv[1]);
-        FILE *bin_file;
-        if ((bin_file = fopen(argv[1], "r")) == NULL) {
-            printf("\n\nfile %s open failed!\n", argv[1]);
-            return -1;
-        }
-
-        size_t rd_len = fread(&g_config, sizeof(g_config), 1, bin_file);
-        printf(" size %zu\n\n", rd_len);
-        dump_config();
-        return 0;
-    }
-
     (void)config;
+
     memset(&g_config, 0xff, sizeof(g_config));
 
     // version & timestamp
     g_config.version_major = PM_CONFIG_VERSION_MAJOR;
     g_config.version_minor = PM_CONFIG_VERSION_MINOR;
-    g_config.timestamp = (uint32_t)(time(NULL) - CixEpoch());
-    g_config.length = sizeof(pm_export_config_crc_t);
     g_config.signature = PM_CONFIG_SIGNATURE;
-    g_config.crc1 = g_config.crc2 = 0;
+    g_config.timestamp = (uint32_t)time(NULL);
 
     // pmic config
 #if PM_PMIC_CONFIG
@@ -536,24 +427,8 @@ int main(int argc, char **argv)
     memcpy(&config->log_config, &log_config, sizeof(config->log_config));
 #endif
 
-#if PM_VMIN_CONFIG
-    memcpy(&config->vmin_config, &vmin_config, sizeof(config->vmin_config));
-#endif
-
-#if PM_NOC_IDLE_CONFIG
-    memcpy(&config->noc_idle_config, &noc_idle_config, sizeof(config->noc_idle_config));
-#endif
-
-#if PM_SPT_CONFIG
-    memcpy(&config->spt_config, &spt_config, sizeof(config->spt_config));
-#endif
-
-#if PM_WDT_CONFIG
-    memcpy(&config->wdt_timeout, &wdt_timeout, sizeof(config->wdt_timeout));
-#endif
-
     // checksum
-    (void)double_check_sum(&g_config, sizeof(g_config), &ck, false);
+    (void)double_check_sum(&g_config, sizeof(g_config) - 8, &ck, false);
     g_config.crc1 = ck >> 32;
     g_config.crc2 = (uint32_t)(ck & (0xFFFFFFFFull));
 

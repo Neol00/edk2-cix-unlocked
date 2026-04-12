@@ -35,17 +35,69 @@
 
 #define DP_PORT_INIT(RemoteDeviceReference0, RemotePipeline0, RemotePort0, RemoteEndPoint0, \
                       RemoteDeviceReference1, RemotePipeline1, RemotePort1, RemoteEndPoint1, \
+                      DpLaneNumber, DpMaxRate, AuxClockDivider, DpPhyRef) \
+ Name (_DSD, Package () { \
+            ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),\
+            Package () { \
+                Package () { "dp_phy", DpPhyRef }, \
+                Package () { "enabled_by_gop", 0 }, \
+                Package () { "cix,dp-lane-number", DpLaneNumber }, \
+                Package () { "cix,dp-max-rate", DpMaxRate }, \
+                Package () { "cix,aux-clock-divider", AuxClockDivider }, \
+            },\
+            ToUUID("dbb8e3e6-5886-4ba6-8795-1319f52a966b"),\
+            Package () { \
+                          Package () { "port@0", "PRT0" },\
+                          Package () { "port@1", "PRT1" },\
+            }\
+        })\
+  Name (PRT0, Package() {\
+            ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),\
+            Package () {\
+                Package () { "reg", 0 }, \
+            },\
+            ToUUID("dbb8e3e6-5886-4ba6-8795-1319f52a966b"),\
+            Package () {\
+                Package () { "endpoint@0", "EP00" },\
+            }\
+  })\
+  Name (EP00, Package() {\
+            ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),\
+            Package () {\
+                Package () { "reg", 0 }, \
+                Package () { "remote-endpoint", Package() { RemoteDeviceReference0, RemotePipeline0, RemotePort0, RemoteEndPoint0 } },\
+            }\
+  })\
+  Name (PRT1, Package() {\
+            ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),\
+            Package () {\
+                Package () { "reg", 1 }, \
+            },\
+            ToUUID("dbb8e3e6-5886-4ba6-8795-1319f52a966b"),\
+            Package () {\
+                Package () { "endpoint@1", "EP01" },\
+            }\
+  })\
+  Name (EP01, Package() {\
+            ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),\
+            Package () {\
+                Package () { "reg", 0 }, \
+                Package () { "remote-endpoint", Package() { RemoteDeviceReference1, RemotePipeline1, RemotePort1, RemoteEndPoint1 } },\
+            }\
+  })
+
+#define EDP_PORT_INIT(RemoteDeviceReference0, RemotePipeline0, RemotePort0, RemoteEndPoint0, \
+                      RemoteDeviceReference1, RemotePipeline1, RemotePort1, RemoteEndPoint1, \
                       DpLaneNumber, DpMaxRate, AuxClockDivider, DpPhyRef, EdpPanelRef) \
  Name (_DSD, Package () { \
             ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),\
             Package () { \
-            /*  Package () { "cix,dp-lane-number", DpLaneNumber }, */  \
-            /*  Package () { "cix,dp-max-rate", DpMaxRate }, */  \
-            /*  Package () { "cix,aux-clock-divider", AuxClockDivider }, */  \
                 Package () { "dp_phy", DpPhyRef }, \
                 Package () { "edp-panel", EdpPanelRef }, \
                 Package () { "enabled_by_gop", 0 }, \
-            /*    Package () { "support_d3_cmd", D3Cmd }, */ \
+                Package () { "cix,dp-lane-number", DpLaneNumber }, \
+                Package () { "cix,dp-max-rate", DpMaxRate }, \
+                Package () { "cix,aux-clock-divider", AuxClockDivider }, \
             },\
             ToUUID("dbb8e3e6-5886-4ba6-8795-1319f52a966b"),\
             Package () { \
@@ -264,8 +316,7 @@ Device (DP00) {
     Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { DP_DP0_APB_INT_INTERRUPT_ID }
   })
 
-  //DP_PORT_INIT(\_SB.DPU0, "pipeline@0", "port@0", "endpoint@0", 1, 162000, 200, \_SB.UCP0.UDPP, EMPTY_STR)
-  DP_PORT_INIT(\_SB.DPU0, "pipeline@0", "port@0", "endpoint@0", \_SB.DPU0, "pipeline@1", "port@1", "endpoint@1", 1, 540000, 200, \_SB.UCP0.UDPP, EMPTY_STR)
+  DP_PORT_INIT(\_SB.DPU0, "pipeline@0", "port@0", "endpoint@0", \_SB.DPU0, "pipeline@1", "port@1", "endpoint@1", 4, 810000, 200, \_SB.UCP0.UDPP)
 
   Name (CLKT, Package() {
     Package() {CLK_TREE_DPC0_VIDCLK0, "vid_clk0", \_SB.DP00},
@@ -298,8 +349,7 @@ Device (DP01) {
     Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { DP_DP1_APB_INT_INTERRUPT_ID }
   })
 
-  //DP_PORT_INIT(\_SB.DPU1, "pipeline@0", "port@0", "endpoint@0", 1, 162000, 200, \_SB.UCP1.UDPP, EMPTY_STR)
-  DP_PORT_INIT(\_SB.DPU1, "pipeline@0", "port@0", "endpoint@0", \_SB.DPU1, "pipeline@1", "port@1", "endpoint@1", 1, 540000, 200, \_SB.UCP1.UDPP, EMPTY_STR)
+  DP_PORT_INIT(\_SB.DPU1, "pipeline@0", "port@0", "endpoint@0", \_SB.DPU1, "pipeline@1", "port@1", "endpoint@1", 4, 810000, 200, \_SB.UCP1.UDPP)
 
   Name (CLKT, Package() {
     Package() {CLK_TREE_DPC1_VIDCLK0, "vid_clk0", \_SB.DP01},
@@ -316,7 +366,7 @@ Device (DP02) {
   Name (_UID, 0x2)
 
   Method (_STA, 0x0, Serialized) {
-    If(\_SB.GETV(ARV_DPU_02_SUPPORT_OFFSET)){
+    If(\_SB.GETV(ARV_EDP_SUPPORT_OFFSET)){
         Return (0xF)
     } else {
         Return (0x0)
@@ -332,8 +382,7 @@ Device (DP02) {
     Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { DP_DP2_APB_INT_INTERRUPT_ID }
   })
 
-  //DP_PORT_INIT(\_SB.DPU2, "pipeline@0", "port@0", "endpoint@0", 1, 540000, 200, EMPTY_STR, \_SB.EDP0)
-  DP_PORT_INIT(\_SB.DPU2, "pipeline@0", "port@0", "endpoint@0", \_SB.DPU2, "pipeline@1", "port@1", "endpoint@1", 1, 540000, 200, EMPTY_STR, \_SB.EDP0)
+  EDP_PORT_INIT(\_SB.DPU2, "pipeline@0", "port@0", "endpoint@0", \_SB.DPU2, "pipeline@1", "port@1", "endpoint@1", 4, 810000, 200, EMPTY_STR, \_SB.EDP0)
 
   Name (CLKT, Package() {
     Package() {CLK_TREE_DPC2_VIDCLK0, "vid_clk0", \_SB.DP02},
@@ -371,8 +420,7 @@ Device (DP03) {
     Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { DP_DP3_APB_INT_INTERRUPT_ID }
   })
 
-  //DP_PORT_INIT(\_SB.DPU3, "pipeline@0", "port@0", "endpoint@0", 1, 162000, 200, \_SB.UCP2.UDPP, EMPTY_STR)
-  DP_PORT_INIT(\_SB.DPU3, "pipeline@0", "port@0", "endpoint@0", \_SB.DPU3, "pipeline@1", "port@1", "endpoint@1", 1, 540000, 200, \_SB.UCP2.UDPP, EMPTY_STR)
+  DP_PORT_INIT(\_SB.DPU3, "pipeline@0", "port@0", "endpoint@0", \_SB.DPU3, "pipeline@1", "port@1", "endpoint@1", 4, 810000, 200, \_SB.UCP2.UDPP)
 
   Name (CLKT, Package() {
     Package() {CLK_TREE_DPC3_VIDCLK0, "vid_clk0", \_SB.DP03},
@@ -405,8 +453,7 @@ Device (DP04) {
     Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { DP_DP4_APB_INT_INTERRUPT_ID }
   })
 
-  //DP_PORT_INIT(\_SB.DPU4, "pipeline@0", "port@0", "endpoint@0", 1, 162000, 200, \_SB.UCP3.UDPP, EMPTY_STR)
-  DP_PORT_INIT(\_SB.DPU4, "pipeline@0", "port@0", "endpoint@0", \_SB.DPU4, "pipeline@1", "port@1", "endpoint@1", 1, 540000, 200, \_SB.UCP3.UDPP, EMPTY_STR)
+  DP_PORT_INIT(\_SB.DPU4, "pipeline@0", "port@0", "endpoint@0", \_SB.DPU4, "pipeline@1", "port@1", "endpoint@1", 4, 810000, 200, \_SB.UCP3.UDPP)
 
   Name (CLKT, Package() {
     Package() {CLK_TREE_DPC4_VIDCLK0, "vid_clk0", \_SB.DP04},
@@ -567,7 +614,7 @@ Device (DPU2) {
   Name (_UID, 0x2)
 
   Method (_STA, 0x0, Serialized) {
-    If(\_SB.GETV(ARV_DPU_02_SUPPORT_OFFSET)){
+    If(\_SB.GETV(ARV_EDP_SUPPORT_OFFSET)){
         Return (0xF)
     } else {
         Return (0x0)
@@ -830,7 +877,7 @@ Device (AEU2) {
 
   Method (_STA, 0x0, Serialized) {
     Return (0x0)
-    If(\_SB.GETV(ARV_DPU_02_SUPPORT_OFFSET)){
+    If(\_SB.GETV(ARV_EDP_SUPPORT_OFFSET)){
         Return (0xF)
     } else {
         Return (0x0)
@@ -946,7 +993,14 @@ Device (DPBL) {
 Device (EDP0) {
   Name (_HID, "CIXH5040")
   Name (_UID, 0x00)
-  Name (_STA, 0x0F)
+  // Enable only when eDP is enabled in BIOS setup (default: disabled)
+  Method (_STA, 0x0, Serialized) {
+    If (\_SB.GETV(ARV_EDP_SUPPORT_OFFSET)) {
+      Return (0x0F)
+    } Else {
+      Return (0x00)
+    }
+  }
   Name (_CCA, 0)
   Name (_CRS, ResourceTemplate () {
       PinGroupFunction(Exclusive, 0x0, "\\_SB.MUX0", 0, "pinctrl_edp0", ResourceConsumer,)
@@ -970,6 +1024,30 @@ Device (EDP0) {
 
   Name (DLKL, Package() {
     Package() {\_SB.DPBL, \_SB.EDP0, 0},
+  })
+}
+
+// Display reset controller consumed by cix_display.c (CIXH5008).
+// The "reset-control" property is a bitmask selecting which display
+// indices to reset at probe time:
+//   bit 0 = display 0 (DPU0 + DP00)
+//   bit 1 = display 1 (DPU1 + DP01)
+//   bit 2 = display 2 (DPU2 + DP02 / eDP)
+//   bit 3 = display 3 (DPU3 + DP03)
+//   bit 4 = display 4 (DPU4 + DP04)
+// 0x1B = bits 0,1,3,4 = all four USB-C DP ports on the Orion O6.
+Device (DRST) {
+  Name (_HID, "CIXH5008")
+  Name (_UID, 0x0)
+  Name (_STA, 0xF)
+  Name (_CRS, ResourceTemplate () {
+    Memory32Fixed (ReadWrite, 0x16000400, 0x4)
+  })
+  Name (_DSD, Package () {
+    ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+    Package () {
+      Package () { "reset-control", 0x1B },
+    }
   })
 }
 

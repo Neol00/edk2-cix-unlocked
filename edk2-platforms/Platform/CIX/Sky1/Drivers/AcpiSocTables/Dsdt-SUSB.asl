@@ -203,6 +203,7 @@ Device (U2P4) //USB 2.0 PHY4
   Name (_UID, 0x04)           // _UID: Unique ID
   Name (_CCA, 0x00)           // _CCA: Cache Coherency Attribute
   Name (_STA, 0x0B)           // _STA: Device status
+  Name (_CRS, ResourceTemplate () {})
 
   Name (RSTL, Package() {
     Package() {\_SB.RST0, SKY1_USBPHY_HS4_PRST_N, \_SB.U2P4, "preset"},
@@ -380,6 +381,7 @@ Device (U2P5) //USB 2.0 PHY5
   Name (_UID, 0x05)           // _UID: Unique ID
   Name (_CCA, 0x00)           // _CCA: Cache Coherency Attribute
   Name (_STA, 0x0B)           // _STA: Device status
+  Name (_CRS, ResourceTemplate () {})
 
   Name (RSTL, Package() {
     Package() {\_SB.RST0, SKY1_USBPHY_HS5_PRST_N, \_SB.U2P5, "preset"},
@@ -557,6 +559,7 @@ Device (U2P8) //USB 2.0 PHY8
   Name (_UID, 0x08)           // _UID: Unique ID
   Name (_CCA, 0x00)           // _CCA: Cache Coherency Attribute
   Name (_STA, 0x0B)           // _STA: Device status
+  Name (_CRS, ResourceTemplate () {})
 
   Name (RSTL, Package() {
     Package() {\_SB.RST0, SKY1_USBPHY_HS8_PRST_N, \_SB.U2P8, "preset"},
@@ -734,6 +737,7 @@ Device (U2P9) //USB 2.0 PHY9
   Name (_UID, 0x09)           // _UID: Unique ID
   Name (_CCA, 0x00)           // _CCA: Cache Coherency Attribute
   Name (_STA, 0x0B)           // _STA: Device status
+  Name (_CRS, ResourceTemplate () {})
 
   Name (RSTL, Package() {
     Package() {\_SB.RST0, SKY1_USBPHY_HS9_PRST_N, \_SB.U2P9, "preset"},
@@ -863,9 +867,10 @@ Device (SUB4)
     Name (_DSD, Package () {
       ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
       Package () {
-            Package () { "maximum-speed", "super-speed-plus" },
+            Package () { "maximum-speed", "super-speed" },
             Package () { "dr_mode", "host" },
             Package () { "cdnsp,usb3-phy", \_SB.U3P4.USB0 },
+            Package () { "usb3-lpm-capable", 1 },
           },
     })
 
@@ -953,9 +958,10 @@ Device (SUB5)
     Name (_DSD, Package () {
       ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
       Package () {
-            Package () { "maximum-speed", "super-speed-plus" },
+            Package () { "maximum-speed", "super-speed" },
             Package () { "dr_mode", "host" },
             Package () { "cdnsp,usb3-phy", \_SB.U3P4.USB1 },
+            Package () { "usb3-lpm-capable", 1 },
           },
     })
 
@@ -980,6 +986,7 @@ Device (U2P6) //USB 2.0 PHY6
   Name (_UID, 0x06)           // _UID: Unique ID
   Name (_CCA, 0x00)           // _CCA: Cache Coherency Attribute
   Name (_STA, 0x0B)           // _STA: Device status
+  Name (_CRS, ResourceTemplate () {})
 
   Name (RSTL, Package() {
     Package() {\_SB.RST0, SKY1_USBPHY_HS6_PRST_N, \_SB.U2P6, "preset"},
@@ -992,6 +999,7 @@ Device (U2P7) //USB 2.0 PHY7
   Name (_UID, 0x07)           // _UID: Unique ID
   Name (_CCA, 0x00)           // _CCA: Cache Coherency Attribute
   Name (_STA, 0x0B)           // _STA: Device status
+  Name (_CRS, ResourceTemplate () {})
 
   Name (RSTL, Package() {
     Package() {\_SB.RST0, SKY1_USBPHY_HS7_PRST_N, \_SB.U2P7, "preset"},
@@ -1015,6 +1023,31 @@ Device (U3P4) //USB 3.0 PHY0
           Package () { "cix,usbphy_syscon", \_SB.CRU0 },
         },
   })
+
+  //
+  // PHY TX Signal Magnitude Fixup
+  // TX_TXCC_MGNFS_MULT_000 controls transmit voltage swing amplitude.
+  // Firmware blob (UsbLib) leaves these unset (commented out in Usb3ARegConf[]).
+  // Without proper TX amplitude, USB3 link degrades under sustained load.
+  // Value 0x7 = default for xcvr_avdd_h >= 1.2V (standard operating voltage).
+  // Cadence PHY addressing: byte_addr = PHY_BASE + (reg_index * 4)
+  //   LANE0: 0x09210000 + (0x4050 * 4) = 0x09220140
+  //   LANE1: 0x09210000 + (0x4250 * 4) = 0x09220940
+  //
+  OperationRegion (TXP0, SystemMemory, 0x09220140, 0x04)
+  Field (TXP0, DWordAcc, NoLock, Preserve) {
+    TMG0, 32
+  }
+  OperationRegion (TXP1, SystemMemory, 0x09220940, 0x04)
+  Field (TXP1, DWordAcc, NoLock, Preserve) {
+    TMG1, 32
+  }
+
+  Method (_INI, 0, NotSerialized)
+  {
+    TMG0 = 0x07
+    TMG1 = 0x07
+  }
 
   Name (CLKT, Package() {
     Package() {CLK_TREE_USB3A_PHY3_GATE, "apb_clk", \_SB.U3P4},
@@ -1218,6 +1251,7 @@ Device (U2P0) //USB 2.0 PHY0
   Name (_UID, 0x00)           // _UID: Unique ID
   Name (_CCA, 0x00)           // _CCA: Cache Coherency Attribute
   Name (_STA, 0x0B)           // _STA: Device status
+  Name (_CRS, ResourceTemplate () {})
 
   Name (RSTL, Package() {
     Package() {\_SB.RST0, SKY1_USBPHY_HS0_PRST_N, \_SB.U2P0, "preset"},
@@ -1230,6 +1264,7 @@ Device (U2P1) //USB 2.0 PHY1
   Name (_UID, 0x01)           // _UID: Unique ID
   Name (_CCA, 0x00)           // _CCA: Cache Coherency Attribute
   Name (_STA, 0x0B)           // _STA: Device status
+  Name (_CRS, ResourceTemplate () {})
 
   Name (RSTL, Package() {
     Package() {\_SB.RST0, SKY1_USBPHY_HS1_PRST_N, \_SB.U2P1, "preset"},
@@ -1331,6 +1366,7 @@ Device (U2P2) //USB 2.0 PHY2
   Name (_UID, 0x02)           // _UID: Unique ID
   Name (_CCA, 0x00)           // _CCA: Cache Coherency Attribute
   Name (_STA, 0x0B)           // _STA: Device status
+  Name (_CRS, ResourceTemplate () {})
 
   Name (RSTL, Package() {
     Package() {\_SB.RST0, SKY1_USBPHY_HS2_PRST_N, \_SB.U2P2, "preset"},
@@ -1432,6 +1468,7 @@ Device (U2P3) //USB 2.0 PHY3
   Name (_UID, 0x03)           // _UID: Unique ID
   Name (_CCA, 0x00)           // _CCA: Cache Coherency Attribute
   Name (_STA, 0x0B)           // _STA: Device status
+  Name (_CRS, ResourceTemplate () {})
 
   Name (RSTL, Package() {
     Package() {\_SB.RST0, SKY1_USBPHY_HS3_PRST_N, \_SB.U2P3, "preset"},

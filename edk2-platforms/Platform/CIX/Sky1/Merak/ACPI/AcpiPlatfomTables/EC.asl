@@ -11,8 +11,10 @@
 #define I2C_ERROR    1
 #define I2C_TIME_OUT 2
 
-#define I2C_RETRIES_NUM 10000000
+#define I2C_RETRIES_NUM 1000000
 #define I2C_FIFO_DEPTH  16
+
+#define EC_I2C_DEV_INST_ID          FixedPcdGet32(PcdEcAcpiI2cDeviceInstanceId)
 
 #define EC_BATT_FLAG_AC_PRESENT      0x01
 #define EC_BATT_FLAG_BATT_PRESENT    0x02
@@ -37,6 +39,11 @@
 #define EC_THERMAL_SUPPORT 0
 #define EC_LID_SUPPORT     0
 #define EC_PWRB_SUPPORT    1
+
+External (\_SB.GPI4, DeviceObj)
+External (\_SB.AMTX, MethodObj)
+External (\_SB.RMTX, MethodObj)
+External (\_SB.I2C6.MXID, IntObj)
 
 Device(EC0){
   Name(_UID, 0)
@@ -324,6 +331,9 @@ Device(EC0){
   //  Arg3 = Response Bytes
   Method(TRAS,4, Serialized) {
     Acquire(ECMX, 0xFFFF)
+    if(\_SB.AMTX(\_SB.I2C6.MXID,EC_I2C_DEV_INST_ID)){
+      Return(I2C_ERROR)
+    }
     Local0 = 0
     While(1){
       if(STAT() != I2C_SUCCESS){
@@ -346,8 +356,11 @@ Device(EC0){
     if(Local0 == 0){
       REST()
       STOP()
+      \_SB.RMTX(\_SB.I2C6.MXID,EC_I2C_DEV_INST_ID)
+      Release(ECMX)
       Return(I2C_ERROR)
     }
+    \_SB.RMTX(\_SB.I2C6.MXID,EC_I2C_DEV_INST_ID)
     Release(ECMX)
     //
     CreateByteField(Arg2,1,LENG)
@@ -507,6 +520,117 @@ Device(EC0){
     CreateDWordField (BUF1, 0x0B, LSSV)
     Return(Package() {LSST,LSSV})
   }
+
+  //
+  // Name: SFAT [Set EC Fan to Auto Mode]
+  // Description: Function to set ec fan to auto mode
+  // Input: None
+  // Output: None
+  //
+  Method(SFAT, 0, Serialized){
+    Name(BUF0, Buffer(10){0xDA,0x03,0xA9,0x00,0x52,0x00,0x00,0x00,0x01,0x01})
+    Name(BUF1, Buffer(10){})
+    TRAS(BUF0,Sizeof(BUF0),BUF1,Sizeof(BUF1))
+  }
+
+  //
+  // Name: SFMT [Set EC Fan to Mute Mode]
+  // Description: Function to set ec fan to mute mode
+  // Input: None
+  // Output: None
+  //
+  Method(SFMT, 0, Serialized){
+    Name(BUF0, Buffer(10){0xDA,0x03,0xA8,0x00,0x52,0x00,0x00,0x00,0x01,0x02})
+    Name(BUF1, Buffer(10){})
+    TRAS(BUF0,Sizeof(BUF0),BUF1,Sizeof(BUF1))
+  }
+
+  //
+  // Name: SFMT [Set EC Fan to Manual Mode]
+  // Description: Function to set ec fan to manual mode
+  // Input: None
+  // Output: None
+  //
+  Method(SFMN, 0, Serialized){
+    Name(BUF0, Buffer(10){0xDA,0x03,0xAA,0x00,0x52,0x00,0x00,0x00,0x01,0x00})
+    Name(BUF1, Buffer(10){})
+    TRAS(BUF0,Sizeof(BUF0),BUF1,Sizeof(BUF1))
+  }
+
+  //
+  // Name: SFPF [Set EC Fan to Performance Mode]
+  // Description: Function to set ec fan to performance mode
+  // Input: None
+  // Output: None
+  //
+  Method(SFPF, 0, Serialized){
+    Name(BUF0, Buffer(10){0xDA,0x03,0xA6,0x00,0x52,0x00,0x00,0x00,0x01,0x04})
+    Name(BUF1, Buffer(10){})
+    TRAS(BUF0,Sizeof(BUF0),BUF1,Sizeof(BUF1))
+  }
+
+  //
+  // Name: SFPW [Set the PWM duty of EC Fan]
+  // Description: Function to set the PWM duty of EC Fan
+  // Input:
+  //         Arg0 -> Duty cycle, EC_PWM_MAX_DUTY = 100%
+  //         Arg1 -> ec_pwm_type
+  //         Arg2 -> Type-specific index, or 0 if unique
+  // Output: Status(No zero may have some error in it)
+  //
+  Method(SFPW, 3, Serialized)
+  {
+    if(Arg0 > 100){
+      Return(1);
+    }
+
+    \_SB.EC0.SFMN()
+
+    Name(BUF0, Buffer(13){0xDA,0x03,0x00,0x00,0x25,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0x00})
+    Name(BUF1, Buffer(10){})
+    CreateByteField (BUF0, 0x02, CSUM)
+    CreateByteField (BUF0, 0x0A, DUTY)
+    CreateByteField (BUF0, 0x0B, PWMT)
+    CreateByteField (BUF0, 0x0C, INDX)
+    DUTY=Arg0
+    PWMT=Arg1
+    INDX=Arg2
+    Mid(BUF0,1,Sizeof(BUF0)-1,Local0)
+    CSUM=CKSB(Local0)&0xFF
+
+    if(\_SB.EC0.TRAS(BUF0,Sizeof(BUF0),BUF1,Sizeof(BUF1)) != I2C_SUCCESS){
+      Return(2);
+    }
+    Return(0);
+  }
+
+  //
+  // Name: GFPW [Get the PWM duty of EC Fan]
+  // Description: Function to get the PWM duty of EC Fan
+  // Input:
+  //         Arg0 -> ec_pwm_type
+  //         Arg1 -> Type-specific index, or 0 if unique
+  // Output: Duty cycle, EC_PWM_MAX_DUTY = 100% , 0xFFFFFFFF means error
+  //
+  Method(GFPW, 2, Serialized)
+  {
+    Name(BUF0, Buffer(11){0xDA,0x03,0xD5,0x00,0x26,0x00,0x00,0x00,0x02,0x00,0x00})
+    CreateByteField (BUF0, 0x02, CSUM)
+    CreateByteField (BUF0, 0x09, PWMT)
+    CreateByteField (BUF0, 0x0A, INDX)
+    PWMT=Arg0
+    INDX=Arg1
+    Mid(BUF0,1,Sizeof(BUF0)-1,Local0)
+    CSUM=CKSB(Local0)&0xFF
+
+    Name(BUF1, Buffer(12){})
+    CreateByteField (BUF1, 0x0B, DUTY)
+
+    if(\_SB.EC0.TRAS(BUF0,Sizeof(BUF0),BUF1,Sizeof(BUF1)) == I2C_SUCCESS){
+        Return(DUTY)
+    }
+    Return(0xFFFFFFFF);
+  }
 }
 
 Scope (\_SB.GPI4)
@@ -531,21 +655,11 @@ Device(BAT0) {
       )
   }
   Method (_STA,0) {
-    Name(BUF0, Buffer(10){0xDA,0x03,0xF5,0x06,0x01,0x00,0x00,0x00,0x01,0x00})
-    Name(BUF1, Buffer(24){})
-
-    if(\_SB.EC0.TRAS(BUF0,Sizeof(BUF0),BUF1,24) == I2C_SUCCESS){
-      CreateWordField (BUF1, 0x12, FLAG)
-      Local0 = FLAG
-      FLAG = ((Local0 &0xff)<<8)| ((Local0&0xff00)>>8)
-
-      if(FLAG & EC_BATT_FLAG_BATT_PRESENT){
-        Return (0x1F)
-      }else{
-        Return (0x0F)
-      }
-    }
-    Return (0x0F)
+    // Orion O6 is a desktop SBC with no battery and no real EC.
+    // Returning 0x00 hides BAT0 from Linux and prevents EC I2C transactions
+    // that loop 1,000,000 times against non-existent hardware, causing
+    // AE_AML_LOOP_TIMEOUT errors in \_SB.EC0.WRIT and \_SB.EC0.TRAS.
+    Return (0x00)
   }
 
   Name(BIXP, Package() {
@@ -585,8 +699,8 @@ Device(BAT0) {
       CAPB = ((Local0 &0xff)<<8)| ((Local0&0xff00)>>8)
       Divide(CAPB, 10, , Local0)
       Store(Local0, Index(BIXP, 6))      // warning capacity = 10% of design capacity
-      Divide(CAPB, 25, , Local0)
-      Store(Local0, Index(BIXP, 7))      // low capacity = 4% of design capacity
+      Divide(CAPB, 20, , Local0)
+      Store(Local0, Index(BIXP, 7))      // low capacity = 5% of design capacity
       Local0 = DSNV
       DSNV = ((Local0 &0xff)<<8)| ((Local0&0xff00)>>8)
       Local0 = CYCC
@@ -638,10 +752,16 @@ Device(BAT0) {
       Store(REMC, Index(BSTP,2))
       Store(ACUV, Index(BSTP,3))
 
+      Local1 = DeRefOf(Index(BIXP,3))
+      Local2 = REMC*100/Local1
       if(FLAG & EC_BATT_FLAG_CHARGING){
         Store(0x02, Index(BSTP,0))
       }elseif(FLAG & EC_BATT_FLAG_DISCHARGING){
-        Store(0x01, Index(BSTP,0))
+        if (Local2 <= 3){ // When the battery level is less than 3%, a battery critical event is triggered
+          Store(0x05, Index(BSTP,0))
+        }else{
+          Store(0x01, Index(BSTP,0))
+        }
       }
     }
     Return(BSTP)
@@ -770,19 +890,12 @@ Device (AC)
     }
     Method (_PSR, 0, NotSerialized)
     {
-      Name(BUF0, Buffer(10){0xDA,0x03,0xF5,0x06,0x01,0x00,0x00,0x00,0x01,0x00})
-      Name(BUF1, Buffer(24){})
-      if(\_SB.EC0.TRAS(BUF0,Sizeof(BUF0),BUF1,24) == I2C_SUCCESS){
-        CreateWordField (BUF1, 0x12, FLAG)
-        Local0 = FLAG
-        FLAG = ((Local0 &0xff)<<8)| ((Local0&0xff00)>>8)
-
-        if(FLAG & EC_BATT_FLAG_AC_PRESENT){
-          Return(0x01)
-        }
-        Return(0x00)
-      }
-      Return(0x01) // Default to AC present when EC communication fails
+      // Orion O6 is a desktop SBC permanently connected to mains power.
+      // The EC I2C path triggers AE_AML_LOOP_TIMEOUT (I2C_RETRIES_NUM loop)
+      // on boards without a real EC battery controller.
+      // Always return 1 (AC present) to prevent the EC timeout and to
+      // correctly reflect that this board is never on battery power.
+      Return (0x01)
     }
 }
 #endif

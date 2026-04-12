@@ -18,10 +18,10 @@ static pm_config_pvt_t pvt_config = {
     .thermal_trip_soc = {
         .fields = {
             .valid    = PM_CONFIG_VALID,
-            .raw_data = 105,
+            .raw_data = 85,
         }
     },
-    .weight_valid = PM_CONFIG_INVALID,
+    .weight_valid = 1,
     .board_sensor1 = {
         .sensor_valid ={
             .fields = {
@@ -45,7 +45,7 @@ static pm_config_pvt_t pvt_config = {
 #endif
 
 #ifndef PM_PMIC_CONFIG
-#define PM_PMIC_CONFIG 0
+#define PM_PMIC_CONFIG 1
 #endif
 #if PM_PMIC_CONFIG
 static pm_config_pmic_t pmic_config = {
@@ -55,9 +55,6 @@ static pm_config_pmic_t pmic_config = {
             .raw_data = CONFIG_EDP_CFG_CUSTOM,
         },
 	},
-    /*
-     * .opp_max and .edp_cfg can take effect only if pmic_scheme is valud and set to CONFIG_EDP_CFG_CUSTOM
-     */
        /* Fmax of         lit,          gm0,          gm1,          gb0,          gb1,          dsu */
     .opp_max = { OPP_NO_LIMIT, OPP_NO_LIMIT, OPP_NO_LIMIT, OPP_NO_LIMIT, OPP_NO_LIMIT, OPP_NO_LIMIT,
                  /*       g_t,          g_c,           ci,           mm,          vpu,          npu,          mem (not taking effect)  */
@@ -75,14 +72,14 @@ static pm_config_pmic_t pmic_config = {
          *
          * delta_mV is the power rail guard band, +/- Max. 500mV, which will be applied against the built OPP table
          */
-        [DPM_EDP_CPU_LIT] = { .vr_type = VR_MP2845, .pwr_cap =  2500, .i2c_port = 0, .i2c_addr = 0x45, .i2c_buck = 1, .vboot_mV = 790, .delta_mV = 0 },
-        [DPM_EDP_CPU_GM0] = { .vr_type = VR_MP2845, .pwr_cap =  6500, .i2c_port = 1, .i2c_addr = 0x45, .i2c_buck = 2, .vboot_mV = 790, .delta_mV = 0 },
-        [DPM_EDP_CPU_GM1] = { .vr_type = VR_MP2845, .pwr_cap =  6500, .i2c_port = 0, .i2c_addr = 0x45, .i2c_buck = 0, .vboot_mV = 790, .delta_mV = 0 },
-        [DPM_EDP_CPU_GB0] = { .vr_type = VR_MP2845, .pwr_cap =  8000, .i2c_port = 0, .i2c_addr = 0x45, .i2c_buck = 2, .vboot_mV = 790, .delta_mV = 0 },
-        [DPM_EDP_CPU_GB1] = { .vr_type = VR_MP2845, .pwr_cap =  8000, .i2c_port = 0, .i2c_addr = 0x45, .i2c_buck = 3, .vboot_mV = 790, .delta_mV = 0 },
-        [DPM_EDP_DSU]     = { .vr_type = VR_MP2845, .pwr_cap =  5500, .i2c_port = 1, .i2c_addr = 0x45, .i2c_buck = 3, .vboot_mV = 790, .delta_mV = 0 },
-        [DPM_EDP_GPU]     = { .vr_type = VR_MP2845, .pwr_cap = 12000, .i2c_port = 1, .i2c_addr = 0x45, .i2c_buck = 1, .vboot_mV = 790, .delta_mV = 10 },
-        [DPM_EDP_SOC]     = { .vr_type = VR_MP2845, .pwr_cap =  9000, .i2c_port = 1, .i2c_addr = 0x45, .i2c_buck = 0, .vboot_mV = 790, .delta_mV = 0 },
+        [DPM_EDP_CPU_LIT] = { .vr_type = VR_MP2845, .pwr_cap = 18500, .i2c_port = 0, .i2c_addr = 0x45, .i2c_buck = 1, .vboot_mV = 790, .delta_mV = CPU_LIT_DELTA_MV },
+        [DPM_EDP_CPU_GM0] = { .vr_type = VR_MP2845, .pwr_cap = 19500, .i2c_port = 1, .i2c_addr = 0x45, .i2c_buck = 2, .vboot_mV = 790, .delta_mV = CPU_GM0_DELTA_MV },
+        [DPM_EDP_CPU_GM1] = { .vr_type = VR_MP2845, .pwr_cap = 19500, .i2c_port = 0, .i2c_addr = 0x45, .i2c_buck = 0, .vboot_mV = 790, .delta_mV = CPU_GM1_DELTA_MV },
+        [DPM_EDP_CPU_GB0] = { .vr_type = VR_MP2845, .pwr_cap = 21000, .i2c_port = 0, .i2c_addr = 0x45, .i2c_buck = 2, .vboot_mV = 790, .delta_mV = CPU_GB0_DELTA_MV },
+        [DPM_EDP_CPU_GB1] = { .vr_type = VR_MP2845, .pwr_cap = 21000, .i2c_port = 0, .i2c_addr = 0x45, .i2c_buck = 3, .vboot_mV = 790, .delta_mV = CPU_GB1_DELTA_MV },
+        [DPM_EDP_DSU]     = { .vr_type = VR_MP2845, .pwr_cap = 18000, .i2c_port = 1, .i2c_addr = 0x45, .i2c_buck = 3, .vboot_mV = 790, .delta_mV = DSU_DELTA_MV },
+        [DPM_EDP_GPU]     = { .vr_type = VR_MP2845, .pwr_cap = 20000, .i2c_port = 1, .i2c_addr = 0x45, .i2c_buck = 1, .vboot_mV = 790, .delta_mV = GPU_DELTA_MV },
+        [DPM_EDP_SOC]     = { .vr_type = VR_MP2845, .pwr_cap = 35000, .i2c_port = 1, .i2c_addr = 0x45, .i2c_buck = 0, .vboot_mV = 790, .delta_mV = SOC_DELTA_MV },
     },
 };
 
@@ -210,90 +207,10 @@ static pm_config_log_t log_config = {
             .valid    = PM_CONFIG_INVALID,
         }
     },
-};
-#endif
-
-#ifndef PM_NOC_IDLE_CONFIG
-#define PM_NOC_IDLE_CONFIG 0
-#endif
-#if PM_NOC_IDLE_CONFIG
-static pm_config_noc_idle_t noc_idle_config = {
-    .noc_idle_enable = {
-        .fields = {
-            .valid    = PM_CONFIG_VALID,
-            .raw_data = 1,  // BIT0: ddr-dfs/ci/mm dfs; BIT1: dsu dfs
-        }
-    },
-    /* default threshold are loaded if not specificed below */
-    .noc_idle_amu1_thro0 = {
-        .fields = { .valid = PM_CONFIG_INVALID }
-    },
-    .noc_idle_amu1_thro1 = {
-        .fields = { .valid = PM_CONFIG_INVALID }
-    },
-    .noc_idle_ddr_dym_pwr_thro = {
-        .fields = { .valid = PM_CONFIG_INVALID }
-    },
-    .noc_idle_hysteresis = {
-        .fields = { .valid = PM_CONFIG_INVALID }
-    },
-};
-#endif
-
-#ifndef PM_SPT_CONFIG
-#define PM_SPT_CONFIG 0
-#endif
-#if PM_SPT_CONFIG
-static pm_config_spt_t spt_config = {
-    .spt_enable_mask = {
-        .fields = {
-            .valid    = PM_CONFIG_VALID,
-            .raw_data = (1 << SPT_CTRL_DIE_T),
-        }
-    },
-    .spt_setpoints = {
-        [SPT_CTRL_FAST] = {
-            .fields = {
-                .valid    = PM_CONFIG_VALID,
-                .raw_data = 32000,  // in mW
-            }
-        },
-        [SPT_CTRL_SLOW] = {
-            .fields = {
-                .valid    = PM_CONFIG_VALID,
-                .raw_data = 28000,  // in mW
-            }
-        },
-        [SPT_CTRL_CHASSIS_T] = {
-            .fields = {
-                .valid    = PM_CONFIG_VALID,
-                .raw_data = 25,     // in degree C
-            }
-        },
-        [SPT_CTRL_DIE_T] = {
-            .fields = {
-                .valid    = PM_CONFIG_VALID,
-                .raw_data = 90,     // in degree C
-            }
-        },
-    },
-    .spt_skin_margin = {
+    .uart_baudrate = {
         .fields = {
             .valid    = PM_CONFIG_INVALID,
-            .raw_data = 5000,       // in mW
         }
-    },
-};
-#endif
-
-#ifndef PM_WDT_CONFIG
-#define PM_WDT_CONFIG 0
-#endif
-#if PM_WDT_CONFIG
-static config_data_t wdt_timeout = {
-    .fields = {
-        .valid    = PM_CONFIG_VALID,
-        .raw_data = 5000000,
     }
 };
 #endif

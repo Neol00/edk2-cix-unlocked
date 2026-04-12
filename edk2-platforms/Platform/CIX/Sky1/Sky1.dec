@@ -147,7 +147,7 @@
   gCixPlatformTokenSpaceGuid.PcdRedriverNeedAuxFlip|{ 0, 0, 0, 0 }|VOID*|0x00000145 # config aux flip, if need set 1
   gCixPlatformTokenSpaceGuid.PcdRedriverForceHpd|{ 0, 0, 0, 0 }|VOID*|0x00000146  # config force hpd, if need set 1
 
-  gCixPlatformTokenSpaceGuid.PcdSiliconDtbUpdateFileName|L"SKY1-EVB.DTB"|VOID*|0x0000A301
+  gCixPlatformTokenSpaceGuid.PcdSiliconDtbUpdateFileName|L"sky1-orion-o6.dtb"|VOID*|0x0000A301
   gCixPlatformTokenSpaceGuid.PcdSiliconDtbUpdateEnable|FALSE|BOOLEAN|0x0000A302
   gCixPlatformTokenSpaceGuid.PcdPlatformDtbUpdateEnable|FALSE|BOOLEAN|0x0000A303
 
@@ -159,14 +159,12 @@
   gCixPlatformTokenSpaceGuid.PcdAcpiGpio3IoMask|0x00000000|UINT32|0x0000A009
   gCixPlatformTokenSpaceGuid.PcdAcpiGpio4IoMask|0x00000000|UINT32|0x0000A00A
   gCixPlatformTokenSpaceGuid.PcdAcpiGpio5IoMask|0x00000000|UINT32|0x0000A00B
-  gCixPlatformTokenSpaceGuid.PcdAcpiPrefPmProf|0x02|UINT8|0x0000A00C # 0: Unspecified, 1: Desktop, 2: Mobile, 3: Workstation, 4: Enterprise Server, 5: SOHO Server, 6: Appliance PC, 7: Performance Server, 8: Tablet, >8: Reserved
+  gCixPlatformTokenSpaceGuid.PcdAcpiPrefPmProf|0x03|UINT8|0x0000A00C # 0: Unspecified, 1: Desktop, 2: Mobile, 3: Workstation, 4: Enterprise Server, 5: SOHO Server, 6: Appliance PC, 7: Performance Server, 8: Tablet, >8: Reserved
 
   #RTC Wakeup
   gCixPlatformTokenSpaceGuid.PcdRtcWakeup|0x00|UINT8|0x00002001
   #Ligt Sensor Control
   gCixPlatformTokenSpaceGuid.PcdLightSensorCtrl|0x01|UINT8|0x00002002
-  gCixPlatformTokenSpaceGuid.PcdCpuFMax|0x00|UINT8|0x00002003
-  gCixPlatformTokenSpaceGuid.PcdGpuFMax|0x00|UINT8|0x00002004
   gCixPlatformTokenSpaceGuid.PcdStmmFirmwareVersionString|L""|VOID*|0x00002006
   gCixPlatformTokenSpaceGuid.PcdRegisterBootShellSupport|TRUE|BOOLEAN|0x00003002
   gCixPlatformTokenSpaceGuid.PcdOemPublicKeyFileGuid|{0x9a, 0x3e, 0xd3, 0x10, 0x25, 0x99, 0x4d, 0xa8, 0xaa, 0x4b, 0xd9, 0xfd, 0x9f, 0x68, 0xd3, 0x82}|VOID*|0x00003003

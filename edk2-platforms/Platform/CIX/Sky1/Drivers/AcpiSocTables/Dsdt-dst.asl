@@ -90,8 +90,10 @@ Device (RAOP) {
     ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
     Package () {
       Package () { "compatible", "ramoops" },
-      Package () { "record-size", 0x20000 },
-      Package () { "console-size", 0x20000 },
+      Package () { "mem-address", RAMOOPS_RES_BASE },
+      Package () { "mem-size", RAMOOPS_RES_SIZE },
+      Package () { "record-size", 0x40000 },
+      Package () { "console-size", 0x40000 },
       Package () { "pmsg-size", 0x1000 },
     }
   })

@@ -71,8 +71,13 @@ Device (PRC0) { /* PCIE0 X8 */
     if (Local0 != 0) { ASPM = Local0 }
   }
 
+  // PCIe is only available if PCIe link is up
   Method (_STA, 0x0, Serialized) {
-    Return (0xF)
+    If(\_SB.GETV(ARV_PCIE_RP_00_LINK_STS_OFFSET)){
+      Return (0xF)
+    } else {
+      Return (0x0)
+    }
   }
   Name (_CRS, ResourceTemplate () {
     Memory32Fixed (ReadWrite, 0x0a010000, 0x10000)
@@ -319,8 +324,13 @@ Device (PRC1) { /* PCIE2 X4 */
     if (Local0 != 0) { ASPM = Local0 }
   }
 
+  // PCIe is only available if PCIe link is up
   Method (_STA, 0x0, Serialized) {
-    Return (0xF)
+    If(\_SB.GETV(ARV_PCIE_RP_01_LINK_STS_OFFSET)){
+      Return (0xF)
+    } else {
+      Return (0x0)
+    }
   }
   Name (_CRS, ResourceTemplate () {
     Memory32Fixed (ReadWrite, 0x0a070000, 0x10000)
@@ -554,8 +564,13 @@ Device (PRC2) { /* PCIE3 X2 */
     if (Local0 != 0) { ASPM = Local0 }
   }
 
+  // PCIe is only available if PCIe link is up
   Method (_STA, 0x0, Serialized) {
-    Return (0xF)
+    If(\_SB.GETV(ARV_PCIE_RP_02_LINK_STS_OFFSET)){
+      Return (0xF)
+    } else {
+      Return (0x0)
+    }
   }
   Name (_CRS, ResourceTemplate () {
     Memory32Fixed (ReadWrite, 0x0a0c0000, 0x10000)
@@ -742,8 +757,13 @@ Device (PRC3) { /* PCIE4 X1_1 */
     if (Local0 != 0) { ASPM = Local0 }
   }
 
+  // PCIe is only available if PCIe link is up
   Method (_STA, 0x0, Serialized) {
-    Return (0xF)
+    If(\_SB.GETV(ARV_PCIE_RP_03_LINK_STS_OFFSET)){
+      Return (0xF)
+    } else {
+      Return (0x0)
+    }
   }
   Name (_CRS, ResourceTemplate () {
     Memory32Fixed (ReadWrite, 0x0a0e0000, 0x10000)
@@ -930,8 +950,13 @@ Device (PRC4) { /* PCIE3 X1_0 */
     if (Local0 != 0) { ASPM = Local0 }
   }
 
+  // PCIe is only available if PCIe link is up
   Method (_STA, 0x0, Serialized) {
-    Return (0xF)
+    If(\_SB.GETV(ARV_PCIE_RP_04_LINK_STS_OFFSET)){
+      Return (0xF)
+    } else {
+      Return (0x0)
+    }
   }
   Name (_CRS, ResourceTemplate () {
     Memory32Fixed (ReadWrite, 0x0a0d0000, 0x10000)

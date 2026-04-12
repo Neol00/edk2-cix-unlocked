@@ -313,13 +313,13 @@
   gCixTokenSpaceGuid.PcdI2c0En|TRUE
   gCixTokenSpaceGuid.PcdI2c0BusFreq|400000
   gCixTokenSpaceGuid.PcdI2c2En|TRUE
-  gCixTokenSpaceGuid.PcdI2c2BusFreq|100000
+  gCixTokenSpaceGuid.PcdI2c2BusFreq|400000
   gCixTokenSpaceGuid.PcdI2c3En|TRUE
-  gCixTokenSpaceGuid.PcdI2c3BusFreq|100000
+  gCixTokenSpaceGuid.PcdI2c3BusFreq|400000
   gCixTokenSpaceGuid.PcdI2c4En|TRUE
-  gCixTokenSpaceGuid.PcdI2c4BusFreq|100000
+  gCixTokenSpaceGuid.PcdI2c4BusFreq|400000
   gCixTokenSpaceGuid.PcdI2c5En|TRUE
-  gCixTokenSpaceGuid.PcdI2c5BusFreq|100000
+  gCixTokenSpaceGuid.PcdI2c5BusFreq|400000
   gCixTokenSpaceGuid.PcdI2c6En|TRUE
   gCixTokenSpaceGuid.PcdI2c6BusFreq|50000
 
@@ -372,6 +372,14 @@
   gCixTokenSpaceGuid.PcdSocWatchdogTimer|0x01
 
   gArmTokenSpaceGuid.PcdProcessorVersion|L"CIX P1 CP8180"
+
+  # Audio: enable I2S5-I2S9 in ACPI (matches Radxa O6 build).
+  # I2S5-9 are used for audio routing through the HDA/DSP subsystem.
+  gCixTokenSpaceGuid.PcdAcpiI2s5Enable|TRUE
+  gCixTokenSpaceGuid.PcdAcpiI2s6Enable|TRUE
+  gCixTokenSpaceGuid.PcdAcpiI2s7Enable|TRUE
+  gCixTokenSpaceGuid.PcdAcpiI2s8Enable|TRUE
+  gCixTokenSpaceGuid.PcdAcpiI2s9Enable|TRUE
 [PcdsDynamicDefault.common]
 
   gEmbeddedTokenSpaceGuid.PcdDmaDeviceLimit|0x47fffffff

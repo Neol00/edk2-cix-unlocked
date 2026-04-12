@@ -45,6 +45,7 @@ Device (COM0) {
   Name (_DSD, Package () {
     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
     Package () {
+          Package () { "clock-frequency", 100000000 },
           Package () { "uartclk", UCLK },
           Package () { "timeout-value", 10000 },
           Package () { "dma-names", Package () { "tx", "rx"} },
@@ -81,6 +82,7 @@ Device (COM1) {
   Name (_DSD, Package () {
     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
     Package () {
+          Package () { "clock-frequency", 100000000 },
           Package () { "uartclk", UCLK },
           Package () { "timeout-value", 10000 },
           Package () { "dma-names", Package () { "tx", "rx"} },
@@ -115,6 +117,7 @@ Device (COM2) {
   Name (_DSD, Package () {
     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
     Package () {
+          Package () { "clock-frequency", 100000000 },
           Package () { "uartclk", UCLK },
         }
   })
@@ -140,6 +143,12 @@ Device (COM3) {
   Name (_CRS, ResourceTemplate () {
     Memory32Fixed (ReadWrite, UART3_BASE, UART3_SIZE)
     Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { FCH_INTR_UART3_INTERRUPT_ID }
+  })
+  Name (_DSD, Package () {
+    ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+    Package () {
+          Package () { "clock-frequency", 100000000 },
+        }
   })
   Name (CLKT, Package() {
     Package() {CLK_TREE_FCH_UART3_APB, "apb_pclk", \_SB.COM3},

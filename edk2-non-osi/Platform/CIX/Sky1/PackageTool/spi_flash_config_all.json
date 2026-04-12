@@ -9,9 +9,14 @@
     "xip_addr": "0x108000",
     "ec_file": "Firmwares/ec_fw.bin",
     "sec_debug_file": "",
-    "xip_file": "",
-    "image_count": 7,
-    "image_header_groups": [
+    "xip_file": "Firmwares/dummy.bin",
+    "image_count": 8,
+    "image_header_groups": [{
+            "image_type": 8,
+            "address": "0x108000",
+            "size": "0x6000",
+            "file": "Firmwares/profile_store.bin"
+        },
         {
             "image_type": 1,
             "address": "0x188000",

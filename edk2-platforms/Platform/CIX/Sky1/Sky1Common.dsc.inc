@@ -427,7 +427,7 @@
   gArmTokenSpaceGuid.PcdArmPrimaryCore|0x000  #core0
 !else
   # The Primary Core is 0.0.4.0
-  gArmTokenSpaceGuid.PcdArmPrimaryCore|0x400  #core4
+  gArmTokenSpaceGuid.PcdArmPrimaryCore|0x000  #core0
 !endif
 
   gArmPlatformTokenSpaceGuid.PcdCPUCorePrimaryStackSize|0x40000
@@ -887,6 +887,13 @@
   #
   Platform/CIX/Sky1/Drivers/NvmExpressDxe/NvmExpressDxe.inf
 
+  #
+  # SATA Support (AHCI controller over PCI, e.g. NVMe-to-SATA adapters)
+  #
+  MdeModulePkg/Bus/Pci/SataControllerDxe/SataControllerDxe.inf
+  MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AtaAtapiPassThru.inf
+  MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf
+
   # SCMI Driver
   Platform/CIX/Sky1/Drivers/ArmScmiDxe/ArmScmiDxe.inf
   # reset
@@ -950,6 +957,7 @@
 !if $(PM_CONFIG_UPDATE_SUPPORT) == TRUE
   Platform/CIX/Sky1/Drivers/PmConfigUpdateDxe/PmConfigUpdateDxe.inf
 !endif
+  Platform/CIX/Sky1/Drivers/ProfileManagerDxe/ProfileManagerDxe.inf
 !if $(MEM_CONFIG_UPDATE_SUPPORT) == TRUE
   Platform/CIX/Sky1/Drivers/MemConfigUpdateDxe/MemConfigUpdateDxe.inf
 !endif

@@ -45,6 +45,11 @@ Device (DSP) {
     Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) {
       AUDIO_IRQ_O_WDT_INTERRUPT_ID
     }
+    // Reserved DRAM buffer for DSP (no-map region).
+    // acpi_resource_lookup (CIXA1019 RSVL) validates this address against
+    // _CRS and then calls dma_declare_coherent_memory() — the ACPI
+    // equivalent of the Device Tree reserved-memory "no-map" property.
+    Memory32Fixed (ReadWrite, 0xcde08000, 0x100000)
   })
   Name (_DSD, Package () {
     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
