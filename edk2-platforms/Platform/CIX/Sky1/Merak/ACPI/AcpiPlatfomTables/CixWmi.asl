@@ -34,12 +34,14 @@ Device(WMIP){
     }
 
     Method(CI01,1) {
-        UDBG(Printf("CI01 %o", Arg0))
+        Concatenate("CI01 ", ToHexString(Arg0), Local0)
+        UDBG(Local0)
         return (Zero)
     }
 
     Method(CI02,1) {
-        UDBG(Printf("CI02 %o", Arg0))
+        Concatenate("CI02 ", ToHexString(Arg0), Local0)
+        UDBG(Local0)
         return (Zero)
     }
 

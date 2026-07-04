@@ -131,10 +131,10 @@ Device (PRC0) { /* PCIE0 X8 */
       MinFixed, MaxFixed,
       Cacheable, ReadWrite,
       0x00000000,               // Granularity
-      0x1800000000,             // Min Base Address
-      0x1BFFFFFFFF,             // Max Base Address
+      0x2800000000,             // Min Base Address
+      0x2FFFFFFFFF,             // Max Base Address
       0x00000000,               // Translate
-      0x400000000               // Length 16G
+      0x800000000               // Length 32G
     )
     PinGroupFunction(Exclusive, 0x0, "\\_SB.MUX1", 0, "pinctrl_pcie_x8_rc", ResourceConsumer,)
 #if PCIE_X8_PERST
@@ -384,10 +384,10 @@ Device (PRC1) { /* PCIE2 X4 */
       MinFixed, MaxFixed,
       Cacheable, ReadWrite,
       0x00000000,               // Granularity
-      0x1400000000,             // Min Base Address
-      0x17FFFFFFFF,             // Max Base Address
+      0x2000000000,             // Min Base Address
+      0x27FFFFFFFF,             // Max Base Address
       0x00000000,               // Translate
-      0x400000000               // Length 16G
+      0x800000000               // Length 32G
     )
     PinGroupFunction(Exclusive, 0x0, "\\_SB.MUX1", 0, "pinctrl_pcie_x4_rc", ResourceConsumer,)
 #if PCIE_X4_PERST
@@ -401,7 +401,7 @@ Device (PRC1) { /* PCIE2 X4 */
           Package () { "device_type", "pci" },
           Package () { "vendor-id", 0x1f6c },
           Package () { "device-id", 0x0001 },
-          Package () { "bus-range", Package () { 0x90, 0xbf } },
+          Package () { "bus-range", Package () { 0x90, 0xaf } },
           Package () { "max-link-speed", MLKS },
           Package () { "num-lanes", NUML },
           Package () { "cdns,no-inbound-bar", 0 },
@@ -624,10 +624,10 @@ Device (PRC2) { /* PCIE3 X2 */
       MinFixed, MaxFixed,
       Cacheable, ReadWrite,
       0x00000000,               // Granularity
-      0x1000000000,             // Min Base Address
-      0x13FFFFFFFF,             // Max Base Address
+      0x1800000000,             // Min Base Address
+      0x1FFFFFFFFF,             // Max Base Address
       0x00000000,               // Translate
-      0x400000000               // Length 16G
+      0x800000000               // Length 32G
     )
     PinGroupFunction(Exclusive, 0x0, "\\_SB.MUX1", 0, "pinctrl_pcie_x2_rc", ResourceConsumer,)
 #if PCIE_X2_PERST
@@ -817,10 +817,10 @@ Device (PRC3) { /* PCIE4 X1_1 */
       MinFixed, MaxFixed,
       Cacheable, ReadWrite,
       0x00000000,               // Granularity
-      0xC00000000,             // Min Base Address
-      0xFFFFFFFFF,             // Max Base Address
+      0x1000000000,             // Min Base Address
+      0x17FFFFFFFF,             // Max Base Address
       0x00000000,               // Translate
-      0x400000000               // Length 16G
+      0x800000000               // Length 32G
     )
     PinGroupFunction(Exclusive, 0x0, "\\_SB.MUX1", 0, "pinctrl_pcie_x1_1_rc", ResourceConsumer,)
 #if PCIE_X1_1_PERST
@@ -1010,10 +1010,10 @@ Device (PRC4) { /* PCIE3 X1_0 */
       MinFixed, MaxFixed,
       Cacheable, ReadWrite,
       0x00000000,               // Granularity
-      0x800000000,             // Min Base Address
-      0xBFFFFFFFF,             // Max Base Address
+      0x0800000000,             // Min Base Address
+      0x0FFFFFFFFF,             // Max Base Address
       0x00000000,               // Translate
-      0x400000000               // Length 16G
+      0x800000000               // Length 32G
     )
     PinGroupFunction(Exclusive, 0x0, "\\_SB.MUX1", 0, "pinctrl_pcie_x1_0_rc", ResourceConsumer,)
 #if PCIE_X1_0_PERST

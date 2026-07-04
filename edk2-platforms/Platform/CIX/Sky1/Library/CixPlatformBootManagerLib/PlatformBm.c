@@ -664,6 +664,12 @@ PlatformBootManagerBeforeConsole (
   EFI_DEVICE_PATH_PROTOCOL  *ConDevicePath;
 
   //
+  // Reclaim variable store space from accumulated Linux crash dumps
+  // before anything else writes variables this boot.
+  //
+  SweepLinuxCrashDumpVariables ();
+
+  //
   // Signal EndOfDxe PI Event
   //
   EfiEventGroupSignal (&gEfiEndOfDxeEventGroupGuid);

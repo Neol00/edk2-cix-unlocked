@@ -124,12 +124,12 @@ InstallType45Structure (
       return;
     }
 
+    CopyMem (SmbiosType45, &SmbiosType45Temple, sizeof (SMBIOS_TABLE_TYPE45));
+
     if (EFI_ERROR (Status)) {
       // Update state since CixFwVerProtocol->GetFwVersion failed
       SmbiosType45->State = FirmwareInventoryStateUnknown;
     }
-
-    CopyMem (SmbiosType45, &SmbiosType45Temple, sizeof (SMBIOS_TABLE_TYPE45));
     StrPtr = (CHAR8 *)((UINT8 *)SmbiosType45 + sizeof (SMBIOS_TABLE_TYPE45));
     // Firmware ID & RELEASE Date & LowestSupportedVersion == NULL
     AsciiStrCpyS (StrPtr, AsciiStrSize (StrNull), StrNull);

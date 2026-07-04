@@ -642,7 +642,9 @@ Device (DPU2) {
         Local0 = MSK0
         Local1 = MSK0
         Local0 = Local0 & PD_PG_EN1
-        printf ("CIX Debug: DPU2 get current state=%o:%o\n", Local0, Local1)
+        Debug = "CIX Debug: DPU2 get current state:"
+        Debug = Local0
+        Debug = Local1
         If (Local0 > 0)
         {
           Return (1)
@@ -655,20 +657,24 @@ Device (DPU2) {
     Method(_ON, 0, Serialized)
     {
       Local0 = MSK0
-      printf ("CIX Debug: DPU2 power on, mask1=%o\n", Local0)
+      Debug = "CIX Debug: DPU2 power on, mask1 ="
+      Debug = Local0
       Local0 = Local0 | PD_PG_EN1 | TIME_CYCLE_CNT
       MSK0 = Local0
-      printf ("CIX Debug: DPU2 power on, mask2=%o\n", MSK0)
+      Debug = "CIX Debug: DPU2 power on, mask2 ="
+      Debug = MSK0
       \_SB.DMRP(MEMORY_ENABLE, MEMR_GROUP_ID_DPU, DPU_RCSU_BASE_REG, BIT2)
-      printf ("CIX Debug: Call do_mem_repair end.\n")
+      Debug = "CIX Debug: Call do_mem_repair end."
     }
     Method(_OFF, 0, Serialized)
     {
       Local0 = MSK0
-      printf ("CIX Debug: DPU2 power off, mask1=%o\n", Local0)
+      Debug = "CIX Debug: DPU2 power off, mask1 ="
+      Debug = Local0
       Local0 = Local0 & ~PD_PG_EN1
       MSK0 = Local0
-      printf ("CIX Debug: DPU2 power off, mask2=%o\n", MSK0)
+      Debug = "CIX Debug: DPU2 power off, mask2 ="
+      Debug = MSK0
     }
   }
 

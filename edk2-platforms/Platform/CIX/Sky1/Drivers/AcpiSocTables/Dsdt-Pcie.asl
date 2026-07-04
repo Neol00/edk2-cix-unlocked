@@ -101,10 +101,10 @@ Device (PCI0)
         MinFixed, MaxFixed,
         Cacheable, ReadWrite,
         0x00000000,               // Granularity
-        0x1800000000,             // Min Base Address
-        0x1BFFFFFFFF,             // Max Base Address
+        0x2800000000,             // Min Base Address
+        0x2FFFFFFFFF,             // Max Base Address
         0x00000000,               // Translate
-        0x400000000               // Length 16G
+        0x800000000               // Length 32G
       )
     })                            // Name(RBUF)
     Return (RBUF)
@@ -177,10 +177,10 @@ Device (PCI1)
         MinFixed, MaxFixed,
         Cacheable, ReadWrite,
         0x00000000,               // Granularity
-        0x1400000000,             // Min Base Address
-        0x17FFFFFFFF,             // Max Base Address
+        0x2000000000,             // Min Base Address
+        0x27FFFFFFFF,             // Max Base Address
         0x00000000,               // Translate
-        0x400000000               // Length 16G
+        0x800000000               // Length 32G
       )
     })                            // Name(RBUF)
     Return (RBUF)
@@ -254,10 +254,10 @@ Device (PCI2)
         MinFixed, MaxFixed,
         Cacheable, ReadWrite,
         0x00000000,               // Granularity
-        0x1000000000,             // Min Base Address
-        0x13FFFFFFFF,             // Max Base Address
+        0x1800000000,             // Min Base Address
+        0x1FFFFFFFFF,             // Max Base Address
         0x00000000,               // Translate
-        0x400000000               // Length 16G
+        0x800000000               // Length 32G
       )
     })                            // Name(RBUF)
     Return (RBUF)
@@ -331,10 +331,10 @@ Device (PCI3)
         MinFixed, MaxFixed,
         Cacheable, ReadWrite,
         0x00000000,               // Granularity
-        0x0C00000000,             // Min Base Address
-        0x0FFFFFFFFF,             // Max Base Address
+        0x1000000000,             // Min Base Address
+        0x17FFFFFFFF,             // Max Base Address
         0x00000000,               // Translate
-        0x400000000               // Length 16G
+        0x800000000               // Length 32G
       )
     })                            // Name(RBUF)
     Return (RBUF)
@@ -409,9 +409,9 @@ Device (PCI4)
         Cacheable, ReadWrite,
         0x00000000,               // Granularity
         0x0800000000,             // Min Base Address
-        0x0BFFFFFFFF,             // Max Base Address
+        0x0FFFFFFFFF,             // Max Base Address
         0x00000000,               // Translate
-        0x400000000               // Length 16G
+        0x800000000               // Length 32G
       )
     })                            // Name(RBUF)
     Return (RBUF)

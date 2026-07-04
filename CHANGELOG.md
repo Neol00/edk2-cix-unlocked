@@ -1,5 +1,30 @@
 This firmware is based on edk2-cix v0.2.2-1 with its prebuilt closed-source binaries (bootloader1.img containing the SE/PBL and SCP firmware) that support OPP table tuning via pm_config. Newer Radxa releases (v1.1.0+) use updated SCP firmware that controls CPU frequency internally, ignoring pm_config OPP tables entirely — which is why runtime overclocking requires staying on the older bootloader1.img.
 
+### V2.4
+
+#### NVRAM
+- **Added boot-time crash dump sweeper** — new `PstoreSweeper` in `CixPlatformBootManagerLib`. On every kernel crash, Linux's efi-pstore dumps the dmesg buffer into `dump-type0-*` UEFI variables under `LINUX_EFI_CRASH_GUID`. If the OS never drains them (systemd-pstore.service disabled or missing), repeated crashes fill the 160KB SPI variable store until efivar writes fail with "No space left on device" and boot slows down. The sweeper runs in `PlatformBootManagerBeforeConsole()`: when free variable-store space drops below 50%, it deletes crash dump variables oldest-first (sorted by the pstore timestamp embedded in the variable name) until the store is back above 50% free. Only variables under the Linux crash vendor GUID are ever touched.
+
+#### Stability
+- **Reset power supplies on boot** — `InitGpio()` in `PlatformEnvHookLib` now drives all five PCIe PERST# pins and the onboard power-enable rails (LOM, M.2 SSD, WLAN, VGFX, camera, and all USB VBUS lines) low for 100ms before normal GPIO initialization powers them up. This guarantees every onboard device gets a clean power cycle even after a forced power-off or crash, instead of coming up in a half-alive state from the previous session. Pinmux initialization now runs before GPIO initialization as part of the same change.
+
+#### ACPI
+- **Added `reg-io-width` property to SCMI shared memory** — mainline Linux ≥ 6.13 uses this property to perform 32-bit accesses to the SCMI shmem; without it the SCMI transport can fail to probe on newer kernels, taking DVFS, clocks, and the panthor GPU driver down with it. Note: the "Enable ACPI SCMI" BIOS option mentioned in CIX's kernel documentation does not exist in this BIOS because the SCMI DVFS/CLKS devices are permanently enabled here — the option only exists in stock Radxa firmware where they ship disabled.
+- **Increased PCIe 64-bit prefetchable windows to 32G per root complex** — doubled each root complex's 64-bit MMIO window from 16G to 32G and relocated them to a new contiguous map (0x08_0000_0000–0x2F_FFFF_FFFF), in both the PNP0A08 host bridges (`Dsdt-Pcie.asl`) and the CIXH2020 vendor devices (`Dsdt-CdnsPcie.asl`). Fixes BAR assignment failures with high-end/resizable-BAR GPUs (radxa/edk2-platforms#3). Note: Radxa shipped this fix in mid-2025 but it was silently reverted by CIX's 2025Q3 vendor code drop and current stock firmware is back to 16G windows — this BIOS keeps the fix. Firmware-side boot-time BAR assignment (`PlatformPcieLib.h`) intentionally still uses the old 16G windows, matching how Radxa shipped it; the OS reassigns BARs into the larger windows per ACPI.
+- **Fixed PCIe bus-range/WordBusNumber mismatch** — the PCIE2 X4 root complex (PRC1) declared `bus-range 0x90–0xbf` in its `_DSD` while its `_CRS` WordBusNumber only allocates buses 0x90–0xaf. Corrected the `_DSD` to match. The other four root complexes were verified consistent.
+
+#### Firmware update
+- **Fixed FmpSetImage return value** — `FmpSetImage()` in `SystemFirmwareReportDxe` always returned `EFI_SUCCESS` even when the underlying image dispatch failed, so a failed firmware update could be reported as successful to capsule tooling. It also skipped `ImageIndex` validation (the check was commented out). Now returns the real dispatch status and rejects out-of-range image indexes with `EFI_INVALID_PARAMETER`. This also fixes the ACS "SetImage, conformance checkpoint" test failure.
+
+#### USB-PD
+- **Guard against invalid PD alert pin** — `SortEnabledAlertPin()` in `PdDxe` now skips PD devices whose alert pin is the unassigned sentinel `0xFF`. The PD device list comes from a runtime configuration data block, so an unassigned pin could previously be registered as a GPIO alert interrupt on a nonexistent pin 255.
+
+#### SMBIOS
+- **Fixed dead State assignment in Type 45** — when a component's firmware version cannot be read, the entry's `State` field is set to `FirmwareInventoryStateUnknown`; previously the assignment ran before the template `CopyMem` overwrote the struct, so it never took effect.
+
+#### Build
+- **Fixed ASL compatibility with current iASL** — iASL 20260408 no longer accepts `Printf`/`printf` statements (internal compiler error). Converted all 16 ACPI debug printf statements across `Dsdt-AcpiRam.asl`, `Dsdt-Dpu.asl`, `Dsdt-ScmiMailbox.asl`, and the Merak `EC.asl` to equivalent `Debug =` stores, and rewrote the two invalid `UDBG(Printf(...))` calls in the Merak `CixWmi.asl` to build the string with `Concatenate`/`ToHexString` first. The firmware now builds with a stock system iasl.
+
 ### V2.3
 
 #### Profile Manager

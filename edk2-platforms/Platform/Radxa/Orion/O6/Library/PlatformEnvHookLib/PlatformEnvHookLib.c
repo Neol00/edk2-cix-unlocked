@@ -12,6 +12,7 @@
 #include <Library/GpioLib.h>
 #include <Library/GpioTableLib.h>
 #include <Library/PlatformEnvHookLib.h>
+#include <Library/TimerLib.h>
 #include <Protocol/EcPlatformProtocol.h>
 #include <Protocol/I2cDevicePath.h>
 #include <Library/CixSipLib.h>
@@ -193,6 +194,29 @@ InitGpio (
   IN OUT ENV_HOOK_PARAMS_DATA_BLOCK  *ConfigData
   )
 {
+  // Reset power signal incase of forced shutdown
+  // Based on edk2-platforms/Platform/Radxa/Library/ArmPsciResetSystemLib/ArmPsciResetSystemLib.c
+  GpioConfig(FixedPcdGet8(PcdPcieRootPort0PeResetPin), OUTPUT, INOUT_LOW, INTERRUPT_DISABLE, INTERRUPT_TYPE_DEFAULT);
+  GpioConfig(FixedPcdGet8(PcdPcieRootPort1PeResetPin), OUTPUT, INOUT_LOW, INTERRUPT_DISABLE, INTERRUPT_TYPE_DEFAULT);
+  GpioConfig(FixedPcdGet8(PcdPcieRootPort2PeResetPin), OUTPUT, INOUT_LOW, INTERRUPT_DISABLE, INTERRUPT_TYPE_DEFAULT);
+  GpioConfig(FixedPcdGet8(PcdPcieRootPort3PeResetPin), OUTPUT, INOUT_LOW, INTERRUPT_DISABLE, INTERRUPT_TYPE_DEFAULT);
+  GpioConfig(FixedPcdGet8(PcdPcieRootPort4PeResetPin), OUTPUT, INOUT_LOW, INTERRUPT_DISABLE, INTERRUPT_TYPE_DEFAULT);
+
+  GpioConfig(10, OUTPUT, INOUT_LOW, INTERRUPT_DISABLE, INTERRUPT_TYPE_DEFAULT); //  output low of LOM_PWREN
+  GpioConfig(12, OUTPUT, INOUT_LOW, INTERRUPT_DISABLE, INTERRUPT_TYPE_DEFAULT); //  output low of M2_SSD_PWREN
+  GpioConfig(13, OUTPUT, INOUT_LOW, INTERRUPT_DISABLE, INTERRUPT_TYPE_DEFAULT); //  output low of WLAN_PWREN
+  GpioConfig(17, OUTPUT, INOUT_LOW, INTERRUPT_DISABLE, INTERRUPT_TYPE_DEFAULT); //  output low of VGFX_PWREN
+  GpioConfig(21, OUTPUT, INOUT_LOW, INTERRUPT_DISABLE, INTERRUPT_TYPE_DEFAULT); //  output low of USB02F_DRIVE_VBUS
+  GpioConfig(22, OUTPUT, INOUT_LOW, INTERRUPT_DISABLE, INTERRUPT_TYPE_DEFAULT); //  output low of 5GPHY2_PWR_EN
+  GpioConfig(40, OUTPUT, INOUT_LOW, INTERRUPT_DISABLE, INTERRUPT_TYPE_DEFAULT); //  output low of USB2_DRIVE_VBUS
+  GpioConfig(41, OUTPUT, INOUT_LOW, INTERRUPT_DISABLE, INTERRUPT_TYPE_DEFAULT); //  output low of USB_DRIVE_VBUS4
+  GpioConfig(42, OUTPUT, INOUT_LOW, INTERRUPT_DISABLE, INTERRUPT_TYPE_DEFAULT); //  output low of USB_DRIVE_VBUS5
+  GpioConfig(81, OUTPUT, INOUT_LOW, INTERRUPT_DISABLE, INTERRUPT_TYPE_DEFAULT); //  output low of CAM_PWREN
+
+  // Wait 100ms to make sure the device is off
+  MicroSecondDelay(100 * 1000);
+
+  // Continue with the rest of GPIO initialization
   GpioInit (GpioCfgTable, ARRAY_SIZE (GpioCfgTable));
 
   return EFI_SUCCESS;
@@ -777,8 +801,8 @@ InitEcDefaultSetting (
 }
 
 STATIC PLATFORM_ENV_INIT_TABLE  mPlatformEnvInitTable[] = {
-  { NULL,                        NULL,                 InitGpio                },
   { NULL,                        NULL,                 InitPinmux              },
+  { NULL,                        NULL,                 InitGpio                },
   { NULL,                        NULL,                 UpdatePcdDmaDeviceLimit },
   { NULL,                        NULL,                 WakeupSourceInit        },
   { NULL,                        NULL,                 OnboardDevicePowerOff   },

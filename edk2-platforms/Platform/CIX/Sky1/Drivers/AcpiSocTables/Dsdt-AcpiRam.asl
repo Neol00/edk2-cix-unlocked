@@ -47,7 +47,9 @@ Method(MVCK, 1, Serialized)
     Local0 = Arg0
     Local1 = MSK0
     Local1 = (Local1 >> Local0) & 0x01
-    printf ("ACPI debug:arg0=%o, MVCK.valid = %o\n",Arg0, Local1)
+    Debug = "ACPI debug: MVCK arg0, valid ="
+    Debug = Arg0
+    Debug = Local1
     return (Local1)
 }
 
@@ -60,7 +62,11 @@ Method(MVCK, 1, Serialized)
  */
 Method(DMRP, 4, Serialized)
 {
-    printf ("ACPI debug: Arg0:Arg1:Arg2:Arg3 = %o:%o:%o:%o\n", Arg0, Arg1, Arg2, Arg3)
+    Debug = "ACPI debug: DMRP Arg0:Arg1:Arg2:Arg3 ="
+    Debug = Arg0
+    Debug = Arg1
+    Debug = Arg2
+    Debug = Arg3
     if(Arg0 && \_SB.MVCK(Arg1)) {
         OperationRegion(PDRG, SystemMemory, Arg2, 0x20)
         Field (PDRG, DWordAcc, NoLock, Preserve) {
@@ -77,14 +83,16 @@ Method(DMRP, 4, Serialized)
         {
             Local0--
             if (Local0 == 0x0) {
-                printf ("Do memory busy, status = %o!\n", Local1)
+                Debug = "Do memory busy, status ="
+                Debug = Local1
             }
             Local1 = BUSY
             Local1 = (Local1 >> 16) & 0xffff
         }
 
         ENBL = Arg3
-        printf ("group_en = 0x%o!\n", ENBL)
+        Debug = "group_en ="
+        Debug = ENBL
 
         Local1 = PASS
         Local1 = (Local1  >> 0x1) & 0x3
@@ -92,14 +100,16 @@ Method(DMRP, 4, Serialized)
         {
             Local0--
             if (Local0 == 0x0) {
-                printf ("Done and pass failed, status = %o!\n", Local1)
+                Debug = "Done and pass failed, status ="
+                Debug = Local1
             }
             Local1 = PASS
             Local1 = (Local1  >> 0x1) & 0x3
         }
 
         ENBL = 0x0
-        printf("group_en = 0x%o!\n", ENBL)
+        Debug = "group_en ="
+        Debug = ENBL
 
         return (ENBL)
     }

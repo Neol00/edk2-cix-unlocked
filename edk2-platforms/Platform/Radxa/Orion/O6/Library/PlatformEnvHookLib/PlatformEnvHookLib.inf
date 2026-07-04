@@ -37,6 +37,7 @@
   UefiBootServicesTableLib
   UefiRuntimeServicesTableLib
   UefiLib
+  TimerLib
   PinMuxLib
   PinMuxTableLib
   GpioLib
@@ -60,6 +61,11 @@
   gRadxaTokenSpaceGuid.PcdRtc8563I2cBus
   gArmTokenSpaceGuid.PcdSystemMemorySize
   gCixTokenSpaceGuid.PcdMemInfoBaseAddr
+  gCixTokenSpaceGuid.PcdPcieRootPort0PeResetPin
+  gCixTokenSpaceGuid.PcdPcieRootPort1PeResetPin
+  gCixTokenSpaceGuid.PcdPcieRootPort2PeResetPin
+  gCixTokenSpaceGuid.PcdPcieRootPort3PeResetPin
+  gCixTokenSpaceGuid.PcdPcieRootPort4PeResetPin
   gCixTokenSpaceGuid.PcdSocWatchdogTimer
   gEfiNetworkPkgTokenSpaceGuid.PcdNetworkStackSupport
   gEfiNetworkPkgTokenSpaceGuid.PcdIPv4PXESupport

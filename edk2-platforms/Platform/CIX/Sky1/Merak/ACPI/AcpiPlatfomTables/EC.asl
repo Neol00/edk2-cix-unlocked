@@ -792,7 +792,7 @@ PowerResource(ECFN, 0, 0)
     Name(BUF1, Buffer(10){})
 
     if(\_SB.EC0.TRAS(BUF0,Sizeof(BUF0),BUF1,Sizeof(BUF1)) != I2C_SUCCESS){
-      printf ("CIX Debug: FN00 on fail")
+      Debug = "CIX Debug: FN00 on fail"
     }
   }
   Method(_OFF, 0, Serialized)
@@ -801,7 +801,7 @@ PowerResource(ECFN, 0, 0)
     Name(BUF1, Buffer(10){})
 
     if(\_SB.EC0.TRAS(BUF0,Sizeof(BUF0),BUF1,Sizeof(BUF1)) != I2C_SUCCESS){
-      printf ("CIX Debug: FN00 off fail")
+      Debug = "CIX Debug: FN00 off fail"
     }
   }
 }

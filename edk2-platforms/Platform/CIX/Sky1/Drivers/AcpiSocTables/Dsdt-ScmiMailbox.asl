@@ -43,7 +43,7 @@
         Local0--                            \
     }                                       \
     if(Local0 == 0){                        \
-        printf("ASL Debug: SCMI Timeout\n") \
+        Debug = "ASL Debug: SCMI Timeout"   \
         Release(MBXM)                       \
         Return(Buffer(4){ACPI_SCMI_TIMEOUT})\
     }                                       \
@@ -85,7 +85,7 @@
         Local0--                            \
     }                                       \
     if(Local0 == 0){                        \
-        printf("ASL Debug: SCMI Timeout\n") \
+        Debug = "ASL Debug: SCMI Timeout"   \
         Release(MBXM)                       \
         Return(Buffer(4){ACPI_SCMI_TIMEOUT})\
     }                                       \
@@ -109,6 +109,7 @@ Device (SHM0) {
     ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
     Package () {
         Package () {"compatible", "arm,scmi-shmem"},
+        Package () { "reg-io-width", 4 },
     }
   })
 }
@@ -127,6 +128,7 @@ Device (SHM1) {
     ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
     Package () {
         Package () {"compatible", "arm,scmi-shmem"},
+        Package () { "reg-io-width", 4 },
     }
   })
 }

@@ -51,4 +51,14 @@ DisableQuietBoot (
   VOID
   );
 
+/**
+  If the variable store is running low on space, delete Linux efi-pstore
+  crash dump variables ("dump-type*"), oldest first, until enough space
+  is free again.
+**/
+VOID
+SweepLinuxCrashDumpVariables (
+  VOID
+  );
+
 #endif // PLATFORM_BM_H_

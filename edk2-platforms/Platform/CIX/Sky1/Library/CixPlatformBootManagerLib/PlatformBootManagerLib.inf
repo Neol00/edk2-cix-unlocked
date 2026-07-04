@@ -28,6 +28,7 @@
 [Sources]
   PlatformBm.c
   PlatformBm.h
+  PstoreSweeper.c
 
 [Packages]
   EmbeddedPkg/EmbeddedPkg.dec
