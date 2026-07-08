@@ -16,7 +16,10 @@ Device(HWMN){
 
     Method(_STA)
     {
-      Return(0x03)
+      // Orion O6 has no EC.  Every HWMN method routes to \_SB.EC0.* (the SCMI
+      // alternatives are commented out below), so on this board HWMN can only
+      // spin against absent EC hardware.  Hide it from Linux; mirrors EC0._STA.
+      Return(0x00)
     }
 
     //

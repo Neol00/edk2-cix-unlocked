@@ -569,6 +569,18 @@ PlatformSetupVariableInit (
 
   VarSize = sizeof (PLATFORM_SETUP_DATA);
 
+  //
+  // Zero the whole struct before reading.  On EFI_BUFFER_TOO_SMALL (a stored
+  // variable LARGER than this build's struct, e.g. a downgrade) GetVariable
+  // updates VarSize to the stored size; a later ZeroMem(&var, VarSize) would
+  // then overrun this stack buffer.  On a successful SHORT read (a stored
+  // variable smaller than this build, e.g. an upgrade that added fields) the
+  // unread tail would otherwise be stack garbage that gets written back as
+  // OPP/voltage values.  Pre-zeroing makes both cases safe: missing fields
+  // read as 0 ("stock"), and no ZeroMem ever uses the returned VarSize.
+  //
+  ZeroMem (&PlatformSetupVar, sizeof (PlatformSetupVar));
+
   Status = gRT->GetVariable (
                   PLATFORM_SETUP_VAR,
                   &gPlatformSetupVariableGuid,
@@ -580,7 +592,7 @@ PlatformSetupVariableInit (
     //
     // Variable does not exist yet - create it
     //
-    ZeroMem (&PlatformSetupVar, VarSize);
+    ZeroMem (&PlatformSetupVar, sizeof (PlatformSetupVar));
     ConstructSetupVariable (&PlatformSetupVar);
 
     Status = gRT->SetVariable (
@@ -715,6 +727,13 @@ NetworkStackVariableInit (
 
   VarSize = sizeof (NETWORK_STACK);
 
+  //
+  // Pre-zero so a larger stored variable can't drive an over-long ZeroMem and
+  // a shorter one can't leave stack garbage in the tail (see the equivalent
+  // note in PlatformSetupVariableInit above).
+  //
+  ZeroMem (&NetworkStack, sizeof (NetworkStack));
+
   Status = gRT->GetVariable (
                   NETWORK_STACK_VAR,
                   &gEfiNetworkStackSetupGuid,
@@ -723,7 +742,7 @@ NetworkStackVariableInit (
                   &NetworkStack
                   );
   if (EFI_ERROR (Status) || IsRtcPowerfailure ()) {
-    ZeroMem (&NetworkStack, VarSize);
+    ZeroMem (&NetworkStack, sizeof (NetworkStack));
     //
     // Variable does not exist yet - create it
     //

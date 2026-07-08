@@ -51,7 +51,12 @@ Device(EC0){
   Mutex(ECMX,0)
   Method(_STA)
   {
-    Return(0x03)
+    // Orion O6 is a desktop SBC with no real EC at I2C6/0x76.  Returning 0x00
+    // hides EC0 from Linux so it never issues EC I2C transactions that spin
+    // I2C_RETRIES_NUM (1,000,000) times against non-existent hardware, causing
+    // multi-second AE_AML_LOOP_TIMEOUT stalls in WRIT/STAT/TRAS.  This mirrors
+    // the BAT0._STA and HWMN._STA gating on this board.
+    Return(0x00)
   }
   OperationRegion (I2CA, SystemMemory, FixedPcdGet32 (PcdEcI2cBaseAddress), 0x100)
   Field (I2CA, DWordAcc, NoLock, Preserve)
@@ -640,7 +645,9 @@ Scope (\_SB.GPI4)
   })
 
   Method (_L06) {
-    \_SB.EC0.EVNT()
+    // No EC on Orion O6 (see EC0._STA).  A spurious edge on GPI4 pin 6 must
+    // not enter EC0.EVNT(), whose mailbox read spins against absent hardware.
+    // \_SB.EC0.EVNT()
   }
 }
 

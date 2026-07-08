@@ -119,8 +119,16 @@ ConstructRootBridge (
     Bridge->Io.Base  = Appeture->IoBase;
     Bridge->Io.Limit = Appeture->IoBase + Appeture->IoSize - 1;
   } else {
-    Bridge->Io.Base  = 0;
-    Bridge->Io.Limit = 0xFFFF;
+    //
+    // No I/O window on this root complex.  Use the "aperture absent"
+    // convention (Base > Limit) like the Mem/PMem branches below, rather
+    // than advertising a valid 0..0xFFFF window.  PcdPciIoTranslation is 0
+    // on Sky1 and nothing routes port I/O to PCIe, so a spuriously-valid
+    // window lets PciBus place an endpoint's I/O BAR at CPU physical 0 and
+    // enable I/O decode there (garbage/abort on discrete-GPU legacy BARs).
+    //
+    Bridge->Io.Base  = MAX_UINT64;
+    Bridge->Io.Limit = 0;
   }
 
   if (Appeture->Mem) {

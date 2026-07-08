@@ -14,7 +14,19 @@
 #include <Library/CixPostCodeLib.h>
 #include <Protocol/WatchdogTimer.h>
 
-#define GLOBAL_WDT_DEFAULT_TIME 20 //seconds
+//
+// Global SoC watchdog timeout, in seconds.  Armed at driver entry and only
+// disarmed at ReadyToBoot, so this single period must cover ALL of BDS:
+// console connect plus full device enumeration (slow USB hubs, multiple NVMe,
+// PXE/HTTP boot attempts).  In RELEASE builds this watchdog is active (the
+// NDEBUG early-return is compiled in only for DEBUG), and expiry triggers an
+// unconditional SoC reset via the hardware WS1 stage.  20s was tight enough to
+// false-trip on a slow-but-progressing cold boot; 90s keeps the hang-recovery
+// safety net while giving enumeration comfortable headroom.  A genuinely hung
+// boot never reaches ReadyToBoot, so the larger value only delays recovery
+// from a real hang, it does not defeat it.
+//
+#define GLOBAL_WDT_DEFAULT_TIME 90 //seconds
 
 VOID
 EFIAPI

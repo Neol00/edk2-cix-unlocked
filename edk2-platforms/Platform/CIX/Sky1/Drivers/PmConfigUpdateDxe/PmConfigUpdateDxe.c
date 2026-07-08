@@ -192,7 +192,13 @@ PatchOppEntries (
       OppIdx = NvSlot;
     }
 
-    if (OppIdx >= DomainOpp->Size) {
+    //
+    // Bound by the real OppTable[] array size, not just DomainOpp->Size:
+    // Size comes from flash and, if it were >= DOMAIN_MAX_OPP_ENTRIES with a
+    // hidden entry, OppIdx (= NvSlot + 1) could reach DOMAIN_MAX_OPP_ENTRIES
+    // and write one DVFS_OPP_T past the array into the next domain.
+    //
+    if ((OppIdx >= DomainOpp->Size) || (OppIdx >= DOMAIN_MAX_OPP_ENTRIES)) {
       break;
     }
 
@@ -1069,9 +1075,28 @@ PatchSpiFlashPmConfig (
   // Patch SoC voltage offset (delta_mV on DPM_EDP_SOC rail)
   //
   if (SetupVar->PmSocVoltageOffset != 0) {
-    INT32 SocDeltaMv;
+    INT32   SocDeltaMv;
+    UINT16  SocOffsetMag;
 
-    SocDeltaMv = (INT32)SetupVar->PmSocVoltageOffset;
+    //
+    // EdpCfg[].DeltaMv is a signed 10-bit field (range -512..+511).  The setup
+    // variable is a UINT16 and OS-writable, so an out-of-range magnitude would
+    // be truncated when stored, the read-back would never equal the requested
+    // value, "Changed" would latch TRUE every boot, and the driver would write
+    // + cold-reset on every boot (soft-brick).  Clamp the magnitude so the
+    // value always round-trips through the field.
+    //
+    SocOffsetMag = SetupVar->PmSocVoltageOffset;
+    if (SocOffsetMag > 511) {
+      DEBUG ((
+        DEBUG_WARN,
+        "[PmConfigUpdate] SoC voltage offset %d mV exceeds 511, clamping\n",
+        SocOffsetMag
+        ));
+      SocOffsetMag = 511;
+    }
+
+    SocDeltaMv = (INT32)SocOffsetMag;
     if (SetupVar->PmSocVoltagePolarity == 1) {
       SocDeltaMv = -SocDeltaMv;
     }
@@ -1113,12 +1138,54 @@ PatchSpiFlashPmConfig (
                        ENTRY_WRITE,
                        NULL
                        );
-  FreePool (PmBuf);
-
   if (EFI_ERROR (Status)) {
     DEBUG ((DEBUG_ERROR, "[PmConfigUpdate] FirmwareRawEntryUpdate WRITE failed: %r\n", Status));
+    FreePool (PmBuf);
     return FALSE;
   }
+
+  //
+  // Read-back verify BEFORE resetting.  FirmwareRawEntryUpdate returns a
+  // UINT16 status code zero-extended into EFI_STATUS, so the EFI_ERROR() check
+  // above can never see a device-level write failure (the error bit, 63, is
+  // always clear).  If the write silently failed, the flash still holds the
+  // old values, "Changed" would be TRUE again next boot, and we would
+  // cold-reset on every boot.  Re-read the region and only reset if the flash
+  // now matches what we intended to write.
+  //
+  {
+    UINT8  *VerifyBuf;
+
+    VerifyBuf = AllocateZeroPool (PM_CONFIG_BIN_SIZE);
+    if (VerifyBuf != NULL) {
+      FwUpdate->FirmwareRawEntryUpdate (
+                  FIRMWARE_TYPE_PM_CONF,
+                  VerifyBuf,
+                  PM_CONFIG_BIN_SIZE,
+                  ENTRY_READ,
+                  NULL
+                  );
+      if (CompareMem (VerifyBuf, PmBuf, PM_CONFIG_BIN_SIZE) != 0) {
+        DEBUG ((
+          DEBUG_ERROR,
+          "[PmConfigUpdate] pm_config read-back mismatch after write; "
+          "NOT resetting to avoid a reset loop\n"
+          ));
+        FreePool (VerifyBuf);
+        FreePool (PmBuf);
+        return FALSE;
+      }
+
+      FreePool (VerifyBuf);
+    }
+
+    //
+    // If the verify buffer could not be allocated we fall through and reset
+    // as before rather than skip a legitimate update.
+    //
+  }
+
+  FreePool (PmBuf);
 
   //
   // Cold reset so SCP re-reads the patched pm_config from SPI flash.
@@ -1157,6 +1224,15 @@ PmConfigUpdateDxeEntryPoint (
   // Read setup variable
   //
   VarSize = sizeof (PLATFORM_SETUP_DATA);
+  //
+  // Pre-zero: if a stored variable from an older BIOS is shorter than this
+  // build's struct, GetVariable succeeds with a short VarSize and would leave
+  // the tail (PmOppFreq/PmOppVolt/PmTdp/PmSocVoltageOffset) as stack garbage,
+  // which PatchSpiFlashPmConfig would then write into the SPI pm_config as
+  // real OPP/voltage values.  Zeroing first makes any missing field read as
+  // 0 ("stock", no patch).
+  //
+  ZeroMem (&SetupVar, sizeof (SetupVar));
   Status  = gRT->GetVariable (
                    PLATFORM_SETUP_VAR,
                    &gPlatformSetupVariableGuid,
