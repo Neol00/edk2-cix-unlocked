@@ -7,6 +7,7 @@
 #include <libfdt.h>
 #include <fdt.h>
 #include <Library/HwHarvestLib.h>
+#include <Library/PcieWindowLib.h>
 #include <Protocol/PlatformConfigParamsManageProtocol.h>
 
 STATIC
@@ -489,6 +490,83 @@ NpuCoreStatus NpuStatus[] = {
   {0, 3}
 };
 
+
+/**
+  Rewrite the 64-bit MMIO entry of each PCIe root complex's "ranges" so that a
+  device-tree boot sees the same windows UEFI programmed and ACPI reports.
+
+  Each entry is seven cells: the child address triplet (flags, hi, lo), the
+  parent address pair, and the size pair.  Only the entry carrying the 64-bit
+  memory space code is touched; the config and 32-bit memory entries are left
+  exactly as the source device tree had them.
+
+**/
+STATIC
+VOID
+UpdatePcieMem64Ranges (
+  IN VOID  *fdt
+  )
+{
+  STATIC CONST CHAR8  *NodePaths[PCIE_MAX_ROOTBRIDGE] = {
+    DT_NODE_PCIEX8_RC,
+    DT_NODE_PCIEX4_RC,
+    DT_NODE_PCIEX2_RC,
+    DT_NODE_PCIEX1_1_RC,
+    DT_NODE_PCIEX1_0_RC
+  };
+
+  PCIE_MEM64_WINDOW  Windows[PCIE_MAX_ROOTBRIDGE];
+  UINTN              Index;
+  UINTN              Entry;
+  INT32              Node;
+  INT32              Length;
+  UINT32             *Ranges;
+
+  PcieGetMem64Windows (Windows);
+
+  for (Index = 0; Index < PCIE_MAX_ROOTBRIDGE; Index++) {
+    Node = fdt_path_offset (fdt, NodePaths[Index]);
+    if (Node < 0) {
+      DEBUG ((DEBUG_WARN, "%a: %a not found\n", __FUNCTION__, NodePaths[Index]));
+      continue;
+    }
+
+    Ranges = (UINT32 *)fdt_getprop (fdt, Node, "ranges", &Length);
+    if ((Ranges == NULL) || (Length <= 0) || ((Length % (7 * sizeof (UINT32))) != 0)) {
+      DEBUG ((DEBUG_WARN, "%a: %a has no usable ranges\n", __FUNCTION__, NodePaths[Index]));
+      continue;
+    }
+
+    for (Entry = 0; Entry < (UINTN)Length / (7 * sizeof (UINT32)); Entry++) {
+      UINT32  *Cells = &Ranges[Entry * 7];
+
+      //
+      // Bits 24..25 of the flags cell hold the space code; 3 is 64-bit memory.
+      //
+      if (((fdt32_to_cpu (Cells[0]) >> 24) & 0x3) != 0x3) {
+        continue;
+      }
+
+      Cells[1] = cpu_to_fdt32 ((UINT32)RShiftU64 (Windows[Index].Base, 32));
+      Cells[2] = cpu_to_fdt32 ((UINT32)Windows[Index].Base);
+      Cells[3] = Cells[1];
+      Cells[4] = Cells[2];
+      Cells[5] = cpu_to_fdt32 ((UINT32)RShiftU64 (Windows[Index].Size, 32));
+      Cells[6] = cpu_to_fdt32 ((UINT32)Windows[Index].Size);
+
+      DEBUG ((
+        DEBUG_INFO,
+        "%a: %a 64-bit range 0x%lx..0x%lx\n",
+        __FUNCTION__,
+        NodePaths[Index],
+        Windows[Index].Base,
+        Windows[Index].Base + Windows[Index].Size - 1
+        ));
+      break;
+    }
+  }
+}
+
 EFI_STATUS
 UpdateDtbStatus (
   IN  VOID  *fdt
@@ -500,6 +578,8 @@ UpdateDtbStatus (
   if (IsIpHarvested (PcieX8)) {
     DisableDtbNode (fdt, DT_NODE_PCIEX8_RC);
   }
+
+  UpdatePcieMem64Ranges (fdt);
 
   // NPU
   NpuHarvestStatus = (IsIpHarvested (NpuCore0)<<1)|IsIpHarvested (NpuCore1_2);

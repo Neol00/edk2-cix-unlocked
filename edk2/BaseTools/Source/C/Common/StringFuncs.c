@@ -136,7 +136,6 @@ Returns:
   CHAR8       *EndOfSubString;
   CHAR8       *EndOfString;
   STRING_LIST *Output;
-  UINTN       Item;
 
   String = CloneString (String);
   if (String == NULL) {
@@ -146,7 +145,7 @@ Returns:
 
   Output = NewStringList ();
 
-  for (Pos = String, Item = 0; Pos < EndOfString; Item++) {
+  for (Pos = String; Pos < EndOfString;) {
     while (isspace ((int)*Pos)) {
       Pos++;
     }

@@ -8,6 +8,7 @@
 #include "AcpiSocDxe.h"
 #include <PlatformSetupVar.h>
 #include <AcpiRamVariable.h>
+#include <Library/PcieWindowLib.h>
 #include <Library/SerialPortLib.h>
 #include <Library/PL011UartClockLib.h>
 #include <Library/PL011UartLib.h>
@@ -595,6 +596,7 @@ InitializeSystemAcpiRam (
   UINT32                             SupportInfoValue = 3;
   CONFIG_PARAMS_DATA_BLOCK           *ConfigData      = NULL;
   CIX_CONFIG_PARAMS_MANAGE_PROTOCOL  *ConfigManage;
+  PCIE_MEM64_WINDOW                  Mem64Windows[PCIE_MAX_ROOTBRIDGE];
 
   if (pPlatformAcpiConfigProtocol == NULL) {
     return;
@@ -676,6 +678,19 @@ InitializeSystemAcpiRam (
     pSystemGpnvArea[ARV_PCIE_RP_02_ASPM_OFFSET]         = ConfigData->Pcie.PcieAspm[2];
     pSystemGpnvArea[ARV_PCIE_RP_03_ASPM_OFFSET]         = ConfigData->Pcie.PcieAspm[3];
     pSystemGpnvArea[ARV_PCIE_RP_04_ASPM_OFFSET]         = ConfigData->Pcie.PcieAspm[4];
+
+    //
+    // Publish the 64-bit MMIO windows the firmware actually programmed, so the
+    // _CRS the OS reads matches them.  Linux resizes BARs against these
+    // windows, so a stale _CRS here is what makes a large-BAR GPU fail.
+    //
+    PcieGetMem64Windows (Mem64Windows);
+    for (UINTN Rb = 0; Rb < PCIE_MAX_ROOTBRIDGE; Rb++) {
+      pSystemGpnvArea[ARV_PCIE_RP_00_MEM64_BASE_OFFSET + Rb] =
+        (UINT8)RShiftU64 (Mem64Windows[Rb].Base, ARV_PCIE_MEM64_UNIT_SHIFT);
+      pSystemGpnvArea[ARV_PCIE_RP_00_MEM64_SIZE_OFFSET + Rb] =
+        (UINT8)RShiftU64 (Mem64Windows[Rb].Size, ARV_PCIE_MEM64_UNIT_SHIFT);
+    }
     pSystemGpnvArea[ARV_USB3_TYPEC_DRD_ENABLE_OFFSET]   = ConfigData->UsbCDrd[0].Enable;
     pSystemGpnvArea[ARV_USB3_TYPEC_HOST0_ENABLE_OFFSET] = ConfigData->UsbC[0].Enable;
     pSystemGpnvArea[ARV_USB3_TYPEC_HOST1_ENABLE_OFFSET] = ConfigData->UsbC[1].Enable;

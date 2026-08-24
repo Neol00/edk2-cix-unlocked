@@ -15,6 +15,7 @@
 #include <Protocol/PciHostBridgeResourceAllocation.h>
 #include <Protocol/PciRootBridgeIo.h>
 #include <Library/PlatformPcieLib.h>
+#include <Library/PcieWindowLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/ConfigParamsDataBlockLib.h>
 #include <Protocol/ConfigParamsManageProtocol.h>
@@ -103,6 +104,7 @@ EFI_STATUS
 ConstructRootBridge (
   PCI_ROOT_BRIDGE                    *Bridge,
   PCI_ROOT_BRIDGE_RESOURCE_APPETURE  *Appeture,
+  CONST PCIE_MEM64_WINDOW            *Mem64Window,
   UINT8                              RootPortIndex
   )
 {
@@ -119,16 +121,8 @@ ConstructRootBridge (
     Bridge->Io.Base  = Appeture->IoBase;
     Bridge->Io.Limit = Appeture->IoBase + Appeture->IoSize - 1;
   } else {
-    //
-    // No I/O window on this root complex.  Use the "aperture absent"
-    // convention (Base > Limit) like the Mem/PMem branches below, rather
-    // than advertising a valid 0..0xFFFF window.  PcdPciIoTranslation is 0
-    // on Sky1 and nothing routes port I/O to PCIe, so a spuriously-valid
-    // window lets PciBus place an endpoint's I/O BAR at CPU physical 0 and
-    // enable I/O decode there (garbage/abort on discrete-GPU legacy BARs).
-    //
-    Bridge->Io.Base  = MAX_UINT64;
-    Bridge->Io.Limit = 0;
+    Bridge->Io.Base  = 0;
+    Bridge->Io.Limit = 0xFFFF;
   }
 
   if (Appeture->Mem) {
@@ -139,9 +133,16 @@ ConstructRootBridge (
     Bridge->Mem.Limit = 0;
   }
 
-  if (Appeture->MemAbove4G) {
-    Bridge->MemAbove4G.Base  = Appeture->MemAbove4G;
-    Bridge->MemAbove4G.Limit = Appeture->MemAbove4G + Appeture->MemAbove4GSize - 1;
+  //
+  // The above-4G window comes from PcieWindowLib rather than from the aperture
+  // table, so that its size can be changed from BIOS setup.  The table itself
+  // lives in a prebuilt binary and cannot be edited; PcieInitDxe reads only the
+  // bus number fields out of it, so overriding the memory window here does not
+  // desync anything.
+  //
+  if (Mem64Window->Size != 0) {
+    Bridge->MemAbove4G.Base  = Mem64Window->Base;
+    Bridge->MemAbove4G.Limit = Mem64Window->Base + Mem64Window->Size - 1;
   } else {
     Bridge->MemAbove4G.Base  = MAX_UINT64;
     Bridge->MemAbove4G.Limit = 0;
@@ -155,9 +156,16 @@ ConstructRootBridge (
     Bridge->PMem.Limit = 0;
   }
 
-  if (Appeture->PMemAbove4G) {
-    Bridge->PMemAbove4G.Base  = Appeture->PMemAbove4G;
-    Bridge->PMemAbove4G.Limit = Appeture->PMemAbove4G + Appeture->PMemAbove4GSize -1;
+  //
+  // The stock aperture table points PMemAbove4G at the very same range as
+  // MemAbove4G, and PciBusDxe draws a GPU's large BAR from the prefetchable
+  // pool, so the prefetchable window has to track the resized one exactly.
+  // Keeping them aliased preserves the stock allocation behaviour; only the
+  // size of the range changes.
+  //
+  if (Mem64Window->Size != 0) {
+    Bridge->PMemAbove4G.Base  = Mem64Window->Base;
+    Bridge->PMemAbove4G.Limit = Mem64Window->Base + Mem64Window->Size - 1;
   } else {
     Bridge->PMemAbove4G.Base  = MAX_UINT64;
     Bridge->PMemAbove4G.Limit = 0;
@@ -194,6 +202,7 @@ PciHostBridgeGetRootBridges (
   PCI_ROOT_BRIDGE                    *Bridges;
   CONFIG_PARAMS_DATA_BLOCK           *ConfigData = NULL;
   CIX_CONFIG_PARAMS_MANAGE_PROTOCOL  *ConfigManage;
+  PCIE_MEM64_WINDOW                  Mem64Windows[PCIE_MAX_ROOTBRIDGE];
 
   // Set default value to 0 in case we got any error.
   *Count = 0;
@@ -221,12 +230,19 @@ PciHostBridgeGetRootBridges (
     return NULL;
   }
 
+  PcieGetMem64Windows (Mem64Windows);
+
   for (Loop = 0; Loop < PCIE_MAX_ROOTBRIDGE; Loop++) {
     if (ConfigData->Pcie.PcieLinkUpStatus[Loop] == FALSE) {
       continue;
     }
 
-    Status = ConstructRootBridge (&Bridges[*Count], &mPcieResourceAppeture[Loop], Loop);
+    Status = ConstructRootBridge (
+               &Bridges[*Count],
+               &mPcieResourceAppeture[Loop],
+               &Mem64Windows[Loop],
+               Loop
+               );
     if (EFI_ERROR (Status)) {
       DEBUG ((DEBUG_ERROR, "[%a:%d] - ConstructRootBridge failed!\n", __FUNCTION__, __LINE__));
       continue;

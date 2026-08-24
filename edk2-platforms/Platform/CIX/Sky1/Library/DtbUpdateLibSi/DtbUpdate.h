@@ -30,6 +30,9 @@
 #define DT_NODE_SMMU_PCIEHUB  "/iommu@0b010000"
 #define DT_NODE_PCIEX8_RC     "/soc@0/pcie@0a010000"
 #define DT_NODE_PCIEX4_RC     "/soc@0/pcie@0a070000"
+#define DT_NODE_PCIEX2_RC     "/soc@0/pcie@0a0c0000"
+#define DT_NODE_PCIEX1_1_RC   "/soc@0/pcie@0a0e0000"
+#define DT_NODE_PCIEX1_0_RC   "/soc@0/pcie@0a0d0000"
 #define DT_NODE_ITS           "/soc@0/interrupt-controller@0e001000/its@0e050000"
 // s5_gpio0
 #define DT_NODE_S5_GPIO0  "/soc@0/gpio-controller@16004000"

@@ -90,7 +90,26 @@
 #define ARV_EDP_SUPPORT_OFFSET              0x4D
 
 //
-#define ARV_VARIABLE_TABLE_TOTAL_SIZE  0x4E
+// PCIe 64-bit MMIO window actually programmed by the firmware, so that the
+// _CRS returned to the OS matches what UEFI handed out.  Base and size are
+// both counted in 4 GB units, which keeps each of them inside one byte for
+// everything up to 1020 GB.
+//
+#define ARV_PCIE_RP_00_MEM64_BASE_OFFSET    0x4E
+#define ARV_PCIE_RP_01_MEM64_BASE_OFFSET    0x4F
+#define ARV_PCIE_RP_02_MEM64_BASE_OFFSET    0x50
+#define ARV_PCIE_RP_03_MEM64_BASE_OFFSET    0x51
+#define ARV_PCIE_RP_04_MEM64_BASE_OFFSET    0x52
+#define ARV_PCIE_RP_00_MEM64_SIZE_OFFSET    0x53
+#define ARV_PCIE_RP_01_MEM64_SIZE_OFFSET    0x54
+#define ARV_PCIE_RP_02_MEM64_SIZE_OFFSET    0x55
+#define ARV_PCIE_RP_03_MEM64_SIZE_OFFSET    0x56
+#define ARV_PCIE_RP_04_MEM64_SIZE_OFFSET    0x57
+
+#define ARV_PCIE_MEM64_UNIT_SHIFT           32
+
+//
+#define ARV_VARIABLE_TABLE_TOTAL_SIZE  0x58
 
 #define ARV_I2C_FREQ_UNIT_HZ   10000
 

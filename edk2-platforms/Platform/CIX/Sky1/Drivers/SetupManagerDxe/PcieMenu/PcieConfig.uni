@@ -103,3 +103,10 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 
 #string STR_PCIE_DTI_PROMPT                     #language en-US "DTI Support"
 #string STR_PCIE_DTI_HELP                       #language en-US "DTI Enable/Disable"
+#string STR_PCIE_BAR_WINDOW_PROMPT               #language en-US "PCIe 64-bit Window"
+#string STR_PCIE_BAR_WINDOW_HELP                 #language en-US "Size of the 64-bit (above-4GB) MMIO window given to the x8 slot. A Resizable BAR must fit inside the window with room left over, so the window has to be LARGER than the BAR and never merely equal to it. In particular a GPU with 16 GB of VRAM asks for a 16 GB BAR and will NOT work with the 16G window - it needs 32G or more. Every setting keeps all five root ports at their fixed hardware base addresses and only grows the x8 slot upward, so the other slots are never affected. Auto reads the Resizable BAR capability of the installed card and picks the smallest window that fits it. 16G is the original CIX size. 32G suits 16 GB cards, 64G suits 24 GB cards. 128G is EXPERIMENTAL: it reaches past 0x27_FFFFFFFF, the highest address confirmed to decode on this SoC, so use it only if a card needs a BAR larger than 32 GB. A reboot is required after changing this."
+#string STR_PCIE_BAR_WINDOW_AUTO                 #language en-US "Auto (size to the installed card)"
+#string STR_PCIE_BAR_WINDOW_STOCK                #language en-US "16G - stock (fails on 16GB GPUs)"
+#string STR_PCIE_BAR_WINDOW_LARGE                #language en-US "32G - for 16GB GPUs"
+#string STR_PCIE_BAR_WINDOW_HUGE                 #language en-US "64G - for 24GB GPUs"
+#string STR_PCIE_BAR_WINDOW_MAX                  #language en-US "128G - experimental"

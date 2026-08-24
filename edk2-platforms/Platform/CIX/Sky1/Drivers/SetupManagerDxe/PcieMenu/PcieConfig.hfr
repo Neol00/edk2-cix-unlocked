@@ -9,6 +9,19 @@
         title  = STRING_TOKEN(STR_PCIE_FORM_SET_TITLE);
         subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
 
+        oneof varid   = PlatformSetupVar.PcieBarWindow,
+          prompt      = STRING_TOKEN(STR_PCIE_BAR_WINDOW_PROMPT),
+          help        = STRING_TOKEN(STR_PCIE_BAR_WINDOW_HELP),
+          default     = FixedPcdGet8 (PcdPcieBarWindowDefault),
+          option text = STRING_TOKEN(STR_PCIE_BAR_WINDOW_AUTO),  value = 0, flags = DEFAULT | RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_PCIE_BAR_WINDOW_STOCK), value = 1, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_PCIE_BAR_WINDOW_LARGE), value = 2, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_PCIE_BAR_WINDOW_HUGE),  value = 3, flags = RESET_REQUIRED;
+          option text = STRING_TOKEN(STR_PCIE_BAR_WINDOW_MAX),   value = 4, flags = RESET_REQUIRED;
+        endoneof;
+
+        subtitle text = STRING_TOKEN(STR_EMPTY_STRING);
+
         goto PCIE_ROOT_PORT0_CONFIG_FORM_ID,
            prompt = STRING_TOKEN(STR_PCIERP0_OPTIONS_FORM_TITLE),
            help = STRING_TOKEN(STR_EMPTY_STRING);

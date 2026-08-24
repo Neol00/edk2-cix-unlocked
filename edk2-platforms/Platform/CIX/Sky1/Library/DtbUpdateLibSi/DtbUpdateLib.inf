@@ -32,5 +32,6 @@
   IoLib
   MemoryAllocationLib
   HwHarvestLib
+  PcieWindowLib
 
 

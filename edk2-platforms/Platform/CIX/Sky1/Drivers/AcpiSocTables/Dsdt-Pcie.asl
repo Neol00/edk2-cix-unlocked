@@ -104,9 +104,33 @@ Device (PCI0)
         0x1800000000,             // Min Base Address
         0x1BFFFFFFFF,             // Max Base Address
         0x00000000,               // Translate
-        0x400000000               // Length 16G
+        0x400000000,              // Length 16G, resized below
+        ,,
+        PM64
       )
     })                            // Name(RBUF)
+
+    //
+    // The 16 GB above declares the stock window only.  Replace it with the
+    // window the firmware actually programmed for this root bridge, which the
+    // BIOS "PCIe 64-bit Window" setting can enlarge.  Linux resizes device
+    // BARs against what _CRS reports, so this has to agree with what UEFI
+    // handed out or a large-BAR GPU will fail to get its BAR.
+    //
+    CreateQWordField (RBUF, PM64._MIN, M64B)
+    CreateQWordField (RBUF, PM64._MAX, M64E)
+    CreateQWordField (RBUF, PM64._LEN, M64L)
+
+    Local0 = \_SB.GETV(ARV_PCIE_RP_00_MEM64_BASE_OFFSET)
+    Local1 = \_SB.GETV(ARV_PCIE_RP_00_MEM64_SIZE_OFFSET)
+    If (LNotEqual (Local1, Zero)) {
+      Local0 = ShiftLeft (Local0, ARV_PCIE_MEM64_UNIT_SHIFT)
+      Local1 = ShiftLeft (Local1, ARV_PCIE_MEM64_UNIT_SHIFT)
+      M64B = Local0
+      M64L = Local1
+      M64E = Local0 + Local1 - One
+    }
+
     Return (RBUF)
   }                               // Method(_CRS), this method return RBUF!
 
@@ -180,9 +204,33 @@ Device (PCI1)
         0x1400000000,             // Min Base Address
         0x17FFFFFFFF,             // Max Base Address
         0x00000000,               // Translate
-        0x400000000               // Length 16G
+        0x400000000,              // Length 16G, resized below
+        ,,
+        PM64
       )
     })                            // Name(RBUF)
+
+    //
+    // The 16 GB above declares the stock window only.  Replace it with the
+    // window the firmware actually programmed for this root bridge, which the
+    // BIOS "PCIe 64-bit Window" setting can enlarge.  Linux resizes device
+    // BARs against what _CRS reports, so this has to agree with what UEFI
+    // handed out or a large-BAR GPU will fail to get its BAR.
+    //
+    CreateQWordField (RBUF, PM64._MIN, M64B)
+    CreateQWordField (RBUF, PM64._MAX, M64E)
+    CreateQWordField (RBUF, PM64._LEN, M64L)
+
+    Local0 = \_SB.GETV(ARV_PCIE_RP_01_MEM64_BASE_OFFSET)
+    Local1 = \_SB.GETV(ARV_PCIE_RP_01_MEM64_SIZE_OFFSET)
+    If (LNotEqual (Local1, Zero)) {
+      Local0 = ShiftLeft (Local0, ARV_PCIE_MEM64_UNIT_SHIFT)
+      Local1 = ShiftLeft (Local1, ARV_PCIE_MEM64_UNIT_SHIFT)
+      M64B = Local0
+      M64L = Local1
+      M64E = Local0 + Local1 - One
+    }
+
     Return (RBUF)
   }                               // Method(_CRS), this method return RBUF!
   // Declare the PCI Routing Table.
@@ -257,9 +305,33 @@ Device (PCI2)
         0x1000000000,             // Min Base Address
         0x13FFFFFFFF,             // Max Base Address
         0x00000000,               // Translate
-        0x400000000               // Length 16G
+        0x400000000,              // Length 16G, resized below
+        ,,
+        PM64
       )
     })                            // Name(RBUF)
+
+    //
+    // The 16 GB above declares the stock window only.  Replace it with the
+    // window the firmware actually programmed for this root bridge, which the
+    // BIOS "PCIe 64-bit Window" setting can enlarge.  Linux resizes device
+    // BARs against what _CRS reports, so this has to agree with what UEFI
+    // handed out or a large-BAR GPU will fail to get its BAR.
+    //
+    CreateQWordField (RBUF, PM64._MIN, M64B)
+    CreateQWordField (RBUF, PM64._MAX, M64E)
+    CreateQWordField (RBUF, PM64._LEN, M64L)
+
+    Local0 = \_SB.GETV(ARV_PCIE_RP_02_MEM64_BASE_OFFSET)
+    Local1 = \_SB.GETV(ARV_PCIE_RP_02_MEM64_SIZE_OFFSET)
+    If (LNotEqual (Local1, Zero)) {
+      Local0 = ShiftLeft (Local0, ARV_PCIE_MEM64_UNIT_SHIFT)
+      Local1 = ShiftLeft (Local1, ARV_PCIE_MEM64_UNIT_SHIFT)
+      M64B = Local0
+      M64L = Local1
+      M64E = Local0 + Local1 - One
+    }
+
     Return (RBUF)
   }                               // Method(_CRS), this method return RBUF!
 
@@ -334,9 +406,33 @@ Device (PCI3)
         0x0C00000000,             // Min Base Address
         0x0FFFFFFFFF,             // Max Base Address
         0x00000000,               // Translate
-        0x400000000               // Length 16G
+        0x400000000,              // Length 16G, resized below
+        ,,
+        PM64
       )
     })                            // Name(RBUF)
+
+    //
+    // The 16 GB above declares the stock window only.  Replace it with the
+    // window the firmware actually programmed for this root bridge, which the
+    // BIOS "PCIe 64-bit Window" setting can enlarge.  Linux resizes device
+    // BARs against what _CRS reports, so this has to agree with what UEFI
+    // handed out or a large-BAR GPU will fail to get its BAR.
+    //
+    CreateQWordField (RBUF, PM64._MIN, M64B)
+    CreateQWordField (RBUF, PM64._MAX, M64E)
+    CreateQWordField (RBUF, PM64._LEN, M64L)
+
+    Local0 = \_SB.GETV(ARV_PCIE_RP_03_MEM64_BASE_OFFSET)
+    Local1 = \_SB.GETV(ARV_PCIE_RP_03_MEM64_SIZE_OFFSET)
+    If (LNotEqual (Local1, Zero)) {
+      Local0 = ShiftLeft (Local0, ARV_PCIE_MEM64_UNIT_SHIFT)
+      Local1 = ShiftLeft (Local1, ARV_PCIE_MEM64_UNIT_SHIFT)
+      M64B = Local0
+      M64L = Local1
+      M64E = Local0 + Local1 - One
+    }
+
     Return (RBUF)
   }                               // Method(_CRS), this method return RBUF!
 
@@ -411,9 +507,33 @@ Device (PCI4)
         0x0800000000,             // Min Base Address
         0x0BFFFFFFFF,             // Max Base Address
         0x00000000,               // Translate
-        0x400000000               // Length 16G
+        0x400000000,              // Length 16G, resized below
+        ,,
+        PM64
       )
     })                            // Name(RBUF)
+
+    //
+    // The 16 GB above declares the stock window only.  Replace it with the
+    // window the firmware actually programmed for this root bridge, which the
+    // BIOS "PCIe 64-bit Window" setting can enlarge.  Linux resizes device
+    // BARs against what _CRS reports, so this has to agree with what UEFI
+    // handed out or a large-BAR GPU will fail to get its BAR.
+    //
+    CreateQWordField (RBUF, PM64._MIN, M64B)
+    CreateQWordField (RBUF, PM64._MAX, M64E)
+    CreateQWordField (RBUF, PM64._LEN, M64L)
+
+    Local0 = \_SB.GETV(ARV_PCIE_RP_04_MEM64_BASE_OFFSET)
+    Local1 = \_SB.GETV(ARV_PCIE_RP_04_MEM64_SIZE_OFFSET)
+    If (LNotEqual (Local1, Zero)) {
+      Local0 = ShiftLeft (Local0, ARV_PCIE_MEM64_UNIT_SHIFT)
+      Local1 = ShiftLeft (Local1, ARV_PCIE_MEM64_UNIT_SHIFT)
+      M64B = Local0
+      M64L = Local1
+      M64E = Local0 + Local1 - One
+    }
+
     Return (RBUF)
   }                               // Method(_CRS), this method return RBUF!
 

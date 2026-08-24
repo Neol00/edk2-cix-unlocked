@@ -19,6 +19,7 @@
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
   Silicon/CIX/Sky1/CixPkg.dec
+  Platform/CIX/Sky1/Sky1.dec
 
 [LibraryClasses]
   BaseLib
@@ -29,6 +30,7 @@
   PcdLib
   UefiBootServicesTableLib
   PlatformPcieLib
+  PcieWindowLib
 
 [Protocols]
   gCixConfigParamsManageProtocolGuid

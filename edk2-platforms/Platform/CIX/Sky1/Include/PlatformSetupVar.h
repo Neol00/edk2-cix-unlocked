@@ -161,6 +161,12 @@ typedef struct {
   // eDP panel support: 0 = disabled (default), 1 = enabled
   //
   UINT8     EdpSupport;
+
+  //
+  // PCIe 64-bit MMIO window layout, see PCIE_WINDOW_MODE_* in PcieWindowLib.h.
+  // 0 = Auto, 1 = Stock, 2 = Large, 3 = Huge, 4 = Max.
+  //
+  UINT8     PcieBarWindow;
 } PLATFORM_SETUP_DATA;
 
 typedef struct {

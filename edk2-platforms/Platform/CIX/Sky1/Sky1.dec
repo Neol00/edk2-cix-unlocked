@@ -133,6 +133,10 @@
   gCixPlatformTokenSpaceGuid.PcdEcAcpiI2cDeviceInstanceId|0x1A|UINT8|0x00000136
   gCixPlatformTokenSpaceGuid.PcdEcDefaultFanMode|0x00|UINT8|0x0000013A  # 0: auto mode, 1: performance mode
 
+  # PCIe 64-bit MMIO window layout, see PCIE_WINDOW_MODE_* in PcieWindowLib.h
+  # 0: auto, 1: stock 16G each, 2: large 48G on x8, 3: huge 64G (experimental), 4: max 128G (experimental)
+  gCixPlatformTokenSpaceGuid.PcdPcieBarWindowDefault|0x00|UINT8|0x00000147
+
   # PD Dev
   gCixPlatformTokenSpaceGuid.PcdPdDevCount|4|UINT8|0x0000013C
   # Refer to TYPEC_MODE enum

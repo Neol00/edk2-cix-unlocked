@@ -1,0 +1,39 @@
+#/** @file PcieWindowLib.inf
+#
+#  Copyright (c) 2025, Radxa Orion O6 custom firmware.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = PcieWindowLib
+  FILE_GUID                      = 6E1A2C74-0B93-4A5F-9C21-5D8E77A31B04
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = PcieWindowLib
+
+[Sources]
+  PcieWindowLib.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  Silicon/CIX/Sky1/CixPkg.dec
+  Platform/CIX/Sky1/Sky1.dec
+
+[LibraryClasses]
+  BaseLib
+  BaseMemoryLib
+  DebugLib
+  PciSegmentLib
+  PlatformPcieLib
+  UefiBootServicesTableLib
+  UefiRuntimeServicesTableLib
+
+[Guids]
+  gPlatformSetupVariableGuid
+
+[Protocols]
+  gCixConfigParamsManageProtocolGuid

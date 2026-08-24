@@ -69,6 +69,25 @@ Device (PRC0) { /* PCIE0 X8 */
     if (Local0 != 0) { MAPM = Local0 }
     Local0 = GETV(ARV_PCIE_RP_00_ASPM_OFFSET)
     if (Local0 != 0) { ASPM = Local0 }
+
+    //
+    // Adopt the 64-bit MMIO window the firmware actually programmed.  The
+    // template above only carries the stock 16 GB; the BIOS "PCIe 64-bit
+    // Window" setting can make it larger, and a large-BAR GPU needs it to be.
+    //
+    CreateQWordField (\_SB.PRC0._CRS, \_SB.PRC0.PM64._MIN, M64B)
+    CreateQWordField (\_SB.PRC0._CRS, \_SB.PRC0.PM64._MAX, M64E)
+    CreateQWordField (\_SB.PRC0._CRS, \_SB.PRC0.PM64._LEN, M64L)
+
+    Local0 = GETV(ARV_PCIE_RP_00_MEM64_BASE_OFFSET)
+    Local1 = GETV(ARV_PCIE_RP_00_MEM64_SIZE_OFFSET)
+    If (LNotEqual (Local1, Zero)) {
+      Local0 = ShiftLeft (Local0, ARV_PCIE_MEM64_UNIT_SHIFT)
+      Local1 = ShiftLeft (Local1, ARV_PCIE_MEM64_UNIT_SHIFT)
+      M64B = Local0
+      M64L = Local1
+      M64E = Local0 + Local1 - One
+    }
   }
 
   // PCIe is only available if PCIe link is up
@@ -134,7 +153,9 @@ Device (PRC0) { /* PCIE0 X8 */
       0x1800000000,             // Min Base Address
       0x1BFFFFFFFF,             // Max Base Address
       0x00000000,               // Translate
-      0x400000000               // Length 16G
+      0x400000000,              // Length 16G, resized in _INI
+      ,,
+      PM64
     )
     PinGroupFunction(Exclusive, 0x0, "\\_SB.MUX1", 0, "pinctrl_pcie_x8_rc", ResourceConsumer,)
 #if PCIE_X8_PERST
@@ -322,6 +343,25 @@ Device (PRC1) { /* PCIE2 X4 */
     if (Local0 != 0) { MAPM = Local0 }
     Local0 = GETV(ARV_PCIE_RP_01_ASPM_OFFSET)
     if (Local0 != 0) { ASPM = Local0 }
+
+    //
+    // Adopt the 64-bit MMIO window the firmware actually programmed.  The
+    // template above only carries the stock 16 GB; the BIOS "PCIe 64-bit
+    // Window" setting can make it larger, and a large-BAR GPU needs it to be.
+    //
+    CreateQWordField (\_SB.PRC1._CRS, \_SB.PRC1.PM64._MIN, M64B)
+    CreateQWordField (\_SB.PRC1._CRS, \_SB.PRC1.PM64._MAX, M64E)
+    CreateQWordField (\_SB.PRC1._CRS, \_SB.PRC1.PM64._LEN, M64L)
+
+    Local0 = GETV(ARV_PCIE_RP_01_MEM64_BASE_OFFSET)
+    Local1 = GETV(ARV_PCIE_RP_01_MEM64_SIZE_OFFSET)
+    If (LNotEqual (Local1, Zero)) {
+      Local0 = ShiftLeft (Local0, ARV_PCIE_MEM64_UNIT_SHIFT)
+      Local1 = ShiftLeft (Local1, ARV_PCIE_MEM64_UNIT_SHIFT)
+      M64B = Local0
+      M64L = Local1
+      M64E = Local0 + Local1 - One
+    }
   }
 
   // PCIe is only available if PCIe link is up
@@ -387,7 +427,9 @@ Device (PRC1) { /* PCIE2 X4 */
       0x1400000000,             // Min Base Address
       0x17FFFFFFFF,             // Max Base Address
       0x00000000,               // Translate
-      0x400000000               // Length 16G
+      0x400000000,              // Length 16G, resized in _INI
+      ,,
+      PM64
     )
     PinGroupFunction(Exclusive, 0x0, "\\_SB.MUX1", 0, "pinctrl_pcie_x4_rc", ResourceConsumer,)
 #if PCIE_X4_PERST
@@ -562,6 +604,25 @@ Device (PRC2) { /* PCIE3 X2 */
     if (Local0 != 0) { MAPM = Local0 }
     Local0 = GETV(ARV_PCIE_RP_02_ASPM_OFFSET)
     if (Local0 != 0) { ASPM = Local0 }
+
+    //
+    // Adopt the 64-bit MMIO window the firmware actually programmed.  The
+    // template above only carries the stock 16 GB; the BIOS "PCIe 64-bit
+    // Window" setting can make it larger, and a large-BAR GPU needs it to be.
+    //
+    CreateQWordField (\_SB.PRC2._CRS, \_SB.PRC2.PM64._MIN, M64B)
+    CreateQWordField (\_SB.PRC2._CRS, \_SB.PRC2.PM64._MAX, M64E)
+    CreateQWordField (\_SB.PRC2._CRS, \_SB.PRC2.PM64._LEN, M64L)
+
+    Local0 = GETV(ARV_PCIE_RP_02_MEM64_BASE_OFFSET)
+    Local1 = GETV(ARV_PCIE_RP_02_MEM64_SIZE_OFFSET)
+    If (LNotEqual (Local1, Zero)) {
+      Local0 = ShiftLeft (Local0, ARV_PCIE_MEM64_UNIT_SHIFT)
+      Local1 = ShiftLeft (Local1, ARV_PCIE_MEM64_UNIT_SHIFT)
+      M64B = Local0
+      M64L = Local1
+      M64E = Local0 + Local1 - One
+    }
   }
 
   // PCIe is only available if PCIe link is up
@@ -627,7 +688,9 @@ Device (PRC2) { /* PCIE3 X2 */
       0x1000000000,             // Min Base Address
       0x13FFFFFFFF,             // Max Base Address
       0x00000000,               // Translate
-      0x400000000               // Length 16G
+      0x400000000,              // Length 16G, resized in _INI
+      ,,
+      PM64
     )
     PinGroupFunction(Exclusive, 0x0, "\\_SB.MUX1", 0, "pinctrl_pcie_x2_rc", ResourceConsumer,)
 #if PCIE_X2_PERST
@@ -755,6 +818,25 @@ Device (PRC3) { /* PCIE4 X1_1 */
     if (Local0 != 0) { MAPM = Local0 }
     Local0 = GETV(ARV_PCIE_RP_03_ASPM_OFFSET)
     if (Local0 != 0) { ASPM = Local0 }
+
+    //
+    // Adopt the 64-bit MMIO window the firmware actually programmed.  The
+    // template above only carries the stock 16 GB; the BIOS "PCIe 64-bit
+    // Window" setting can make it larger, and a large-BAR GPU needs it to be.
+    //
+    CreateQWordField (\_SB.PRC3._CRS, \_SB.PRC3.PM64._MIN, M64B)
+    CreateQWordField (\_SB.PRC3._CRS, \_SB.PRC3.PM64._MAX, M64E)
+    CreateQWordField (\_SB.PRC3._CRS, \_SB.PRC3.PM64._LEN, M64L)
+
+    Local0 = GETV(ARV_PCIE_RP_03_MEM64_BASE_OFFSET)
+    Local1 = GETV(ARV_PCIE_RP_03_MEM64_SIZE_OFFSET)
+    If (LNotEqual (Local1, Zero)) {
+      Local0 = ShiftLeft (Local0, ARV_PCIE_MEM64_UNIT_SHIFT)
+      Local1 = ShiftLeft (Local1, ARV_PCIE_MEM64_UNIT_SHIFT)
+      M64B = Local0
+      M64L = Local1
+      M64E = Local0 + Local1 - One
+    }
   }
 
   // PCIe is only available if PCIe link is up
@@ -820,7 +902,9 @@ Device (PRC3) { /* PCIE4 X1_1 */
       0xC00000000,             // Min Base Address
       0xFFFFFFFFF,             // Max Base Address
       0x00000000,               // Translate
-      0x400000000               // Length 16G
+      0x400000000,              // Length 16G, resized in _INI
+      ,,
+      PM64
     )
     PinGroupFunction(Exclusive, 0x0, "\\_SB.MUX1", 0, "pinctrl_pcie_x1_1_rc", ResourceConsumer,)
 #if PCIE_X1_1_PERST
@@ -948,6 +1032,25 @@ Device (PRC4) { /* PCIE3 X1_0 */
     if (Local0 != 0) { MAPM = Local0 }
     Local0 = GETV(ARV_PCIE_RP_04_ASPM_OFFSET)
     if (Local0 != 0) { ASPM = Local0 }
+
+    //
+    // Adopt the 64-bit MMIO window the firmware actually programmed.  The
+    // template above only carries the stock 16 GB; the BIOS "PCIe 64-bit
+    // Window" setting can make it larger, and a large-BAR GPU needs it to be.
+    //
+    CreateQWordField (\_SB.PRC4._CRS, \_SB.PRC4.PM64._MIN, M64B)
+    CreateQWordField (\_SB.PRC4._CRS, \_SB.PRC4.PM64._MAX, M64E)
+    CreateQWordField (\_SB.PRC4._CRS, \_SB.PRC4.PM64._LEN, M64L)
+
+    Local0 = GETV(ARV_PCIE_RP_04_MEM64_BASE_OFFSET)
+    Local1 = GETV(ARV_PCIE_RP_04_MEM64_SIZE_OFFSET)
+    If (LNotEqual (Local1, Zero)) {
+      Local0 = ShiftLeft (Local0, ARV_PCIE_MEM64_UNIT_SHIFT)
+      Local1 = ShiftLeft (Local1, ARV_PCIE_MEM64_UNIT_SHIFT)
+      M64B = Local0
+      M64L = Local1
+      M64E = Local0 + Local1 - One
+    }
   }
 
   // PCIe is only available if PCIe link is up
@@ -1013,7 +1116,9 @@ Device (PRC4) { /* PCIE3 X1_0 */
       0x800000000,             // Min Base Address
       0xBFFFFFFFF,             // Max Base Address
       0x00000000,               // Translate
-      0x400000000               // Length 16G
+      0x400000000,              // Length 16G, resized in _INI
+      ,,
+      PM64
     )
     PinGroupFunction(Exclusive, 0x0, "\\_SB.MUX1", 0, "pinctrl_pcie_x1_0_rc", ResourceConsumer,)
 #if PCIE_X1_0_PERST

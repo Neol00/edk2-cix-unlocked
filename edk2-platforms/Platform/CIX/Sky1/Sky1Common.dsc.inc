@@ -198,6 +198,7 @@
   PciHostBridgeLib|Silicon/CIX/Sky1/Library/PciHostBridgeLib/PciHostBridgeLib.inf
   PciSegmentLib|Silicon/CIX/Sky1/Library/PciSegmentLib/PciSegmentLib.inf
   PlatformPcieLib|Silicon/CIX/Sky1/Library/PlatformPcieLib/PlatformPcieLib.inf
+  PcieWindowLib|Platform/CIX/Sky1/Library/PcieWindowLib/PcieWindowLib.inf
   NetLib|NetworkPkg/Library/DxeNetLib/DxeNetLib.inf
 
 !if $(SOC_GOP_ENABLE) == TRUE

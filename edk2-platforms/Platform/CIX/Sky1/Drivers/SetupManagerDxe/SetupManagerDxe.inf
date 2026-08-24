@@ -86,6 +86,7 @@
 
 [FixedPcd]
   gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString
+  gCixPlatformTokenSpaceGuid.PcdPcieBarWindowDefault
   gCixTokenSpaceGuid.PcdPcieRootPort0Enable
   gCixTokenSpaceGuid.PcdPcieRootPort1Enable
   gCixTokenSpaceGuid.PcdPcieRootPort2Enable
